@@ -1,0 +1,67 @@
+.logo{
+  width:144px;
+  position: absolute;
+  margin-left: -5%;
+  margin-top: -3%;
+  
+}
+
+.Home {
+    text-align: center;
+  }
+  
+  .Home-logo {
+    height: 40vmin;
+  }
+  
+  .Home-header {
+    background-color: #282c34;
+   
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+    
+  }
+  
+  .Home-link {
+    color: #09d3ac;
+  }
+  
+  .pocket{
+    background:url(./map.png) no-repeat left/cover;
+    background-size:70%;
+    font-family: 'Times New Roman', Times, serif;
+    /* border: 5px double rgba(250, 243, 243, 0.918); */
+     /* overflow: hidden; */
+    margin-top: -63%;
+   margin-left: -0%;
+    color: white; 
+    /* background:rgba(0, 0, 0, 0.637); */
+  position: relative;
+  width: 100%;
+  height: 70%;
+  border-radius: 100px;
+ 
+  padding:130px;
+  /* background: url("C:\Users\hitup\Hitup_web-master\src\routes\image.png"); */
+  
+  /* background: radial-gradient(rgba(0,0,0,0),rgba(0,0,0,0.2)),
+  url(./image.png) no-repeat center/cover; */
+}
+
+.day-card{
+  font-family: 'Times New Roman', Times, serif;
+  border-radius: 20px;
+  border: 1px double rgb(172, 169, 169);
+  color : white;
+  width: 13%;
+  margin-top: 25%;
+  margin-left: 3.5%;
+  margin-right: 3%;
+  float: left;
+  padding: 13px;
+}
