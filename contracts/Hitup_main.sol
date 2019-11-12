@@ -10,6 +10,7 @@ contract Hitup_main is usingOraclize{
         uint256 fee;
         uint256 WinOrLose;
 	}
+    mapping (address => uint) public user_index_mapping;
     mapping (uint256 => User) public users;
     
     address public owner;
@@ -41,7 +42,7 @@ contract Hitup_main is usingOraclize{
         owner = msg.sender;
 
         emit LogUpdate(owner, address(this).balance);
-       OAR = OraclizeAddrResolverI(0x9082844364f8841781cd7d3941cc7b6c3099B96d);
+       OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);
         update();
     }
 
@@ -58,7 +59,13 @@ contract Hitup_main is usingOraclize{
         standardExchangeRate = oracleExchangeRate[0] ;  
         return standardExchangeRate;
     }
-    
+
+    function getOracleExchangeRate0() public view returns (string){
+       return oracleExchangeRate[0];
+    }
+    function getOracleExchangeRate1() public view returns (string){
+       return oracleExchangeRate[1];
+    }
     
     function pushUserInfo(uint guess, uint fee) internal returns (bool) {
         uint UserBettingTime = now;
@@ -69,6 +76,7 @@ contract Hitup_main is usingOraclize{
         b.bettingTime = UserBettingTime;
         b.fee = fee;
         users[user_index] = b;
+        user_index_mapping[msg.sender] = user_index;
         user_index ++;
         return true;
     }
@@ -110,8 +118,9 @@ contract Hitup_main is usingOraclize{
         return true;
     }
 
-    function getUserInfo(uint256 _userIndex) public view returns (address userAddress, uint guess, string bettingExchangeRate, uint bettingTime, uint256 fee, uint256 WinOrLose) {
-        User memory b = users[_userIndex];
+    function getUserInfo(address _userAddress) public view returns (address userAddress, uint guess, string bettingExchangeRate, uint bettingTime, uint256 fee, uint256 WinOrLose) {
+        uint256 a = user_index_mapping[_userAddress];
+        User memory b = users[a];
         userAddress = b.userAddress;       
         guess = b.guess;
         bettingExchangeRate = b.bettingExchangeRate;
@@ -120,7 +129,7 @@ contract Hitup_main is usingOraclize{
         WinOrLose = b.WinOrLose;
     }
     
-    function choice_transfer()internal {
+    function choice_transfer()public {
         choice_winnerAddress();
         transferAfterPayingFee();
     }
@@ -195,7 +204,7 @@ contract Hitup_main is usingOraclize{
         return true;
     }
     
-    function closeGame()internal {    
+    function closeGame()public {    
         _pot = 0;
         user_index = 0;
         winnerNumber = 0;
@@ -220,7 +229,7 @@ contract Hitup_main is usingOraclize{
 
         oracleExchangeRate.push(result);
         emit LogPriceUpdate(result);
-        update();
+        // update();
     }
 
     function getBalance()
@@ -240,7 +249,7 @@ contract Hitup_main is usingOraclize{
             emit LogInfo("Oraclize query was sent, standing by for the answer..");
 
             // Using XPath to to fetch the right element in the JSON response, 시간간격 해결하기
-            oraclize_query("URL","json(https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=8zEeLCO4qHk9mCYAfsLP6dUxrOTVxq1t&searchdate=&data=AP01).[21].kftc_deal_bas_r");
+            oraclize_query("URL","json(https://api.bithumb.com/public/ticker/ETH).data.closing_price");
         }
     }
 }
