@@ -14,6 +14,34 @@
 
 
 
+.main_header{
+    
+    /* margin-left: 5%; */
+    margin-top:40%;
+    /* background-color: blanchedalmond; */
+    /* justify-content:space-between; */
+
+}
+
+
+.Manual_item{
+    width:400px;
+
+    text-align: center;
+    /* padding-top: 4rem;
+    padding-bottom: 3rem; */
+    display:table-cell;
+    color:white;
+    text-decoration: none;
+    /* font-size: 1.5rem; */
+    
+    background: url("./manual.png");
+    background-position: center center;
+    background-repeat: no-repeat; 
+    background-size: 90px;
+
+}
+
 .Home_item{
     width:400px;
     text-align: center;
@@ -98,16 +126,6 @@
 
 
 
-.main_header{
-    
-    margin-left: 13%;
-    margin-top:40%;
-    /* background-color: blanchedalmond; */
-    /* justify-content:space-between; */
-
-}
-
-
 
 .hvrbox,
 .hvrbox * {
@@ -155,8 +173,9 @@
 	opacity: 1;
 }
 .hvrbox .hvrbox-text {
+    font-family: 'Times New Roman', Times, serif;
 	text-align: center;
-	font-size: 26px;
+	font-size: 33px;
 	display: inline-block;
     position: relative;
 	top: 50%;

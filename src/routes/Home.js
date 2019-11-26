@@ -1,11 +1,11 @@
 import React , { Component }from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 import logo from '../hitup_logo.png'
-
+import './footer.css';
 import Web3 from 'web3';
 import './Home.css';
-let hitupAddress = '0xe0cec33a93d8414c4f44c67728fc7094c4fcbe94';
-let hitupABI = [{"constant": true,"inputs": [{"name": "","type": "uint256"}],"name": "winnerAddresses","outputs": [{"name": "","type": "address"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "","type": "uint256"}],"name": "users","outputs": [{"name": "userAddress","type": "address"},{"name": "guess","type": "uint256"},{"name": "bettingExchangeRate","type": "string"},{"name": "bettingTime","type": "uint256"},{"name": "fee","type": "uint256"},{"name": "WinOrLose","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "","type": "uint256"}],"name": "userAddresses","outputs": [{"name": "","type": "address"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "owner","outputs": [{"name": "","type": "address"}],"payable": false,"stateMutability": "view","type": "function"},{"inputs": [],"payable": true,"stateMutability": "payable","type": "constructor"},{"payable": false,"stateMutability": "nonpayable","type": "fallback"},{"anonymous": false,"inputs": [{"indexed": false,"name": "description","type": "string"}],"name": "LogInfo","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"name": "price","type": "string"}],"name": "LogPriceUpdate","type": "event"},{"anonymous": false,"inputs": [{"indexed": true,"name": "_owner","type": "address"},{"indexed": true,"name": "_balance","type": "uint256"}],"name": "LogUpdate","type": "event"},{"constant": true,"inputs": [],"name": "getOwner","outputs": [{"name": "","type": "address"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "getPot","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "getStandardExchangeRate","outputs": [{"name": "","type": "string"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "getOracleExchangeRate0","outputs": [{"name": "","type": "string"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "getOracleExchangeRate1","outputs": [{"name": "","type": "string"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": false,"inputs": [{"name": "_userGuess","type": "uint256"}],"name": "bet_Mon","outputs": [{"name": "result","type": "bool"}],"payable": true,"stateMutability": "payable","type": "function"},{"constant": false,"inputs": [{"name": "_userGuess","type": "uint256"}],"name": "bet_Tue","outputs": [{"name": "result","type": "bool"}],"payable": true,"stateMutability": "payable","type": "function"},{"constant": false,"inputs": [{"name": "_userGuess","type": "uint256"}],"name": "bet_Wed","outputs": [{"name": "result","type": "bool"}],"payable": true,"stateMutability": "payable","type": "function"},{"constant": false,"inputs": [{"name": "_userGuess","type": "uint256"}],"name": "bet_Thu","outputs": [{"name": "result","type": "bool"}],"payable": true,"stateMutability": "payable","type": "function"},{"constant": false,"inputs": [{"name": "_userGuess","type": "uint256"}],"name": "bet_Fri","outputs": [{"name": "result","type": "bool"}],"payable": true,"stateMutability": "payable","type": "function"},{"constant": true,"inputs": [{"name": "_userIndex","type": "uint256"}],"name": "getUserInfo","outputs": [{"name": "userAddress","type": "address"},{"name": "guess","type": "uint256"},{"name": "bettingExchangeRate","type": "string"},{"name": "bettingTime","type": "uint256"},{"name": "fee","type": "uint256"},{"name": "WinOrLose","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": false,"inputs": [],"name": "transferAfterPayingFee","outputs": [{"name": "","type": "bool"}],"payable": true,"stateMutability": "payable","type": "function"},{"constant": false,"inputs": [{"name": "id","type": "bytes32"},{"name": "result","type": "string"},{"name": "proof","type": "bytes"}],"name": "__callback","outputs": [],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": false,"inputs": [{"name": "myid","type": "bytes32"},{"name": "result","type": "string"}],"name": "__callback","outputs": [],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": true,"inputs": [],"name": "getBalance","outputs": [{"name": "_balance","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": false,"inputs": [],"name": "update","outputs": [],"payable": true,"stateMutability": "payable","type": "function"}];
+let hitupAddress = '0xfa971a93e1227b4640bf6a5b1d5c8c5085a79a5d';
+let hitupABI = [{"constant": true,"inputs": [{"name": "","type": "uint256"}],"name": "winnerAddresses","outputs": [{"name": "","type": "address"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "","type": "address"}],"name": "user_index_mapping","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "","type": "uint256"}],"name": "users","outputs": [{"name": "userAddress","type": "address"},{"name": "guess","type": "uint256"},{"name": "bettingExchangeRate","type": "string"},{"name": "bettingTime","type": "uint256"},{"name": "fee","type": "uint256"},{"name": "WinOrLose","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "","type": "uint256"}],"name": "userAddresses","outputs": [{"name": "","type": "address"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "owner","outputs": [{"name": "","type": "address"}],"payable": false,"stateMutability": "view","type": "function"},{"inputs": [],"payable": true,"stateMutability": "payable","type": "constructor"},{"payable": false,"stateMutability": "nonpayable","type": "fallback"},{"anonymous": false,"inputs": [{"indexed": false,"name": "description","type": "string"}],"name": "LogInfo","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"name": "price","type": "string"}],"name": "LogPriceUpdate","type": "event"},{"anonymous": false,"inputs": [{"indexed": true,"name": "_owner","type": "address"},{"indexed": true,"name": "_balance","type": "uint256"}],"name": "LogUpdate","type": "event"},{"constant": true,"inputs": [],"name": "getOwner","outputs": [{"name": "","type": "address"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "getPot","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "getStandardExchangeRate","outputs": [{"name": "","type": "string"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "getOracleExchangeRate0","outputs": [{"name": "","type": "string"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "getOracleExchangeRate1","outputs": [{"name": "","type": "string"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": false,"inputs": [{"name": "_userGuess","type": "uint256"}],"name": "bet_Mon","outputs": [{"name": "result","type": "bool"}],"payable": true,"stateMutability": "payable","type": "function"},{"constant": false,"inputs": [{"name": "_userGuess","type": "uint256"}],"name": "bet_Tue","outputs": [{"name": "result","type": "bool"}],"payable": true,"stateMutability": "payable","type": "function"},{"constant": false,"inputs": [{"name": "_userGuess","type": "uint256"}],"name": "bet_Wed","outputs": [{"name": "result","type": "bool"}],"payable": true,"stateMutability": "payable","type": "function"},{"constant": false,"inputs": [{"name": "_userGuess","type": "uint256"}],"name": "bet_Thu","outputs": [{"name": "result","type": "bool"}],"payable": true,"stateMutability": "payable","type": "function"},{"constant": false,"inputs": [{"name": "_userGuess","type": "uint256"}],"name": "bet_Fri","outputs": [{"name": "result","type": "bool"}],"payable": true,"stateMutability": "payable","type": "function"},{"constant": true,"inputs": [{"name": "_userAddress","type": "address"}],"name": "getUserInfo","outputs": [{"name": "userAddress","type": "address"},{"name": "guess","type": "uint256"},{"name": "bettingExchangeRate","type": "string"},{"name": "bettingTime","type": "uint256"},{"name": "fee","type": "uint256"},{"name": "WinOrLose","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": false,"inputs": [],"name": "choice_transfer","outputs": [],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": false,"inputs": [],"name": "transferAfterPayingFee","outputs": [{"name": "","type": "bool"}],"payable": true,"stateMutability": "payable","type": "function"},{"constant": false,"inputs": [],"name": "closeGame","outputs": [],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": false,"inputs": [{"name": "id","type": "bytes32"},{"name": "result","type": "string"},{"name": "proof","type": "bytes"}],"name": "__callback","outputs": [],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": false,"inputs": [{"name": "myid","type": "bytes32"},{"name": "result","type": "string"}],"name": "__callback","outputs": [],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": true,"inputs": [],"name": "getBalance","outputs": [{"name": "_balance","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": false,"inputs": [],"name": "update","outputs": [],"payable": true,"stateMutability": "payable","type": "function"}];
 class Home extends Component{
   constructor(props) {
     super(props);
@@ -16,7 +16,7 @@ class Home extends Component{
       failRecords:[],
       pot :'0',
       standardExchangeRate:'200000',
-      currentExchangeRate:'200000',
+      currentExchangeRate:'1,688.4',
       guess :[1,1,1,1,1],
       guessString :['Not yet','Not yet','Not yet','Not yet','Not yet']
       
@@ -81,6 +81,7 @@ class Home extends Component{
   getCurrentExchangeRate = () => {
     // var url = 'https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=8zEeLCO4qHk9mCYAfsLP6dUxrOTVxq1t&searchdate=&data=AP01';
     var url = 'https://api.bithumb.com/public/ticker/ETH';
+    
     var date = new Date();
     var hour = date.getHours();
     console.log(hour);
@@ -112,7 +113,7 @@ class Home extends Component{
       //  console.log(res[21].kftc_deal_bas_r)
        console.log(this.state.guessString[0])
       }) 
-  },30000) 
+  },50000) 
 
 }
   
@@ -346,9 +347,9 @@ render() {
           <br></br>
           <h1>Pot money : {this.state.pot}</h1>
           <br></br>
-          <h2>Standard USD - KRW :{this.state.standardExchangeRate} </h2>
+          <h2>Standard ETH - WON :{this.state.standardExchangeRate} </h2>
           <br></br>
-          <h2>Current USD - KRW :{this.state.currentExchangeRate} </h2>
+          <h2>Current ETH - WON :{this.state.currentExchangeRate} </h2>
           <br></br>
         </div>         
       </div>
@@ -356,7 +357,8 @@ render() {
           <h2>Mon</h2>
           <span>BETTING TIME</span>
           <p>12:00 ~ 23:59</p>
-          <br></br>
+          <span>Fee</span>
+          <p>0 ETH</p>
           <h5>Your Bet</h5>
           <p>{this.state.guessString[0]}</p>
           <div className="upDownButton" >
@@ -378,7 +380,8 @@ render() {
           <h2>Tue</h2>
           <span>BETTING TIME</span>
           <p>12:00 ~ 23:59</p>
-          <br></br>
+          <span>Fee</span>
+          <p>0.2 ETH</p>
           <h5>Your Bet</h5>
           <p>{this.state.guessString[1]}</p>
           <div className="upDownButton" >
@@ -400,7 +403,8 @@ render() {
           <h2>Wed</h2>
           <span>BETTING TIME</span>
           <p>12:00 ~ 23:59</p>
-          <br></br>
+          <span>Fee</span>
+          <p>0.3 ETH</p>
           <h5>Your Bet</h5>
           <p>{this.state.guessString[2]}</p>
           <div className="upDownButton" >
@@ -423,7 +427,8 @@ render() {
           <h2>Thr</h2>
           <span>BETTING TIME</span>
           <p>12:00 ~ 23:59</p>
-          <br></br>
+          <span>Fee</span>
+          <p>0.4 ETH</p>
           <h5>Your Bet</h5>
           <p>{this.state.guessString[3]}</p>
           <div className="upDownButton" >
@@ -445,7 +450,8 @@ render() {
           <h2>Fri</h2>
           <span>BETTING TIME</span>
           <p>12:00 ~ 23:59</p>
-          <br></br>
+          <span>Fee</span>
+          <p>0.5 ETH</p>
           <h5>Your Bet</h5>
           <p>{this.state.guessString[4]}</p>
           <div className="upDownButton" >
@@ -462,6 +468,19 @@ render() {
           this.getMinuteLabel() <= 59 &&
           <button className='btn btn-outline-success' onClick={this.bet_Fri}>BET!</button>
           }
+        </div>
+        <div id ="FooterWrap_home">
+        <footer class ="footer"> 
+      <p>
+      <img className="logo2" src={logo} alt="A logo2 "/>
+      　<span>
+      　(주) Hit Up | 대표 : 이인학 | 서울 강남구 현대디지털1로 226 에이스하이엔드타워5차 1103호 | TEL: 070-4823-7860 | FAX: 02-4823-7860 /></span>
+      <hr style={{borderColor:"gray", marginLeft:250,marginRight:250}}/>
+      </p>
+      <span>Copyright © 2019 HITUP Inc. All rights reserved.</span>
+      
+      </footer> 
+          
         </div>
     </div>
   );
