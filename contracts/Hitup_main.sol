@@ -42,7 +42,7 @@ contract Hitup_main is usingOraclize{
         owner = msg.sender;
 
         emit LogUpdate(owner, address(this).balance);
-       OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);
+        OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);
         update();
     }
 
@@ -248,7 +248,7 @@ contract Hitup_main is usingOraclize{
         } else {
             emit LogInfo("Oraclize query was sent, standing by for the answer..");
 
-            // Using XPath to to fetch the right element in the JSON response, 시간간격 해결하기
+            // oraclize_query("URL","json(https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=8zEeLCO4qHk9mCYAfsLP6dUxrOTVxq1t&searchdate=&data=AP01).[21].kftc_deal_bas_r");
             oraclize_query("URL","json(https://api.bithumb.com/public/ticker/ETH).data.closing_price");
         }
     }
