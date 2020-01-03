@@ -1,0 +1,36 @@
+body {
+    background-color:#3c6382;
+}
+
+.displayName,
+.form {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
+.success {
+    text-decoration: line-through;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+
+.bgimage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    animation: fadeIn 1.5s linear;
+}
