@@ -1,50 +1,26 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-function Food({name, picture}) {
-  return(
-  <div>
-      <h1>I like {name}</h1>
-      <img src={picture}/>
-  </div>
-  )
-}
-
-const foodILike = [
-  {
-    name: "Kimchi",
-    image:
-      "http://aeriskitchen.com/wp-content/uploads/2008/09/kimchi_bokkeumbap_02-.jpg"
-  },
-  {
-    name: "Samgyeopsal",
-    image:
-      "https://3.bp.blogspot.com/-hKwIBxIVcQw/WfsewX3fhJI/AAAAAAAAALk/yHxnxFXcfx4ZKSfHS_RQNKjw3bAC03AnACLcBGAs/s400/DSC07624.jpg"
-  },
-  {
-    name: "Bibimbap",
-    image:
-      "http://cdn-image.myrecipes.com/sites/default/files/styles/4_3_horizontal_-_1200x900/public/image/recipes/ck/12/03/bibimbop-ck-x.jpg?itok=RoXlp6Xb"
-  },
-  {
-    name: "Doncasu",
-    image:
-      "https://s3-media3.fl.yelpcdn.com/bphoto/7F9eTTQ_yxaWIRytAu5feA/ls.jpg"
-  },
-  {
-    name: "Kimbap",
-    image:
-      "http://cdn2.koreanbapsang.com/wp-content/uploads/2012/05/DSC_1238r-e1454170512295.jpg"
+class App extends React.Component{
+  state = {
+    count: 0
+  };
+  plus = () => {
+      this.setState(current => ({count: current.count + 1}));
   }
-];
-
-function App() { 
-  return (
-    <div>
-      {foodILike.map(food => {
-        return <Food name={food.name} picture={food.image}/>
-      })}
-    </div>
-  );
+  minus = () => {
+      this.setState(current => ({count: current.count -1}));
+  }
+  render(){
+      return( 
+          <div>
+            <h1>Im a class {this.state.count}</h1>
+            <button onClick={this.plus}>Plus</button>
+            {/* 괄호가 없는것은 누를때만 실행, 괄호 써주면 즉시 실행 */}
+            <button onClick={this.minus}>Minus</button>  
+          </div>
+    ) 
+  }
 }
 
 export default App;
