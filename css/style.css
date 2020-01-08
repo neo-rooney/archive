@@ -1,0 +1,32 @@
+@import "reset.css";
+html, body {
+    height: 100%;
+}
+body {
+    display: flex;
+}
+
+.nav {
+    height: 100%;
+    width: 15%;
+    background-color: aqua;
+    
+}
+
+.content {
+    height: 100%;
+    width: 85%;
+    background-color: blueviolet;
+}
+
+.a {
+    height: 30px;
+    width: 30px;
+    background-color: chartreuse;
+}
+
+.b {
+    height: 30px;
+    width: 30px;
+    background-color: chocolate;
+}
