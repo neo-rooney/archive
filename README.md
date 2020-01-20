@@ -1,1 +1,3 @@
-#YoutubeClone with VanilaJS and NodeJS
+# YoutubeClone
+
+YoutubeClone with VanilaJS and NodeJS

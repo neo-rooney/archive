@@ -1,14 +1,15 @@
 {
-  "name": "youtubeclone_js",
-  "version": "1.0.0",
-  "description": "cloning youtube with Vanilla and NodeJS",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Rooney",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.17.1"
-  }
+    "name": "youtubeclone_js",
+    "version": "1.0.0",
+    "description": "cloning youtube with Vanilla and NodeJS",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node index.js"
+    },
+    "author": "Rooney",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.17.1"
+    }
 }
