@@ -19,6 +19,7 @@
 1. ES6 on NodeJS using Babel
 1. Express Core: Middlewares
 1. Express Core : Routing
+1. MVC Pattern
 
 ---
 
@@ -305,4 +306,159 @@ const handleListening = () =>
     console.log(`Listening on : http://localhost:${PORT}`);
 
 app.listen(PORT, handleListening);
+```
+
+---
+
+### MVC Pattern
+
+#### MVC Pattern 이란
+
+MVC는 Model, View, Controller의 약자로 하나의 프로젝트를 구성할 때 그 구성요소를 세자기의 역할로 구분한 패턴이다.
+
+Model은 데이터를 의미하고, View는 그 데이터를 어떻게 보여주는가를 의미한다. 마지막으로 Controller는 데이터를 보여주는 함수를 의미한다.
+
+이번 Youtube Clone Cording에서는 MVC Pattern을 사용한다.
+
+먼저 Controller를 구성해보겠다. Controller를 구성하기 전에 각 Router의 URI를 지정하기위해 Root디렉토리에 `routes.js` 파일을 만들고 사용할 URI를 지정해준다.
+
+#### routes.js
+
+```javascript
+// Global
+const HOME = "/";
+const JOIN = "/join";
+const LOGIN = "/login";
+const LOGOUT = "/logout";
+const SEARCH = "/search";
+
+// Users
+
+const USERS = "/users";
+const USER_DETAIL = "/:id";
+const EDIT_PROFILE = "/edit-profile";
+const CHANGE_PASSWORD = "/change-password";
+
+// Videos
+
+const VIDEOS = "/videos";
+const UPLOAD = "/upload";
+const VIDEO_DETAIL = "/:id";
+const EDIT_VIDEO = "/:id/edit";
+const DELETE_VIDEO = "/:id/delete";
+
+const routes = {
+    home: HOME,
+    join: JOIN,
+    login: LOGIN,
+    logout: LOGOUT,
+    search: SEARCH,
+    users: USERS,
+    userDetail: USER_DETAIL,
+    editProfile: EDIT_PROFILE,
+    changePassword: CHANGE_PASSWORD,
+    videos: VIDEOS,
+    upload: UPLOAD,
+    videoDetail: VIDEO_DETAIL,
+    editVideo: EDIT_VIDEO,
+    deleteVideo: DELETE_VIDEO
+};
+
+export default routes;
+```
+
+#### Controllers
+
+URI를 정리했으므로, 이제 Controller에 해당하는 함수들을 각각 정의해준다. `controllers` 디렉토리를 하나 만들고 그 안에 `userController.js` `videoController.js` 파일을 만들어 준다.
+
+##### userController.js
+
+```javascript
+export const join = (req, res) => res.send("Join");
+export const login = (req, res) => res.send("Login");
+export const logout = (req, res) => res.send("Logout");
+export const users = (req, res) => res.send("Users");
+export const userDetail = (req, res) => res.send("UserDetail");
+export const editProfile = (req, res) => res.send("EditProfile");
+export const changePassword = (req, res) => res.send("ChangePassword");
+```
+
+##### videoController.js
+
+```javascript
+export const home = (req, res) => res.send("Home");
+export const search = (req, res) => res.send("Search");
+export const videos = (req, res) => res.send("Videos");
+export const upload = (req, res) => res.send("Upload");
+export const videoDetail = (req, res) => res.send("VideoDetail");
+export const editVideo = (req, res) => res.send("EditVideo");
+export const deleteVideo = (req, res) => res.send("DeleteVideo");
+```
+
+#### Routers
+
+`Routers` 디렉토리를 하나 만들어서 그 안에 `globalRouter.js` `userRouter.js` `videoRouter.js` 를 각각 만들어 준다.
+
+##### globalRouter.js
+
+```javascript
+import express from "express";
+import routes from "../routes";
+import { home, search } from "../controllers/videoController";
+import { join, login, logout } from "../controllers/userController";
+
+const globalRouter = express.Router();
+
+globalRouter.get(routes.home, home);
+globalRouter.get(routes.search, search);
+globalRouter.get(routes.join, join);
+globalRouter.get(routes.login, login);
+globalRouter.get(routes.logout, logout);
+
+export default globalRouter;
+```
+
+##### userRouter.js
+
+```javascript
+import express from "express";
+import routes from "../routes";
+import {
+    users,
+    userDetail,
+    editProfile,
+    changePassword
+} from "../controllers/userController";
+
+const userRouter = express.Router();
+
+userRouter.get(routes.users, users);
+userRouter.get(routes.userDetail, userDetail);
+userRouter.get(routes.editProfile, editProfile);
+userRouter.get(routes.changePassword, changePassword);
+
+export default userRouter;
+```
+
+##### videoRouter.js
+
+```javascript
+import express from "express";
+import routes from "../routes";
+import {
+    videos,
+    upload,
+    videoDetail,
+    editVideo,
+    deleteVideo
+} from "../controllers/videoController";
+
+const videoRouter = express.Router();
+videoRouter.get(routes.videos, videos);
+videoRouter.get(routes.upload, upload);
+videoRouter.get(routes.videoDetail, videoDetail);
+videoRouter.get(routes.editVideo, editVideo);
+videoRouter.get(routes.deleteVideo, deleteVideo);
+
+export default videoRouter;
 ```
