@@ -17,6 +17,7 @@
 1. Create My First Express Server
 1. Handlig Routes with Express
 1. ES6 on NodeJS using Babel
+1. Express Core:Middlewares
 
 ### 2020-01-20-월
 
@@ -144,3 +145,102 @@ package.json의 script에 아래와 같이 코드를 추가해준다.
 ```
 
 이제 콘솔창에 `npm start` 를 입력하게 되면 서버를 nodemon 과 babel을 통해 편리하게 서버를 실행시킬 수 있다.
+
+#### Express Core:Middlewares
+
+##### Middleware란?
+
+서버는 요청에서 응답까지 하나의 흐름을 갖고 있습니다. 이 요청과 응답사이에 실행되는 함수 목록을 `Middleware 함수` 라고 합니다.
+
+```javascript
+import express from "express";
+const app = express();
+
+const PORT = 4000;
+
+const handleListening = () =>
+    console.log(`listening on: http://localhost:${PORT}`);
+
+const handleHome = (req, res) => res.send("Hello from home");
+
+const handleProfile = (req, res) => res.send("You are my profile");
+
+// Middleware 함수
+const betweenHome = (req, res, next) => {
+    console.log("Between");
+    next();
+};
+
+//betweenHome이라는 함수는 모든 요청전에 한번씩 실행될것이다.
+app.use(betweenHome);
+
+app.get("/", handleHome);
+
+app.get("/profile", handleProfile);
+
+app.listen(PORT, handleListening);
+```
+
+##### morgan
+
+로깅을 하려면 morgan이라는 middleware를 사용해야한다
+로깅이란 무슨일이 어디서 일어났는지 기록하는것을 의미한다.
+
+```
+npm install morgan
+```
+
+##### helmet
+
+웹 서버에서 http 헤더설정을 바꿔주는 모듈이다.
+보안에 관한 모듈로 express 프레임워크를 사용할 경우 꼭 설치해주도록 한다.
+
+```
+npm install helmet
+```
+
+##### body-parser
+
+클라이언터POST request data의 body로부터 파라이터를 편리하게 추출할경우 사용하는 모듈이다.
+
+```
+npm install body-parser
+```
+
+##### cookie-parser
+
+요청된 쿠키를 쉽게 추출할 수 있도록 해주는 모듈이다.
+
+```
+npm install cookie-parser
+```
+
+```javascript
+import express from "express";
+import morgan from "morgan";
+import helmet from "helmet";
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
+
+const app = express();
+
+const PORT = 4000;
+
+const handleListening = () =>
+    console.log(`listening on: http://localhost:${PORT}`);
+
+const handleHome = (req, res) => res.send("Hello from home");
+
+const handleProfile = (req, res) => res.send("You are my profile");
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan("dev"));
+app.use(helmet());
+
+app.get("/", handleHome);
+
+app.get("/profile", handleProfile);
+
+app.listen(PORT, handleListening);
+```
