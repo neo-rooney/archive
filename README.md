@@ -20,6 +20,7 @@
 1. Express Core: Middlewares
 1. Express Core : Routing
 1. MVC Pattern
+1. Recap
 
 ---
 
@@ -42,7 +43,7 @@ app.listen(PORT, handleListening); //PORT number
 
 ### Handlig Routes with Express
 
-라우팅은 애플리케이션 엔드 포인트(URI)의 정의, 그리고 URI가 클라이언트 요청에 응답하는 방식을 말한다.
+라우팅은 애플리케이션 엔드 포인트(URL)의 정의, 그리고 URL가 클라이언트 요청에 응답하는 방식을 말한다.
 
 ```javascript
 const express = require("express"); //require => node modules을 어딘가에서 가져오는 역할
@@ -314,13 +315,13 @@ app.listen(PORT, handleListening);
 
 #### MVC Pattern 이란
 
-MVC는 Model, View, Controller의 약자로 하나의 프로젝트를 구성할 때 그 구성요소를 세자기의 역할로 구분한 패턴이다.
+MVC는 Model, View, Controller의 약자로 하나의 프로젝트를 구성할 때 그 구성요소를 세가지의 역할로 구분한 패턴이다.
 
 Model은 데이터를 의미하고, View는 그 데이터를 어떻게 보여주는가를 의미한다. 마지막으로 Controller는 데이터를 보여주는 함수를 의미한다.
 
 이번 Youtube Clone Cording에서는 MVC Pattern을 사용한다.
 
-먼저 Controller를 구성해보겠다. Controller를 구성하기 전에 각 Router의 URI를 지정하기위해 Root디렉토리에 `routes.js` 파일을 만들고 사용할 URI를 지정해준다.
+먼저 Controller를 구성해보겠다. Controller를 구성하기 전에 각 Router의 URL를 지정하기위해 Root디렉토리에 `routes.js` 파일을 만들고 사용할 URL를 지정해준다.
 
 #### routes.js
 
@@ -369,7 +370,7 @@ export default routes;
 
 #### Controllers
 
-URI를 정리했으므로, 이제 Controller에 해당하는 함수들을 각각 정의해준다. `controllers` 디렉토리를 하나 만들고 그 안에 `userController.js` `videoController.js` 파일을 만들어 준다.
+URL를 정리했으므로, 이제 Controller에 해당하는 함수들을 각각 정의해준다. `controllers` 디렉토리를 하나 만들고 그 안에 `userController.js` `videoController.js` 파일을 만들어 준다.
 
 ##### userController.js
 
@@ -461,4 +462,177 @@ videoRouter.get(routes.editVideo, editVideo);
 videoRouter.get(routes.deleteVideo, deleteVideo);
 
 export default videoRouter;
+```
+
+#### app.js
+
+URL, controller, router를 모두 정의하였으므로 `app.js`는 아래와같이 작성한다.
+
+##### app.js
+
+```javascript
+import express from "express";
+import morgan from "morgan";
+import helmet from "helmet";
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
+import globalRouter from "./Routers/globalRouter";
+import userRouter from "./Routers/userRouter";
+import videoRouter from "./Routers/videoRouter";
+import routes from "./routes";
+
+const app = express();
+
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan("dev"));
+app.use(helmet());
+
+app.use(routes.home, globalRouter);
+app.use(routes.users, userRouter);
+app.use(routes.videos, videoRouter);
+
+export default app;
+```
+
+---
+
+### Recap
+
+#### init.js
+
+`init.js` 에는 app.js에서 import한 application이 있다.
+
+```javascript
+import app from "./app";
+
+const PORT = 4000;
+
+const handleListening = () =>
+    console.log(`Listening on : http://localhost:${PORT}`);
+
+app.listen(PORT, handleListening);
+```
+
+#### app.js
+
+application에 관한 코드들은 `app.js`에 담겨있다. 코드들에 대하여 간단히 설명하자면, 먼저 express를 import 하고 express의 실행 결과를 app 상수로 만들었다. 그리고 middleware들을 추가하였고, 사용할 router들도 추가하였다.
+
+```javascript
+import express from "express";
+import morgan from "morgan";
+import helmet from "helmet";
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
+import globalRouter from "./Routers/globalRouter";
+import userRouter from "./Routers/userRouter";
+import videoRouter from "./Routers/videoRouter";
+import routes from "./routes";
+
+const app = express();
+
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan("dev"));
+app.use(helmet());
+
+app.use(routes.home, globalRouter);
+app.use(routes.users, userRouter);
+app.use(routes.videos, videoRouter);
+
+export default app;
+```
+
+#### Routers
+
+라우터 디렉토리를 따로 만들어 그 안에 `globalRouter.js`, `userRouter.js`, `videoRouter.js`를 각각 만들었다.
+
+##### gobalRouter.js
+
+세가지의 라우터 중 `globalRouter.js`를 살펴보면, 이 안에는 URL과 controller가 담겨있다. URL은 Root 디렉토리에 따로 `routes.js` 파일을 만들어 정의해주었고, controller도 따로 디렉토리를 만들어서 정희해 주었다.
+
+```javascript
+import express from "express";
+import routes from "../routes";
+import { home, search } from "../controllers/videoController";
+import { join, login, logout } from "../controllers/userController";
+
+const globalRouter = express.Router();
+
+globalRouter.get(routes.home, home);
+globalRouter.get(routes.search, search);
+globalRouter.get(routes.join, join);
+globalRouter.get(routes.login, login);
+globalRouter.get(routes.logout, logout);
+
+export default globalRouter;
+```
+
+##### routes.js
+
+```javascript
+// Global
+const HOME = "/";
+const JOIN = "/join";
+const LOGIN = "/login";
+const LOGOUT = "/logout";
+const SEARCH = "/search";
+
+// Users
+const USERS = "/users";
+const USER_DETAIL = "/:id";
+const EDIT_PROFILE = "/edit-profile";
+const CHANGE_PASSWORD = "/change-password";
+
+// Videos
+const VIDEOS = "/videos";
+const UPLOAD = "/upload";
+const VIDEO_DETAIL = "/:id";
+const EDIT_VIDEO = "/:id/edit";
+const DELETE_VIDEO = "/:id/delete";
+
+const routes = {
+    home: HOME,
+    join: JOIN,
+    login: LOGIN,
+    logout: LOGOUT,
+    search: SEARCH,
+    users: USERS,
+    userDetail: USER_DETAIL,
+    editProfile: EDIT_PROFILE,
+    changePassword: CHANGE_PASSWORD,
+    videos: VIDEOS,
+    upload: UPLOAD,
+    videoDetail: VIDEO_DETAIL,
+    editVideo: EDIT_VIDEO,
+    deleteVideo: DELETE_VIDEO
+};
+
+export default routes;
+```
+
+##### controllers > userController.js
+
+```javascript
+export const join = (req, res) => res.send("Join");
+export const login = (req, res) => res.send("Login");
+export const logout = (req, res) => res.send("Logout");
+export const users = (req, res) => res.send("Users");
+export const userDetail = (req, res) => res.send("UserDetail");
+export const editProfile = (req, res) => res.send("EditProfile");
+export const changePassword = (req, res) => res.send("ChangePassword");
+```
+
+##### controllers > videoController.js
+
+```javascript
+export const home = (req, res) => res.send("Home");
+export const search = (req, res) => res.send("Search");
+export const videos = (req, res) => res.send("Videos");
+export const upload = (req, res) => res.send("Upload");
+export const videoDetail = (req, res) => res.send("VideoDetail");
+export const editVideo = (req, res) => res.send("EditVideo");
+export const deleteVideo = (req, res) => res.send("DeleteVideo");
 ```
