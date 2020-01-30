@@ -22,6 +22,7 @@
 1. MVC Pattern
 1. Recap
 1. Pug
+1. HTML Working
 
 ---
 
@@ -910,3 +911,20 @@ export const editProfile = (req, res) =>
 export const changePassword = (req, res) =>
     res.render("changePassword", { pageTitle: "Change Password" });
 ```
+
+---
+
+### HTML Working
+
+### Pages
+
+-   [] Home
+-   [] Join
+-   [] Login
+-   [x] Search
+-   [] User Detail
+-   [] Edit Profile
+-   [] Change Password
+-   [] Upload
+-   [] Video Detail
+-   [] Edit Video
