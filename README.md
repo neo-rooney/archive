@@ -21,6 +21,7 @@
 1. Express Core : Routing
 1. MVC Pattern
 1. Recap
+1. Pug
 
 ---
 
@@ -551,7 +552,7 @@ export default app;
 
 ##### gobalRouter.js
 
-세가지의 라우터 중 `globalRouter.js`를 살펴보면, 이 안에는 URL과 controller가 담겨있다. URL은 Root 디렉토리에 따로 `routes.js` 파일을 만들어 정의해주었고, controller도 따로 디렉토리를 만들어서 정희해 주었다.
+세가지의 라우터 중 `globalRouter.js`를 살펴보면, 이 안에는 URL과 controller가 담겨있다. URL은 Root 디렉토리에 따로 `routes.js` 파일을 만들어 정의해주었고, controller도 따로 디렉토리를 만들어서 정의해 주었다.
 
 ```javascript
 import express from "express";
@@ -635,4 +636,277 @@ export const upload = (req, res) => res.send("Upload");
 export const videoDetail = (req, res) => res.send("VideoDetail");
 export const editVideo = (req, res) => res.send("EditVideo");
 export const deleteVideo = (req, res) => res.send("DeleteVideo");
+```
+
+---
+
+### Pug
+
+#### What is Pug?
+
+Pug는 Node Express Template Engine이다. Template Engine은 HTML을 최소화시키도록 도와주는 도구를 의미한다.
+
+#### Installing Pug
+
+##### Install
+
+```
+npm install pug
+```
+
+##### app.js
+
+`app.set()`을 이용하여 view engine을 설정해주도록 한다. 공식문서에 따르면 `app.set('title','value')`과 같은 형식으로 설정하고자하는 Property의 name과 value를 입력해야한다. view engine의 경우 Default값이 `N/A (undefined)이므로`, value값에 `"pug"`를 입력해준다. Pug과 Express에는 view 파일들의 위치에 관한 기본 설정이 있으므로, Root 디렉토리에 views 디렉토리를 생성하고, 그 안에 home.pug와 같이 확장자명을 html이 아닌 pug로 파일을 생성해준다.
+
+```javascript
+import express from "express";
+import morgan from "morgan";
+import helmet from "helmet";
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
+import globalRouter from "./Routers/globalRouter";
+import userRouter from "./Routers/userRouter";
+import videoRouter from "./Routers/videoRouter";
+import routes from "./routes";
+
+const app = express();
+
+app.set("view engine", "pug"); //pug setting
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan("dev"));
+app.use(helmet());
+
+app.use(routes.home, globalRouter);
+app.use(routes.users, userRouter);
+app.use(routes.videos, videoRouter);
+
+export default app;
+```
+
+##### videoController.js
+
+아래와 같이 `res.render()`의 괄호안에 확장자명을 제외한 views 디렉토리 안의 파일명을 입력해주면 홈화면에 home.pug 파일에 입력한 코드가 출력될것이다.
+
+```javascript
+export const home = (req, res) => res.render("home"); //res.render()
+export const search = (req, res) => res.send("Search");
+export const videos = (req, res) => res.send("Videos");
+export const upload = (req, res) => res.send("Upload");
+export const videoDetail = (req, res) => res.send("VideoDetail");
+export const editVideo = (req, res) => res.send("EditVideo");
+export const deleteVideo = (req, res) => res.send("DeleteVideo");
+```
+
+#### Layouts with Pug
+
+HTML과 CSS만드로 작업을 하는경우 똑같은 코드를 반복하여 작성하는 경우가 있다. Pug의 layout을 사용하면 불필요한 반복을 줄일 수 있어 효율적으로 코드를 작성할 수 있다.
+`views`디렉토리 안에 `layout`이라는 새로운 디렉토리를 생성하고 그 안에 main.pug라는 파일을 생성한다.
+
+##### main.pug
+
+HTML의 경우 태그로 코드를 구분하지만, pug의 경우에는 들여쓰기로 코드들의 종속관계를 구분한다. `main`안의 `block content`부분이 다른 화면들의 pug파일들의 내용들이 채워지는 곳이다.
+
+```pug
+doctyle html
+html
+    head
+        title Youtube Clone
+    body
+        main
+            block content //- 이 부분에 다른 pug파일들의 내용들이 채워진다.
+        footer
+            span &copy: Youtube
+```
+
+##### home.pug
+
+만든 layout을 사용하기 위해서는 아래와 같이 입력하여야한다. 이렇게 입력하게되면 layout에서 입력한 `head`의 `title`과 `footer`의 `&copy: Youtube`이 출력되고, home.pug에서 입력한 내용인 `Hello`가 함께 출력된다.
+
+```pug
+extends layouts/main
+
+block content
+    p Hello
+```
+
+#### Partials with Pug
+
+Partials는 페이지의 일부분을 의미한다. header부분이나 footer부분이 그 예가 될 것이다. `views`디렉토리에 `partials`라는 새로운 디렉토리를 생성하고, 그 안에 `header.pug`와 `footer.pug`를 만들어 작업을 진행한다.
+
+##### header.pug
+
+div 태그의 경우에는 태그이름을 붙이지 않고 `.className`의 형태로 작성하는것이 가능하다. header의 경우에는 로그인이 되어있는 경우와 그렇지 않은경우 그 내용이 달라질것이므로 차후 그 내용에대해 다루도록하고 일단 로그인이 되어있지 않은 상태라 생각하고 코드를 작성하였다. font awesome의 아이콘을 사용하였는데 main.pug의 head에 코드를 추가해야 정상적으로 작동할 것이다.
+
+```pug
+header.header
+    .header__column
+        i.fab.fa-youtube
+    .header__column
+        ul
+            li
+                a(href='#') Join
+            li
+                a(href='#') Log In
+```
+
+##### footer.pug
+
+Pug에 javascript 코드를 추가하는 경우 `#{ }` 형태로 추가하는것이 가능하다.
+
+```pug
+footer.footer
+    div.footer__icon
+        i.fab.fa-youtube
+        span.footer__text Youtube #{new Date().getFullYear()} &copy;
+```
+
+##### main.pug
+
+Pug의 경우 일반적인 HTML코드를 사용하여도 상관없다.
+
+```pug
+doctype html
+html
+    head
+        title Youtube Clone
+        //- fontAwesom 작동 코드 ↓
+        <script src="https://kit.fontawesome.com/a01f14778c.js"crossorigin="anonymous"></script>
+    body
+        include ../partials/header
+        main
+            block content
+        include ../partials/footer
+```
+
+#### Local Variables in Pug
+
+아래 `header.pug`의 a 태그 안에는 URL에 관한 정보가 담겨야한다. 앞서 우리는 `routes.js`에 URL에 관한 정보를 정리해 두었는데, 이를 Pug에서 사용하려면 URL에 관한 변수가 전역적(global)으로 사용할 수 있어야한다. 이를 위해서는 middleware를 사용해야 하는데 이에 대해서 알아보고자 한다.
+
+```pug
+header.header
+    .header__column
+        i.fab.fa-youtube
+    .header__column
+        ul
+            li
+                a(href='#') Join
+            li
+                a(href='#') Log In
+```
+
+##### What is locals ?
+
+공식문서에 따르면 res.locals의 정의는 아래와 같다
+
+```
+An object that contains response local variables scoped to the request, and therefore available only to the view(s) rendered during that request / response cycle (if any). Otherwise, this property is identical to app.locals.
+```
+
+간단히 말하면, local변수를 global 변수로 사용하도록 만들어 주는것이다. middleware는 `app.js`에 추가했으므로, Root 디렉토리에 `middlewares.js`파일을 만들어 사용할 function을 정의해주고 `app.js`에 이를 추가하도록 하겠다.
+
+##### middlewares.js
+
+이 middleware는 다른 코드들 사이에 위치하므로, next를 호출 해야한다. 다음 함수로 넘어간다는 의미이다.
+
+```javascript
+import routes from "./routes";
+
+export const localsMiddleware = (req, res, next) => {
+    res.locals.siteName = "WeTube";
+    res.locals.routes = routes;
+    next();
+};
+```
+
+##### app.js
+
+middle
+
+```javascript
+import express from "express";
+import morgan from "morgan";
+import helmet from "helmet";
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
+import { localsMiddleware } from "./middlewares";
+import globalRouter from "./Routers/globalRouter";
+import userRouter from "./Routers/userRouter";
+import videoRouter from "./Routers/videoRouter";
+import routes from "./routes";
+
+const app = express();
+
+app.use(helmet());
+app.set("view engine", "pug");
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan("dev"));
+//middleware의 위치에 신경써야한다. 우리는 globalRouter, userRouter, videoRouter 모두에서 localsMiddleware에 접근 가능해야 하므로 이 곳에 middleware를 위치시킨다.
+app.use(localsMiddleware);
+
+app.use(routes.home, globalRouter);
+app.use(routes.users, userRouter);
+app.use(routes.videos, videoRouter);
+
+export default app;
+```
+
+#### Template Variables in Pug
+
+템플릿마다 다른 정보를 갖는 경우, 그 템플릿에만 변수를 추가하는것이 가능하다.
+
+##### main.pug
+
+`title` 부분에 각 템플릿마다, 템플릿의 title을 표시하도록 해보겠다.
+
+```pug
+doctype html
+html
+    head
+        <script src="https://kit.fontawesome.com/a01f14778c.js"crossorigin="anonymous"></script>
+        title #{pageTitle} | #{siteName}
+    body
+        include ../partials/header
+        main
+            block content
+        include ../partials/footer
+```
+
+##### videoController.js
+
+render 함수의 첫번째 인자는 템플릿이고, 두 번째 인자는 템플릿에 추가할 정보가 담긱 객체이다. 즉, 템플릿에 전달 할 정보를 객체 형태로 각각의 템플릿에 보낼 수 있다.
+
+```javascript
+export const home = (req, res) => res.render("home", { pageTitle: "Home" });
+export const search = (req, res) =>
+    res.render("search", { pageTitle: "Search" });
+export const videos = (req, res) =>
+    res.render("videos", { pageTitle: "Videos" });
+export const upload = (req, res) =>
+    res.render("upload", { pageTitle: "Upload" });
+export const videoDetail = (req, res) =>
+    res.render("videoDetail", { pageTitle: "Video Detail" });
+export const editVideo = (req, res) =>
+    res.render("editVideo", { pageTitle: "Edit Video" });
+export const deleteVideo = (req, res) =>
+    res.render("deleteVideo", { pageTitle: "Delete Video" });
+```
+
+##### userController.js
+
+```javascript
+export const join = (req, res) => res.render("join", { pageTitle: "Join" });
+export const login = (req, res) => res.render("login", { pageTitle: "Login" });
+export const logout = (req, res) =>
+    res.render("logout", { pageTitle: "Logout" });
+export const users = (req, res) => res.render("users", { pageTitle: "Users" });
+export const userDetail = (req, res) =>
+    res.render("userDetail", { pageTitle: "User Detail" });
+export const editProfile = (req, res) =>
+    res.render("editProfile", { pageTitle: "EditvProfile" });
+export const changePassword = (req, res) =>
+    res.render("changePassword", { pageTitle: "Change Password" });
 ```
