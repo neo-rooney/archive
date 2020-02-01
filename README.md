@@ -933,6 +933,7 @@ export const changePassword = (req, res) =>
 
 1. MongoDB and Mongoose
 1. Video Model
+1. Comment Model
 
 ---
 
@@ -1104,4 +1105,95 @@ const handleListening = () =>
     console.log(`Listening on : http://localhost:${PORT}`);
 
 app.listen(PORT, handleListening);
+```
+
+---
+
+### Comment Model
+
+동영상에 댓글을 달게되면 해당 댓글 또한 DB에 저장되어야 한다. 따라서 댓글에 대한 Model을 설정해주도록 한다. models 디렉토리에 `Comment.js` 파일을 생성한다.
+
+##### Commnet.js
+
+```javascript
+import mongoose from "mongoose";
+
+const CommentSchema = new mongoose.Schema({
+    text: {
+        type: text,
+        required: "Text is required"
+    },
+    createAt: {
+        type: Date,
+        default: Date.now
+    }
+});
+const model = mongoose.model("Comment", CommentSchema);
+
+export default model;
+```
+
+DB에 앞서 만든 동영상에 대한 데이터와 댓글에 관한 데이터가 저장 될 것 이다. 여기서 중요한 점은 동영상과 댓글에 대한 데이터를 연결시켜야 한다는 것이다. 어떤 댓글이 어떤 동영상에 달린것인지 DB가 인지해야 하는것이다.
+아래와 같이 `Commet.js`를 작성한다.
+
+```javascript
+import mongoose from "mongoose";
+
+const CommentSchema = new mongoose.Schema({
+    text: {
+        type: text,
+        required: "Text is required"
+    },
+    createAt: {
+        type: Date,
+        default: Date.now
+    },
+    video: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Video"
+    }
+});
+const model = mongoose.model("Comment", CommentSchema);
+
+export default model;
+```
+
+댓글에 관한 데이터베이스에 비디오의 ID값을 갖게 해서 두 데이터를 연결시켰다.
+
+다른 방법으로는 모든 Comment ID들을 array로 video에 넣는 방법이 있다. 아래와 같이 `Video.js`에 Comment ID의 배열을 추가한다.
+
+#### Video.js
+
+```javascript
+import mongoose from "mongoose";
+
+const VideoSchema = new mongoose.Schema({
+    fileUrl: {
+        type: String,
+        required: "File URL is required"
+    },
+    title: {
+        type: String,
+        required: "Title is required"
+    },
+    description: String,
+    view: {
+        tyle: Number,
+        default: 0
+    },
+    createAt: {
+        type: Date,
+        default: Date.now
+    },
+    comments: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Comment"
+        } //comment ID에 대한 array
+    ]
+});
+
+const model = mongoose.model("Video", VideoSchema);
+
+export default model;
 ```
