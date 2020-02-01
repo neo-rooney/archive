@@ -1197,3 +1197,74 @@ const model = mongoose.model("Video", VideoSchema);
 
 export default model;
 ```
+
+---
+
+### Home Controller
+
+DB로 부터 Video에 관한 데이터를 받아와서 화면에 render해야 한다. 따라서 다음과 같이 `videoController.js`파일을 수정한다.
+
+##### videoController.js
+
+```javascript
+import routes from "../routes";
+import Video from "../models/Video";
+
+export const home = async (req, res) => {
+    //수정된 부분_시작
+    try {
+        const videos = await Video.find({});
+        res.render("home", { pageTitle: "Home", videos });
+    } catch (error) {
+        console.log(error);
+        res.render("home", { pageTitle: "Home", videos: [] });
+    }
+}; // 수정된 부분_끝
+
+export const search = (req, res) => {
+    const {
+        query: { term: searchingBy }
+    } = req;
+    //const searchingBy = req.query.term ES6이전
+    res.render("search", { pageTitle: "Search", searchingBy, videos }); //searchingBy: searchingBy ES6 이전
+};
+
+export const getUpload = (req, res) =>
+    res.render("upload", { pageTitle: "Upload" });
+export const postUpload = (req, res) => {
+    const {
+        body: { file, title, decription }
+    } = req;
+    // To Do : Upload and save Video
+    res.redirect(routes.videoDetail(324393));
+};
+export const videoDetail = (req, res) =>
+    res.render("videoDetail", { pageTitle: "Video Detail" });
+export const editVideo = (req, res) =>
+    res.render("editVideo", { pageTitle: "Edit Video" });
+export const deleteVideo = (req, res) =>
+    res.render("deleteVideo", { pageTitle: "Delete Video" });
+```
+
+#### async & await
+
+async \$ await는 자바스크립트의 비동기 처리 패턴 중 하나이다. 아래 수정된 `videoController.js`코드를 살펴보자
+
+```javascript
+export const home = async (req, res) => {
+    //수정된 부분_시작
+    try {
+        const videos = await Video.find({});
+        res.render("home", { pageTitle: "Home", videos });
+    } catch (error) {
+        console.log(error);
+        res.render("home", { pageTitle: "Home", videos: [] });
+    }
+}; // 수정된 부분_끝
+```
+
+데이터베이스로부터 Video에 관한 정보를 받아오도록했다. 비동기 처리를 하지 않으면, 데이터베이스로부터 모든 데이터를 받아오기 전에 다음 코드로 넘어 갈 것이다. 우리가 원하는 것은 모든 데이터를 받은 후 화면에 render하기를 원하는것이므로 데이터를 다 받을 때까지 javascript가 기다려줬으면 한다. 이럴때 비동기 처리를 하면 된다.
+
+#### async & await 예외 처리
+
+async & await에서 예외를 처리하는 방법은 바로 try catch이다. 프로미스에서 에러 처리를 위해 .catch()를 사용했던 것처럼 async에서는 catch {} 를 사용하시면 된다. 발견된 에러는 `error`객체에 담기기 때문에 에러의 유형에 맞게 에러 코드를 처리해주면된다.
