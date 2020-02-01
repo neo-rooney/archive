@@ -928,3 +928,123 @@ export const changePassword = (req, res) =>
 -   [] Upload
 -   [] Video Detail
 -   [] Edit Video
+
+## ExpressJS
+
+1. MongoDB and Mongoose
+
+---
+
+### MongoDB and Mongoose
+
+#### What is MongoDB?
+
+MongoDB는 C++로 작성된 오픈소스 문서지향(Document-Oriented) 적 Cross-platform 데이터베이스이며, 뛰어난 확장성과 성능을 자랑한다.
+
+##### NoSQL
+
+NoSQL은 Not only SQL의 약자이다. 기존의 RDBMS의 한계를 극복하기 위해 만들어진 새로운 형태의 데이터저장소이다. 관계형 DB가 아니므로, RDMS 처럼 고정된 스키마 및 JSON이 존재하지 않는다.
+
+##### Document
+
+MongoDB는 Document-Oriented 데이터베이스이다. 여기서 말하는 Document는 데이터 구조는 한개이상의 key - value pair 으로 이루어져있다는것을 의미한다.
+
+```
+{
+    "_id": ObjectId("5099803df3f4948bd2f98391"),
+    "username": "velopert",
+    "name": { first: "M.J.", last: "Kim" }
+}
+```
+
+위의 Sample Document에서 \_id, username, name은 `key`이고 그 오른쪽 값들은 `value`이다.
+\_id는 12bytes의 hexadecimal 값으로서, 각 document의 유일함을 제공한다. 이 값의 첫 4byte는 현재 timestamp, 다음 3bytes는 machin id, 다음 2byte는 MongoDB 서버의 프로세스 id, 마이막 3byte는 순차번호를 의미한다.
+
+#### install Mongoose
+
+Javascript에서 MongoDB와 연결하려면 Adapter를 통해야한다.
+
+MongoDB는 데이터베이스고 이를 javascript와 연결해주는것이 mongoose이다.
+
+```
+npm install mongoose
+```
+
+#### Connecting to MongoDB
+
+##### db.js
+
+```javascript
+import mongoose from "mongoose";
+
+mongoose.connect("mongodb://localhost:27017/wetube", {
+    useNewUrlParser: true,
+    useFindAndModify: false
+});
+
+const db = mongoose.connection;
+
+const handleOpen = () => console.log("Connected to DB");
+const handleError = error => console.log(`Error on DB Connection : ${error}`);
+db.once("open", handleOpen);
+db.once("error", handleError);
+```
+
+##### init.js
+
+```javascript
+import "./db"; //기존 videoController에 import한것을 지우고!
+import app from "./app";
+
+const PORT = 4002;
+
+const handleListening = () =>
+    console.log(`Listening on : http://localhost:${PORT}`);
+
+app.listen(PORT, handleListening);
+```
+
+#### install dotenv
+
+node.js 로 개발을 하면서, 포트, DB 관련 정보 등 전역으로 필요한 여러 정보들이 존재한다. node.js 에서는 dotenv 패키지를 통해 환경변수 파일을 외부에 만들고, 관리할 수 있다. 특히, 깃허브 등에 오픈소스로 프로젝트를 공개할때, DB 계정 정보를 소스코드 내에 하드코딩하지 않고, 외부 환경변수 파일에 작성하고, .gitignore 을 통해 제외하면 안전하다.
+
+```
+npm install dotenv
+```
+
+##### db.js
+
+```javascript
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
+
+mongoose.connect(process.env.MONGO_URL, {
+    //기존의 DB URL 주소를 .env파일에서 따로 관리한다!
+    useNewUrlParser: true,
+    useFindAndModify: false
+});
+
+const db = mongoose.connection;
+
+const handleOpen = () => console.log("Connected to DB");
+const handleError = error => console.log(`Error on DB Connection : ${error}`);
+db.once("open", handleOpen);
+db.once("error", handleError);
+```
+
+##### init.js
+
+```javascript
+import "./db";
+import app from "./app";
+import dotenv from "dotenv";
+dotenv.config();
+
+const PORT = process.env.PORT || 4000; //PORT 번호도 .env파일에서 관리한다.
+
+const handleListening = () =>
+    console.log(`Listening on : http://localhost:${PORT}`);
+
+app.listen(PORT, handleListening);
+```
