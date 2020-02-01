@@ -929,9 +929,10 @@ export const changePassword = (req, res) =>
 -   [] Video Detail
 -   [] Edit Video
 
-## ExpressJS
+## MongoDB
 
 1. MongoDB and Mongoose
+1. Video Model
 
 ---
 
@@ -1042,6 +1043,62 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const PORT = process.env.PORT || 4000; //PORT 번호도 .env파일에서 관리한다.
+
+const handleListening = () =>
+    console.log(`Listening on : http://localhost:${PORT}`);
+
+app.listen(PORT, handleListening);
+```
+
+---
+
+### Video Model
+
+MongoDB에 우리의 파일들이 어떤 식으로 생겼는지 알려줘야한다. 설정해줘야 할 것은 두 가지다. 하나는 model 즉, documnet의 name이고 다른 하나는 schema이다. schema는 형태이다.
+Root 디렉토리에 models라는 디렉토리를 하나 만들고 그 안에 `Vidoe.js`파일을 생성한다.
+
+#### Video.js
+
+```javascript
+import mongoose from "mongoose";
+
+const VideoSchema = new mongoose.Schema({
+    fileUrl: {
+        type: String,
+        required: "File URL is required"
+    },
+    title: {
+        type: String,
+        required: "Title is required"
+    },
+    description: String,
+    view: {
+        tyle: Number,
+        default: 0
+    },
+    createAt: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+const model = mongoose.model("Video", VideoSchema); // Documnet의 name은 Video고 schema는 VideoSchema이다. VideoSchema는 위에 정의한것처럼 생겼다.
+
+export default model;
+```
+
+생성한 model을 `init.js`에 import하면 mongoDB가 이제 우리의 파일들이 어떻게 생겼는지 알 수 있다.
+
+#### init.js
+
+```javascript
+import "./db";
+import app from "./app";
+import dotenv from "dotenv";
+dotenv.config();
+import "./models/Video";
+
+const PORT = process.env.PORT || 4000;
 
 const handleListening = () =>
     console.log(`Listening on : http://localhost:${PORT}`);
