@@ -1692,3 +1692,152 @@ export const deleteVideo = (req, res) =>
     res.render("deleteVideo", { pageTitle: "Delete Video" });
 
 ```
+
+---
+
+### Delete a Video
+
+#### routes.js
+```javascript
+// Global
+const HOME = "/";
+const JOIN = "/join";
+const LOGIN = "/login";
+const LOGOUT = "/logout";
+const SEARCH = "/search";
+
+// Users
+
+const USERS = "/users";
+const USER_DETAIL = "/:id";
+const EDIT_PROFILE = "/edit-profile";
+const CHANGE_PASSWORD = "/change-password";
+
+// Videos
+
+const VIDEOS = "/videos";
+const UPLOAD = "/upload";
+const VIDEO_DETAIL = "/:id";
+const EDIT_VIDEO = "/:id/edit";
+const DELETE_VIDEO = "/:id/delete";
+
+const routes = {
+.
+.
+.
+    deleteVideo: id => {
+        if (id) {
+            return `/videos/${id}/delete`;
+        } else {
+            return DELETE_VIDEO;
+        }
+    }
+};
+
+export default routes;
+
+```
+
+#### videoRouter.js
+
+```javascript
+import express from "express";
+import routes from "../routes";
+import {
+    getUpload,
+    postUpload,
+    videoDetail,
+    getEditVideo,
+    deleteVideo,
+    postEditVideo
+} from "../controllers/videoController";
+import { uploadVideo } from "../middlewares";
+
+const videoRouter = express.Router();
+//Upload
+videoRouter.get(routes.upload, getUpload);
+videoRouter.post(routes.upload, uploadVideo, postUpload);
+
+//video Detail
+videoRouter.get(routes.videoDetail(), videoDetail);
+
+//Edit Video
+videoRouter.get(routes.editVideo(), getEditVideo);
+videoRouter.post(routes.editVideo(), postEditVideo);
+
+videoRouter.get(routes.deleteVideo(), deleteVideo); //string이 아니므로 함수로 변경
+
+export default videoRouter;
+```
+
+#### videoController.js
+
+```javascript
+import routes from "../routes";
+import Video from "../models/Video";
+.
+.
+.
+export const deleteVideo = async (req, res) => {
+    const {
+        params: { id }
+    } = req;
+    try {
+        await Video.findByIdAndRemove({ _id: id });
+    } catch {
+        console.log(error);
+    }
+    res.redirect(routes.home);
+};
+
+```
+
+---
+
+### Searching Videos
+
+#### videoController.js
+```javascript
+import routes from "../routes";
+import Video from "../models/Video";
+.
+.
+.
+export const search = async (req, res) => {
+    const {
+        query: { term: searchingBy }
+    } = req;
+    let videos = [];
+    try {
+        videos = await Video.find({                        // regex 는 정규표현식으로 검색어를 포함하는 제목을 찾기 위함
+            title: { $regex: searchingBy, $options: "i" } //i는 insensitive라는 의미로 대소문자 구분하지 않겠다는 의미
+        });
+    } catch (error) {
+        console.log(error);
+    }
+    res.render("search", { pageTitle: "Search", searchingBy, videos });
+};
+.
+.
+.
+```
+
+#### search.pug
+```pug
+extends layouts/main
+include mixins/videoBlock
+
+block content
+    .search__header
+        h3 Searching by #{searchingBy}
+    .search__videos
+        if videos.length === 0
+            h5 Videos not Found
+        each item in videos
+            +videoBlock({
+                title:item.title,
+                views:item.views,
+                videoFile:item.fileUrl,
+                id:item.id
+            }) 
+```
