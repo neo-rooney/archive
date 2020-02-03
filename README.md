@@ -934,6 +934,7 @@ export const changePassword = (req, res) =>
 1. MongoDB and Mongoose
 1. Video Model
 1. Comment Model
+1. Uploading and Creating a Video
 
 ---
 
@@ -1267,4 +1268,168 @@ export const home = async (req, res) => {
 
 #### async & await 예외 처리
 
-async & await에서 예외를 처리하는 방법은 바로 try catch이다. 프로미스에서 에러 처리를 위해 .catch()를 사용했던 것처럼 async에서는 catch {} 를 사용하시면 된다. 발견된 에러는 `error`객체에 담기기 때문에 에러의 유형에 맞게 에러 코드를 처리해주면된다.
+## async & await에서 예외를 처리하는 방법은 바로 try catch이다. 프로미스에서 에러 처리를 위해 .catch()를 사용했던 것처럼 async에서는 catch {} 를 사용하시면 된다. 발견된 에러는 `error`객체에 담기기 때문에 에러의 유형에 맞게 에러 코드를 처리해주면된다.
+
+### Uploading and Creating a Video
+
+#### install multer
+
+```
+npm install multer
+```
+Multer는 파일 업로드를 위해 사용되는 `multipart/form-data` 를 다루기 위한 node.js 의 미들웨어이다.
+
+#### middlewares.js
+
+```javascript
+import multer from "multer";
+import routes from "./routes";
+
+const multerVideo = multer({ dest: "uploads/videos/" }); //파일이 저장 될 경로를 지정
+
+export const localsMiddleware = (req, res, next) => {
+    res.locals.siteName = "WeTube";
+    res.locals.routes = routes;
+    res.locals.user = {
+        isAuthenticated: true,
+        id: 1
+    };
+    next();
+};
+
+export const uploadVideo = multerVideo.single("videoFile"); //하나의 파일만 업로드하기위해 single사용 upload.pug의 type="file"의 name 입력
+```
+
+#### upload.pug
+
+```pug
+extends layouts/main
+
+block content
+    .form-container
+        form(action=`/videos${routes.upload}`, method="post", enctype="multipart/form-data")
+            label(for="file") Video File
+            input(type="file", id="file", name="videoFile", required=true, accept="video/*") //video파일만을 업로드 가능하기 위해서 accept 사용
+            input(type="text", placeholder="Title", name="title", required=true)
+            textarea(name="description", placeholder="Description", required=true)
+            input(type="submit", value="Upload Video")
+```
+
+#### videoRouter.js
+
+```javascript
+import express from "express";
+import routes from "../routes";
+import {
+    getUpload,
+    postUpload,
+    videoDetail,
+    editVideo,
+    deleteVideo
+} from "../controllers/videoController";
+import { uploadVideo } from "../middlewares";
+
+const videoRouter = express.Router();
+videoRouter.get(routes.upload, getUpload);
+videoRouter.post(routes.upload, uploadVideo, postUpload); // 이 곳에 uploadvideo middleware 추가하였음
+
+videoRouter.get(routes.videoDetail(), videoDetail);
+videoRouter.get(routes.editVideo, editVideo);
+videoRouter.get(routes.deleteVideo, deleteVideo);
+
+export default videoRouter;
+
+```
+#### app.js
+```javascript
+import express from "express";
+import morgan from "morgan";
+import helmet from "helmet";
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
+import { localsMiddleware } from "./middlewares";
+import globalRouter from "./Routers/globalRouter";
+import userRouter from "./Routers/userRouter";
+import videoRouter from "./Routers/videoRouter";
+import routes from "./routes";
+
+const app = express();
+
+app.use(helmet());
+app.set("view engine", "pug");
+app.use("/uploads", express.static("uploads")); // uploads만을 위한 router필요하므로 지정
+app.use(cookieParser());                        // express.static("uploads)에 의해 해당 Url로 접속하게되면 uploads파일경로로 갈것이다.
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan("dev"));
+
+app.use(localsMiddleware);
+
+app.use(routes.home, globalRouter);
+app.use(routes.users, userRouter);
+app.use(routes.videos, videoRouter);
+
+export default app;
+```
+#### videoController.js
+```javascript
+import routes from "../routes";
+import Video from "../models/Video";
+
+export const home = async (req, res) => {
+    try {
+        const videos = await Video.find({});
+        res.render("home", { pageTitle: "Home", videos });
+    } catch (error) {
+        console.log(error);
+        res.render("home", { pageTitle: "Home", videos: [] });
+    }
+};
+
+export const search = (req, res) => {
+    const {
+        query: { term: searchingBy }
+    } = req;
+    res.render("search", { pageTitle: "Search", searchingBy, videos }); 
+};
+
+export const getUpload = (req, res) =>
+    res.render("upload", { pageTitle: "Upload" });
+//수정된 부분 _ 시작
+export const postUpload = async (req, res) => {
+    const {
+        body: { title, decription },
+        file: { path }
+    } = req;
+    const newVideo = await Video.create({
+        fileUrl: path.replace(/\\/g, "/"), //window 경우 파일경로를 "\"로 지정하므로 이를 "/로 변환"
+        title,
+        decription
+    });
+    console.log(newVideo);
+    res.redirect(routes.videoDetail(newVideo.id));
+};
+//수정된 부분 _ 끝
+export const videoDetail = (req, res) =>
+    res.render("videoDetail", { pageTitle: "Video Detail" });
+export const editVideo = (req, res) =>
+    res.render("editVideo", { pageTitle: "Edit Video" });
+export const deleteVideo = (req, res) =>
+    res.render("deleteVideo", { pageTitle: "Delete Video" });
+```
+
+#### home.pug
+```pug
+extends layouts/main
+include mixins/videoBlock
+
+block content
+    .videos
+        each item in videos
+           +videoBlock({
+                id:item.id,
+                title:item.title,
+                views:item.views,
+                videoFile:item.fileUrl // 변경
+            }) 
+```
