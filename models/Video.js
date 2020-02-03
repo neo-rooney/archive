@@ -11,7 +11,7 @@ const VideoSchema = new mongoose.Schema({
     },
     description: String,
     view: {
-        tyle: Number,
+        type: Number,
         default: 0
     },
     createAt: {

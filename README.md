@@ -934,8 +934,9 @@ export const changePassword = (req, res) =>
 1. MongoDB and Mongoose
 1. Video Model
 1. Comment Model
+1. Home Controller
 1. Uploading and Creating a Video
-
+1. Getting Video by ID
 ---
 
 ### MongoDB and Mongoose
@@ -1268,7 +1269,9 @@ export const home = async (req, res) => {
 
 #### async & await 예외 처리
 
-## async & await에서 예외를 처리하는 방법은 바로 try catch이다. 프로미스에서 에러 처리를 위해 .catch()를 사용했던 것처럼 async에서는 catch {} 를 사용하시면 된다. 발견된 에러는 `error`객체에 담기기 때문에 에러의 유형에 맞게 에러 코드를 처리해주면된다.
+async & await에서 예외를 처리하는 방법은 바로 try catch이다. 프로미스에서 에러 처리를 위해 .catch()를 사용했던 것처럼 async에서는 catch {} 를 사용하시면 된다. 발견된 에러는 `error`객체에 담기기 때문에 에러의 유형에 맞게 에러 코드를 처리해주면된다.
+
+---
 
 ### Uploading and Creating a Video
 
@@ -1433,3 +1436,85 @@ block content
                 videoFile:item.fileUrl // 변경
             }) 
 ```
+
+---
+
+### Getting Video by ID
+
+#### videoController.js
+
+```javascript
+import routes from "../routes";
+import Video from "../models/Video";
+
+export const home = async (req, res) => {
+    try {
+        const videos = await Video.find({});
+        res.render("home", { pageTitle: "Home", videos });
+    } catch (error) {
+        console.log(error);
+        res.render("home", { pageTitle: "Home", videos: [] });
+    }
+};
+
+export const search = (req, res) => {
+    const {
+        query: { term: searchingBy }
+    } = req;
+    res.render("search", { pageTitle: "Search", searchingBy, videos }); 
+};
+
+export const getUpload = (req, res) =>
+    res.render("upload", { pageTitle: "Upload" });
+
+export const postUpload = async (req, res) => {
+    const {
+        body: { title, description },
+        file: { path }
+    } = req;
+    const newVideo = await Video.create({
+        fileUrl: path.replace(/\\/g, "/"), 
+        title,
+        description
+    });
+    console.log(newVideo);
+    res.redirect(routes.videoDetail(newVideo.id));
+};
+//코드 수정 _ 시작
+export const videoDetail = async (req, res) => {
+    const {
+        params: { id }
+    } = req;
+    try {
+        const video = await Video.findById(id); //URL에 있는 id를 이용하여 DB로부터 데이터를 불러온다. 
+        res.render("videoDetail", { pageTitle: "Video Detail", video });// 데이터를 videoDetail.pug로 전달한다. 
+    } catch (error) {
+        console.log(error);
+        res.redirect(routes.home);
+    }
+};
+//코드 수정 _ 끝
+export const editVideo = (req, res) =>
+    res.render("editVideo", { pageTitle: "Edit Video" });
+export const deleteVideo = (req, res) =>
+    res.render("deleteVideo", { pageTitle: "Delete Video" });
+```
+
+#### videoDetail.pug
+
+```pug
+extends layouts/main
+
+block content
+    .videp__player 
+        video(src=`/${video.fileUrl}`)
+    .video__info
+        h5.video__title=video.title
+        span.video__views=video.view
+        p.video__description=video.description
+```
+
+---
+
+### Editing a Video
+

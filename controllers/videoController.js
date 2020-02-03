@@ -15,8 +15,7 @@ export const search = (req, res) => {
     const {
         query: { term: searchingBy }
     } = req;
-    //const searchingBy = req.query.term ES6이전
-    res.render("search", { pageTitle: "Search", searchingBy, videos }); //searchingBy: searchingBy ES6 이전
+    res.render("search", { pageTitle: "Search", searchingBy, videos });
 };
 
 export const getUpload = (req, res) =>
@@ -24,19 +23,30 @@ export const getUpload = (req, res) =>
 
 export const postUpload = async (req, res) => {
     const {
-        body: { title, decription },
+        body: { title, description },
         file: { path }
     } = req;
     const newVideo = await Video.create({
-        fileUrl: path.replace(/\\/g, "/"), //window 경우 파일경로를 "\"로 지정하므로 이를 "/로 변환"
+        fileUrl: path.replace(/\\/g, "/"),
         title,
-        decription
+        description
     });
     console.log(newVideo);
     res.redirect(routes.videoDetail(newVideo.id));
 };
-export const videoDetail = (req, res) =>
-    res.render("videoDetail", { pageTitle: "Video Detail" });
+export const videoDetail = async (req, res) => {
+    const {
+        params: { id }
+    } = req;
+    try {
+        const video = await Video.findById(id);
+        res.render("videoDetail", { pageTitle: "Video Detail", video });
+    } catch (error) {
+        console.log(error);
+        res.redirect(routes.home);
+    }
+};
+
 export const editVideo = (req, res) =>
     res.render("editVideo", { pageTitle: "Edit Video" });
 export const deleteVideo = (req, res) =>
