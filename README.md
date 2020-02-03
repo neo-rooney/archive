@@ -937,6 +937,9 @@ export const changePassword = (req, res) =>
 1. Home Controller
 1. Uploading and Creating a Video
 1. Getting Video by ID
+1. Editing a Video
+1. Delete a Video
+1. Searching Videos
 ---
 
 ### MongoDB and Mongoose
@@ -1840,4 +1843,132 @@ block content
                 videoFile:item.fileUrl,
                 id:item.id
             }) 
+```
+
+## Webpack
+1. Introduction to Webpack
+
+---
+### Introduction to Webpack
+
+#### Install
+```
+npm install webpack webpack-cli
+npm install css-loader, postcss-loader, sass-loader
+npm install autoprefixer
+npm install node-sass
+npm install babel-loader
+npm install @babel/polyfill
+```
+webpack-cli 는 터미널에서 webpack을 사용할 수 있도록 하는 것
+
+#### What is Webpack
+Webpack은 module bundler이다. 우리가 어떤 파일을 Webpack에게 주면, Webpack은 여러 브라우저에서 호환되는 static 파일로 변환해준다. 
+예를 들어 ES6로 자바스크립트를 작성하면 브라우저가 이해 할 수 있는 javascript로 변환해주고, Sass를 Css로 변환해 준다. 
+
+#### package.json
+`package.json`의 `script`부분을 아래와 같이 변경해 준다.
+```
+"scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev:server": "nodemon --exec babel-node init.js --delay 2",
+        "dev:assets": "cross-env WEBPACK_ENV=development webpack -w", //-w 옵션은 파일들을 변경했을 때 webpack을 다시 껐다가 키는 불편함을 없애줌
+        "build:assets": "cross-env WEBPACK_ENV=production webpack"
+    }
+```
+
+#### webpack.config.js
+webpack은 기본적으로 export configuration object를 찾는다. 따라서 `webpack.config.js`파일에 webpack에 관한 규칙들을 정해놓는다고 생각하면 된다.
+우리는 앞으로 사용할 모든 파일의 형식들을 Webpack에게 알려줘야 한다. 
+주의할 점은 `webpack.config.js`파일 안의 코드들은 server코드와는 연관시켜서는 안된다는 점과 ES6 이전의 javascript로 작성해야한다는 것이다.
+
+```javascript
+const path = require("path");
+const autoprefixer = require("autoprefixer");
+const ExtractCSS = require("extract-text-webpack-plugin");
+
+const MODE = process.env.WEBPACK_ENV; //package.json에 쓴 이름과 동일한 이름 쓰기
+const ENTRY_FILE = path.resolve(__dirname, "assets", "js", "main.js"); //__dirname은 프로젝트의 Root폴더를 의미한다. project폴더/assets/js/main.js를 의미
+const OUTPUT_DIR = path.join(__dirname, "static");
+
+const config = {
+    entry: ["@babel/polyfill", ENTRY_FILE], //'파일들이 어디서 왔는가?'를 의미
+    mode: MODE,                             //@babel/polyfill은 구름 크롬이 아직 async를 어떻게 처리해야하는지 모르기 때문에 설치
+    module: {
+        rules: [
+            {
+                test: /\.(js)$/,//정규표현식으로, 그 파일이 js파일인지 알아보는 역할
+                use: [
+                    {   //loader은 webpack에게 파일을 처리하는 방법을 알려주는 역할을 담당한다.
+                        loader: "babel-loader" 
+                    }
+                ]
+            },
+            {                      //webpack은 config파일에서 아래에서 위로 실행한다는 점 주의!
+                test: /\.(scss)$/, //1st : scss파일 찾기
+                use: ExtractCSS.extract([ //5th : CSS부분만 추출
+                    {
+                        loader: "css-loader" //4th : webpack이 CSS를 이해 할 수 있도록 알려주는 역할
+                    },
+                    {
+                        loader: "postcss-loader", //3rd : sass-loader로 부터 받은 css를 plugin을 사용하여 호환 가능 한 css로 변환(다른 브라우져와의 호환 등)
+                        options: {
+                            plugins() {
+                                return [
+                                    autoprefixer({ //브라우저의 인기도를 바탕으로 호환가능하게 만들어 주는 것
+                                        overrideBrowserslist: "cover 99.5%"
+                                    })
+                                ];
+                            }
+                        }
+                    },
+                    {
+                        loader: "sass-loader" //2nd : sass 또는 css파일을 일반 css로 바꿔주는 역할
+                    }
+                ])
+            }
+        ]
+    },
+    output: { //'변환된 파일들을 어디에다가 넣을 것인가?'를 의미
+        path: OUTPUT_DIR,
+        filename: "[name].js"
+    },
+    plugins: [new ExtractCSS("styles.css")]
+};
+
+module.exports = config;
+```
+
+#### app.js
+```javascript
+import express from "express";
+import morgan from "morgan";
+import helmet from "helmet";
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
+import { localsMiddleware } from "./middlewares";
+import globalRouter from "./Routers/globalRouter";
+import userRouter from "./Routers/userRouter";
+import videoRouter from "./Routers/videoRouter";
+import routes from "./routes";
+
+const app = express();
+
+app.use(helmet());
+app.set("view engine", "pug");
+app.use("/uploads", express.static("uploads"));
+app.use("/static", express.static("static")); // 누군가 /static 로 가려고 하면 static 폴더로 가도록 하는것
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan("dev"));
+
+app.use(localsMiddleware);
+
+app.use(routes.home, globalRouter);
+app.use(routes.users, userRouter);
+app.use(routes.videos, videoRouter);
+
+export default app;
+
 ```
