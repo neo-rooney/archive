@@ -1518,3 +1518,177 @@ block content
 
 ### Editing a Video
 
+우선 router의 형태가 `/:id/edit` 이므로 function 형태로 router에 접근할 수 있도록 변경한다.
+
+#### routes.js
+```javascript
+// Global
+const HOME = "/";
+const JOIN = "/join";
+const LOGIN = "/login";
+const LOGOUT = "/logout";
+const SEARCH = "/search";
+
+// Users
+
+const USERS = "/users";
+const USER_DETAIL = "/:id";
+const EDIT_PROFILE = "/edit-profile";
+const CHANGE_PASSWORD = "/change-password";
+
+// Videos
+
+const VIDEOS = "/videos";
+const UPLOAD = "/upload";
+const VIDEO_DETAIL = "/:id";
+const EDIT_VIDEO = "/:id/edit";
+const DELETE_VIDEO = "/:id/delete";
+
+const routes = {
+    home: HOME,
+    join: JOIN,
+    login: LOGIN,
+    logout: LOGOUT,
+    search: SEARCH,
+    users: USERS,
+    userDetail: id => {
+        if (id) {
+            return `/users/${id}`;
+        } else {
+            return USER_DETAIL;
+        }
+    },
+    editProfile: EDIT_PROFILE,
+    changePassword: CHANGE_PASSWORD,
+    videos: VIDEOS,
+    upload: UPLOAD,
+    videoDetail: id => {
+        if (id) {
+            return `/videos/${id}`;
+        } else {
+            return VIDEO_DETAIL;
+        }
+    },
+    editVideo: id => {
+        if (id) {
+            return `/videos/${id}/edit`;
+        } else {
+            return EDIT_VIDEO;
+        }
+    },
+    deleteVideo: DELETE_VIDEO
+};
+
+export default routes;
+
+```
+#### videoRouter.js
+```javascript
+import express from "express";
+import routes from "../routes";
+import {
+    getUpload,
+    postUpload,
+    videoDetail,
+    getEditVideo,
+    deleteVideo,
+    postEditVideo
+} from "../controllers/videoController";
+import { uploadVideo } from "../middlewares";
+
+const videoRouter = express.Router();
+//Upload
+videoRouter.get(routes.upload, getUpload);
+videoRouter.post(routes.upload, uploadVideo, postUpload);
+
+//video Detail
+videoRouter.get(routes.videoDetail(), videoDetail);
+
+//Edit Video
+videoRouter.get(routes.editVideo(), getEditVideo);
+videoRouter.post(routes.editVideo(), postEditVideo);
+
+videoRouter.get(routes.deleteVideo, deleteVideo);
+
+export default videoRouter;
+```
+
+#### videoController.js - getEditVideo
+수정 페이지에 접속했을 때 양식이 채워져있길 바라므로 DB로 부터 수정하기 이전의 데이터를 불러와 화면에 채워넣어야 한다. 
+```javascript
+import routes from "../routes";
+import Video from "../models/Video";
+.
+.
+.
+export const getEditVideo = async (req, res) => {
+    const {
+        params: { id }
+    } = req;
+    try {
+        const video = await Video.findById(id);
+        res.render("editVideo", { pageTitle: `Edit ${video.title}`, video }); 
+    } catch (error) {
+        console.log(error);
+        res.redirect(routes.home);
+    }
+};
+
+export const postEditVideo = async (req, res) => {
+};
+export const deleteVideo = (req, res) =>
+    res.render("deleteVideo", { pageTitle: "Delete Video" });
+
+```
+
+#### editVideo.pug
+pug로 전달한 데이터를 이용하여 양식을 채워넣는다. 
+```pug
+extends layouts/main
+
+block content
+    .form-container
+        form(action=routes.editVideo(video.id), method="post")
+            input(type="text", placeholder="Title", name="title", value=video.title)
+            textarea(name="description", placeholder="Description")=video.description
+            input(type="submit", value="Update Video")
+        a.form-container__link.form-container__link--delete(href=`/videos${routes.deleteVideo}`) Delete Video 
+```
+
+#### videoController.js - postEditVideo
+```javascript
+import routes from "../routes";
+import Video from "../models/Video";
+.
+.
+.
+export const getEditVideo = async (req, res) => {
+    const {
+        params: { id }
+    } = req;
+    try {
+        const video = await Video.findById(id);
+        res.render("editVideo", { pageTitle: `Edit ${video.title}`, video }); 
+    } catch (error) {
+        console.log(error);
+        res.redirect(routes.home);
+    }
+};
+
+export const postEditVideo = async (req, res) => {
+    const {
+        params: { id },
+        body: { title, description }
+    } = req;
+    try {
+        await Video.findOneAndUpdate({ _id: id }, { title, description }); // id로 해당 데이터를 특정한 후 새로 작성한 데이터로 변경한다.
+        res.redirect(routes.videoDetail(id));
+    } catch (error) {
+        console.log(error);
+        res.redirect(routes.home);
+    }
+};
+export const deleteVideo = (req, res) =>
+    res.render("deleteVideo", { pageTitle: "Delete Video" });
+
+```
