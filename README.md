@@ -2108,6 +2108,11 @@ $dark-grey: #e7e7e7;
 
 ## User Authenication
 
+1. PassportJS
+1. Local Autentication with Passport
+1. Github Log In
+1. User Detail
+
 ### PassportJS
 
 Passport는 middleware로 사용자 인증을 구현시켜준다.  
@@ -2118,13 +2123,17 @@ Passport는 middleware로 사용자 인증을 구현시켜준다.
 ### Local Autentication with Passport
 
 #### Passport-local-mongoose
+
 Password 설정, 확인 등의 작업을 자동으로 해주는것
+
 ```
 npm install passport-local-mongoose
 ```
 
 #### User.js
+
 `init.js`에 해당 파일을 추가해서 db가 해당 모델을 알 수 있도로 한다.
+
 ```javascript
 import mongoose from "mongoose";
 import passportLocalMongoose from "passport-local-mongoose";
@@ -2137,15 +2146,15 @@ const UserSchema = new mongoose.Schema({
     githubId: Number
 });
 
-UserSchema.plugin(passportLocalMongoose, { usernameField: "email" });//usernameField를 email로 하겠다는 설정 
+UserSchema.plugin(passportLocalMongoose, { usernameField: "email" }); //usernameField를 email로 하겠다는 설정
 
 const model = mongoose.Model("User", UserSchema);
 
 export default model;
 ```
 
-
 #### passport, passport-local
+
 passport-local은 username과 password를 쓰는 사용자 인증 방식(strategy)을 의미한다.
 
 ```
@@ -2153,10 +2162,11 @@ npm i passport passport-local
 ```
 
 #### passport.js
+
 strategy라는 건, 로그인 하는 방식을 의미한다.  
 serialization 이라는 것은, '어떤 정보를 쿠키에게 주느냐'를 의미한다.  
 deserialization는 '어느 사용자인지 어떻게 찾는가?'를 의미한다.  
-일반적으로 serialization을 통해서 쿠키에 user.id를 담고 그 id를 가지고 deserialization을 통해 사용자를 식별한다.  
+일반적으로 serialization을 통해서 쿠키에 user.id를 담고 그 id를 가지고 deserialization을 통해 사용자를 식별한다.
 
 ```javascript
 import passport from "passport";
@@ -2170,6 +2180,7 @@ passport.deserializeUser(User.deserializeUser());
 ```
 
 #### userController.js
+
 ```javascript
 .
 .
@@ -2189,7 +2200,7 @@ export const postJoin = async (req, res, next) => {
                 email
             });
             await User.register(user, password); //register는 create와는 다르게 비밀번호를 암호화해서 저장
-            next(); 
+            next();
         } catch (error) {
             console.log(error);
             res.redirect(routes.home);
@@ -2200,7 +2211,7 @@ export const getLogin = (req, res) =>
     res.render("login", { pageTitle: "Login" });
 export const postLogin = passport.authenticate("local", {
     failureRedirect: routes.login, //로그인 실패시 로그인 화면으로
-    successRedirect: routes.home //로그인 성공시 홈 화면으로 
+    successRedirect: routes.home //로그인 성공시 홈 화면으로
 });
 .
 .
@@ -2208,6 +2219,7 @@ export const postLogin = passport.authenticate("local", {
 ```
 
 #### app.js
+
 `app.js`에 `passport.js`와 passport middleware를 추가한다.
 
 ```javascript
@@ -2236,8 +2248,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
-app.use(passport.initialize());//추가
-app.use(passport.session());//추가
+app.use(passport.initialize()); //추가
+app.use(passport.session()); //추가
 
 app.use(localsMiddleware);
 
@@ -2246,18 +2258,18 @@ app.use(routes.users, userRouter);
 app.use(routes.videos, videoRouter);
 
 export default app;
-
 ```
 
 #### express-session
 
 ```
- npm install express-session 
+ npm install express-session
 ```
+
 `app.js`에 다음과 같은 코드 추가
+
 ```javascript
 import session from "express-session";
-
 
 app.use(
     session({
@@ -2268,17 +2280,19 @@ app.use(
 );
 ```
 
-
 #### connet-mongo
+
 쿠키를 저장할 저장소를 우리의 데이터 베이스에 연결하는 역할을 함
+
 ```
 npm i connect-mongo
 ```
-mongoose를 사용하여 MongoDB와 쿠키저장소를 연결하였다. 따라서 서버를 재시작하더라도 로그인 상태가 유지 될것이다. 
+
+mongoose를 사용하여 MongoDB와 쿠키저장소를 연결하였다. 따라서 서버를 재시작하더라도 로그인 상태가 유지 될것이다.
+
 ```javascript
 import MongoStore from "connect-mongo";
 import mongoose from "mongoose";
-
 
 app.use(
     session({
@@ -2291,11 +2305,14 @@ app.use(
 ```
 
 #### new middleware -OnlyPublic and OnlyPrivate
+
 OnlyPublic은 로그인된 상태에서는 접근 할 수 없도록 만드는 middleware
 OnlyPublic은 로그인된 상태에서만 접근 할 수 있도록 만드는 middleware
 
 각 용도에 맞게 Routers에 추가
+
 ##### middlewares.js
+
 ```javascript
 import multer from "multer";
 import routes from "./routes";
@@ -2326,10 +2343,10 @@ export const olnyPrivate = (req, res, next) => {
 };
 
 export const uploadVideo = multerVideo.single("videoFile");
-
 ```
 
 ##### globalRouter.js
+
 ```javascript
 import express from "express";
 import routes from "../routes";
@@ -2358,6 +2375,7 @@ export default globalRouter;
 ```
 
 ##### videoRouter.js
+
 ```javascript
 import express from "express";
 import routes from "../routes";
@@ -2389,6 +2407,7 @@ export default videoRouter;
 ```
 
 ##### userRouter.js
+
 ```javascript
 import express from "express";
 import routes from "../routes";
@@ -2407,5 +2426,420 @@ userRouter.get(routes.userDetail(), olnyPrivate, userDetail);
 userRouter.get(routes.changePassword, changePassword);
 
 export default userRouter;
+```
+
+### Github Log In
+github 홈페이지 > setting > Developer settings > OAuth Apps 에 등록 
+```
+npm install passport-github
+```
+
+#### routes.js
+
+```javascript
+// Global
+const HOME = "/";
+const JOIN = "/join";
+const LOGIN = "/login";
+const LOGOUT = "/logout";
+const SEARCH = "/search";
+
+// Users
+
+const USERS = "/users";
+const USER_DETAIL = "/:id";
+const EDIT_PROFILE = "/edit-profile";
+const CHANGE_PASSWORD = "/change-password";
+
+// Videos
+
+const VIDEOS = "/videos";
+const UPLOAD = "/upload";
+const VIDEO_DETAIL = "/:id";
+const EDIT_VIDEO = "/:id/edit";
+const DELETE_VIDEO = "/:id/delete";
+
+//Github
+
+const GITHUB = "/auth/github"; //추가
+const GITHUB_CALLBACK = "/auth/github/callback"; //추가
+
+const routes = {
+    home: HOME,
+    join: JOIN,
+    login: LOGIN,
+    logout: LOGOUT,
+    search: SEARCH,
+    users: USERS,
+    userDetail: id => {
+        if (id) {
+            return `/users/${id}`;
+        } else {
+            return USER_DETAIL;
+        }
+    },
+    editProfile: EDIT_PROFILE,
+    changePassword: CHANGE_PASSWORD,
+    videos: VIDEOS,
+    upload: UPLOAD,
+    videoDetail: id => {
+        if (id) {
+            return `/videos/${id}`;
+        } else {
+            return VIDEO_DETAIL;
+        }
+    },
+    editVideo: id => {
+        if (id) {
+            return `/videos/${id}/edit`;
+        } else {
+            return EDIT_VIDEO;
+        }
+    },
+    deleteVideo: id => {
+        if (id) {
+            return `/videos/${id}/delete`;
+        } else {
+            return DELETE_VIDEO;
+        }
+    },
+    github: GITHUB, //추가
+    githubCallback: GITHUB_CALLBACK //추가
+};
+
+export default routes;
+```
+
+#### passport.js
+
+```javascript
+import passport from "passport";
+import GithubStrategy from "passport-github";
+import User from "./models/User";
+import { githubLoginCallback } from "./controllers/userController";
+import routes from "./routes";
+
+passport.use(User.createStrategy());
+
+passport.use(
+    new GithubStrategy(
+        {
+            clientID: process.env.GH_ID,
+            clientSecret: process.env.GH_SECRET,
+            callbackURL: `http://localhost:4004${routes.githubCallback}`
+        },
+        githubLoginCallback
+    )
+);
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+```
+
+#### userController.js
+
+```javascript
+.
+.
+.
+export const githubLoginCallback = async (_, __, profile, cb) => {
+    const {
+        _json: { id, avatar_url, name, email }
+    } = profile;
+
+    try {
+        const user = await User.findOne({ email });
+        if (user) {
+            user.githubId = id;
+            user.save();
+            return cb(null, user);
+        } else {
+            const newUser = await User.create({
+                email,
+                name,
+                githubId: id,
+                avatarUrl: avatar_url
+            });
+            return cb(null, newUser);
+        }
+    } catch (error) {
+        return cb(error);
+    }
+};
+
+export const postGithubLogin = (req, res) => {
+    res.redirect(routes.home);
+};
+
+export const logout = (req, res) => {
+    req.logout();
+    res.redirect(routes.home);
+};
+.
+.
+.
+```
+
+#### globalRouter.js
+
+```javascript
+import express from "express";
+import routes from "../routes";
+import passport from "passport";
+import { home, search } from "../controllers/videoController";
+import {
+    getJoin,
+    postJoin,
+    getLogin,
+    postLogin,
+    logout,
+    githubLogin,
+    postGithubLogin
+} from "../controllers/userController";
+import { olnyPublic, olnyPrivate } from "../middlewares";
+
+const globalRouter = express.Router();
+globalRouter.get(routes.join, olnyPublic, getJoin);
+globalRouter.post(routes.join, olnyPublic, postJoin, postLogin);
+
+globalRouter.get(routes.login, olnyPublic, getLogin);
+globalRouter.post(routes.login, olnyPublic, postLogin);
+
+globalRouter.get(routes.home, home);
+globalRouter.get(routes.search, search);
+globalRouter.get(routes.logout, olnyPrivate, logout);
+
+globalRouter.get(routes.github, githubLogin);
+globalRouter.get(
+    routes.githubCallback,
+    passport.authenticate("github", {
+        failureRedirect: routes.login,
+        successRedirect: routes.home
+    }),
+    postGithubLogin
+);
+
+export default globalRouter;
+```
+
+#### FLOW
+
+1. 먼저 사용하는 깃헙 웹사이트로 이동해서 권한 승인을 누른다.
+1. 깃헙 웹사이트는 사용자의 정보를 서버로 보내준다.(auth/github/callback)
+1. passport가 `githubLoginCallback`함수를 호출한다.
+1. `githubLoginCallback`함수에 의해 사용자의 정보를 얻는다.(id, email, name, avatar_url)
+1. `githubLoginCallback`함수는 callback(cb)함수를 return 해야하는데, 이 함수에게 error의 유무와 user의 유무를 알려줘야 한다.
+1. user가 있다면(=null) passport는 이 user를 취해서 ,쿠키를 만들고 쿠키를 저장한다. 그리고 저장된 쿠키를 브라우저로 보내준다.
+
+### User Detail
+
+로그인이 된 상태에서는 데이터베이스로부터 id값을 가지고 유저 정보를 찾을 필요 없이 바로 유저 정보를 받아 올 수 있으므로 이를 활용하여 User Detail(내 정보보기)를 만들어 본다.
+
+#### routes.js
+
+```javascript
+// Global
+const HOME = "/";
+const JOIN = "/join";
+const LOGIN = "/login";
+const LOGOUT = "/logout";
+const SEARCH = "/search";
+
+// Users
+
+const USERS = "/users";
+const USER_DETAIL = "/:id";
+const EDIT_PROFILE = "/edit-profile";
+const CHANGE_PASSWORD = "/change-password";
+const ME = "/me"; //추가
+
+// Videos
+
+const VIDEOS = "/videos";
+const UPLOAD = "/upload";
+const VIDEO_DETAIL = "/:id";
+const EDIT_VIDEO = "/:id/edit";
+const DELETE_VIDEO = "/:id/delete";
+
+//Github
+
+const GITHUB = "/auth/github";
+const GITHUB_CALLBACK = "/auth/github/callback";
+
+const routes = {
+    home: HOME,
+    join: JOIN,
+    login: LOGIN,
+    logout: LOGOUT,
+    search: SEARCH,
+    users: USERS,
+    userDetail: id => {
+        if (id) {
+            return `/users/${id}`;
+        } else {
+            return USER_DETAIL;
+        }
+    },
+    editProfile: EDIT_PROFILE,
+    changePassword: CHANGE_PASSWORD,
+    videos: VIDEOS,
+    upload: UPLOAD,
+    videoDetail: id => {
+        if (id) {
+            return `/videos/${id}`;
+        } else {
+            return VIDEO_DETAIL;
+        }
+    },
+    editVideo: id => {
+        if (id) {
+            return `/videos/${id}/edit`;
+        } else {
+            return EDIT_VIDEO;
+        }
+    },
+    deleteVideo: id => {
+        if (id) {
+            return `/videos/${id}/delete`;
+        } else {
+            return DELETE_VIDEO;
+        }
+    },
+    github: GITHUB,
+    githubCallback: GITHUB_CALLBACK,
+    me: ME //추가
+};
+
+export default routes;
+```
+
+#### userController.js
+
+```javascript
+export const getMe = (req, res) => {
+    res.render("userDetail", { pageTitle: "User Detail", user: req.user });
+};
+//req.user은 현재 로그인된 유저에 관한 정보를 담고 있다. 이를 템플릿으로 user라는 이름으로 전송한다.
+export const userDetail = async (req, res) => {
+    const {
+        params: { id }
+    } = req;
+    try {
+        const user = await User.findById(id);
+        res.render("userDetail", { pageTitle: "User Detail", user });
+    } catch (error) {
+        console.log(error);
+        res.redirect(routes.home);
+    }
+};
+//무작위로 주소창에 id 값을 입력한 경우에는 이를 가지고와서 데이터베이스에서 유저 정보를 검색한다.
+//만약 있는 경우에는 user라는 변수에 담아 템플릿에 전송하고
+//없는 경우에는 홈화면으로 redirect한다.
+```
+
+#### middlewares.js
+
+기존의 user라는 이름의 전역변수의 이름을 변경한다.
+user라는 이름이 중복되어 middleware에서 온 것인지, controller로 부터 온것인지 혼잡을 피하기 위함이다.
+
+```javascript
+import multer from "multer";
+import routes from "./routes";
+
+const multerVideo = multer({ dest: "uploads/videos/" });
+
+export const localsMiddleware = (req, res, next) => {
+    res.locals.siteName = "WeTube";
+    res.locals.routes = routes;
+    res.locals.loggedUser = req.user || null; //수정
+    next();
+};
+.
+.
+.
+```
+
+#### header.pug
+
+```pug
+header.header
+    .header__wrapper
+        .header__column
+            a(href=routes.home)
+                i.fab.fa-youtube
+        .header__column
+            form(action=routes.search, method="get")
+                input(type="text", placeholder="Search by term...", name="term")
+        .header__column
+            ul
+                if !loggedUser
+                    li
+                        a(href=routes.join) Join
+                    li
+                        a(href=routes.login) Log In
+                else
+                    li
+                        a(href=`/videos${routes.upload}`) Upload
+                    li
+                        a(href=routes.me) Profile //라우터의 주소를 변경(localhost/me)
+                    li
+                        a(href=routes.logout) Log Out
+```
+
+#### userDetail.pug
+
+```pug
+extends layouts/main
+
+block content
+   .user-profile
+        .user-profile__header
+            img.avatar(src=user.avatarUrl) //controller로 부터 받은 user
+            h4.profile__username=user.name
+```
+
+### Facebook Login
+https://developers.facebook.com/ 에 등록
+
+설정 상태 : 라이브로 !
+
+대시보드 > 제품 > Facebook 로그인 > 유요한 OAuth 리디렉션 URI에 ngrok로 변환한 주소 입력
+ex)https://75b8a2ed.ngrok.io
+ex)https://75b8a2ed.ngrok.io/auth/facebook/callback
+위의 둘다 입력
 
 ```
+npm install passport-facebook
+```
+
+#### ngrok
+http주소를 https로 바꿔주기 위함
+cmd 창 켜서 따로 실행
+```
+npm install -g ngrok
+ngrok.exe http 4004
+```
+
+
+#### passport.js
+```javascript
+.
+.
+.
+passport.use(
+    new FacebookStrategy(
+        {
+            clientID: process.env.FB_ID,
+            clientSecret: process.env.FB_SECRET,
+            callbackURL: `https://75b8a2ed.ngrok.io${routes.facebookCallback}`,// 변환된 주소 입력
+            profileFields: ["id", "displayName", "photos", "email"],
+            scope: ["public_profile", "email"]
+        },
+        facebookLoginCallback
+    )
+.
+.
+.
+```
+
+그 외 나머지 부분은 github 로그인과 동일!
