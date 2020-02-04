@@ -2003,18 +2003,20 @@ export default app;
 ## Styling
 
 ### What is Scss
+
 한 눈에 알아보기 쉽게 CSS코드를 작성하고자 하는 이유와 mixin과의 호환성 및 변수와 함수의 사용을 위해 Scss로 styling을 한다.
 
-파일 구조는 아래와 같다   
+파일 구조는 아래와 같다  
 `parials`에는 header, footer, Login에 관한 scss파일을 만든다.  
 `pages`에는 개별 페이지에서 필요한 스타일링을 한다.  
 `config`에는 필요한 변수에 관한 scss파일을 만들고, reset.scss를 넣어 styling의 편의를 도모한다.  
 `main.scss`는 application에 공통으로 들어갈 styling을 한다.  
-모든 scss파일은 `styles.scss`에 import되고 `styles.scss`파일은 `main.js`에서 import된다. 
+모든 scss파일은 `styles.scss`에 import되고 `styles.scss`파일은 `main.js`에서 import된다.
 
 ![photo1](https://user-images.githubusercontent.com/52039229/73718101-e607f300-475e-11ea-9561-4c4ebcbd9acd.JPG)
 
 #### main.scss
+
 ```scss
 html,
 body {
@@ -2035,7 +2037,9 @@ main {
     min-height: 70vh;
 }
 ```
-#### _variagles.scss
+
+#### \_variagles.scss
+
 ```scss
 $red: #ea232c;
 $dark-red: #bb2f2a;
@@ -2045,8 +2049,10 @@ $dark-grey: #e7e7e7;
 ```
 
 #### header.scss
+
 아래와 같이 HTML처럼 구조를 살려 코딩할 수 있다는 점이 편했다.  
 또한 변수를 사용할 수 있는것이 장점이었다.
+
 ```scss
 .header {
     background-color: $red; // _variagles.scss에서 정의한 변수 사용
@@ -2098,7 +2104,147 @@ $dark-grey: #e7e7e7;
         }
     }
 }
-
 ```
 
 ## User Authenication
+
+### PassportJS
+
+Passport는 middleware로 사용자 인증을 구현시켜준다.  
+브라우저 상에 쿠키(Cookies)를 설정해주면 그 쿠키를 통해 사용자 ID 등을 알 수 있고, Passport가 브라우저에서 자동으로 쿠키를 가져와서 인증이 완료된 User Object를 Controller에 넘겨줄것이다.
+
+쿠키(Cookies)는 브라우저에 저장할 수 있는 것들인데 모든 요청(request)에 대해서, 백엔드(back-end)로 전송될 정보들이 담겨있다.
+
+### Local Autentication with Passport
+
+#### Passport-local-mongoose
+Password 설정, 확인 등의 작업을 자동으로 해주는것
+```
+npm install passport-local-mongoose
+```
+
+#### User.js
+`init.js`에 해당 파일을 추가해서 db가 해당 모델을 알 수 있도로 한다.
+```javascript
+import mongoose from "mongoose";
+import passportLocalMongoose from "passport-local-mongoose";
+
+const UserSchema = new mongoose.Schema({
+    name: String,
+    email: String,
+    avatarUrl: String,
+    facebookId: Number,
+    githubId: Number
+});
+
+UserSchema.plugin(passportLocalMongoose, { usernameField: "email" });//usernameField를 email로 하겠다는 설정 
+
+const model = mongoose.Model("User", UserSchema);
+
+export default model;
+```
+
+
+#### passport, passport-local
+passport-local은 username과 password를 쓰는 사용자 인증 방식(strategy)을 의미한다.
+
+```
+npm i passport passport-local
+```
+
+#### passport.js
+strategy라는 건, 로그인 하는 방식을 의미한다.  
+serialization 이라는 것은, '어떤 정보를 쿠키에게 주느냐'를 의미한다.  
+deserialization는 '어느 사용자인지 어떻게 찾는가?'를 의미한다.  
+일반적으로 serialization을 통해서 쿠키에 user.id를 담고 그 id를 가지고 deserialization을 통해 사용자를 식별한다.  
+
+```javascript
+import passport from "passport";
+import User from "./models/User";
+
+passport.use(User.createStrategy());
+
+//passport-local-mongoose에서 제공하는 함수 사용
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+```
+
+#### userController.js
+```javascript
+.
+.
+.
+//postJoin을 middleware로 만듬 가입 후 바로 로그인 하기 위함
+export const postJoin = async (req, res, next) => {
+    const {
+        body: { name, email, password, password2 }
+    } = req;
+    if (password !== password2) {
+        res.status(400);
+        res.render("join", { pageTitle: "Join" });
+    } else {
+        try {
+            const user = await User({
+                name,
+                email
+            });
+            await User.register(user, password); //register는 create와는 다르게 비밀번호를 암호화해서 저장
+            next(); 
+        } catch (error) {
+            console.log(error);
+            res.redirect(routes.home);
+        }
+    }
+};
+export const getLogin = (req, res) =>
+    res.render("login", { pageTitle: "Login" });
+export const postLogin = passport.authenticate("local", {
+    failureRedirect: routes.login, //로그인 실패시 로그인 화면으로
+    successRedirect: routes.home //로그인 성공시 홈 화면으로 
+});
+.
+.
+.
+```
+
+#### app.js
+`app.js`에 `passport.js`와 passport middleware를 추가한다.
+
+```javascript
+import express from "express";
+import morgan from "morgan";
+import helmet from "helmet";
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
+import passport from "passport"; //추가
+import { localsMiddleware } from "./middlewares";
+import globalRouter from "./Routers/globalRouter";
+import userRouter from "./Routers/userRouter";
+import videoRouter from "./Routers/videoRouter";
+import routes from "./routes";
+
+import "./passport"; //추가
+
+const app = express();
+
+app.use(helmet());
+app.set("view engine", "pug");
+app.use("/uploads", express.static("uploads"));
+app.use("/static", express.static("static"));
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan("dev"));
+
+app.use(passport.initialize());//추가
+app.use(passport.session());//추가
+
+app.use(localsMiddleware);
+
+app.use(routes.home, globalRouter);
+app.use(routes.users, userRouter);
+app.use(routes.videos, videoRouter);
+
+export default app;
+
+```

@@ -10,7 +10,7 @@ import {
 } from "../controllers/userController";
 
 const globalRouter = express.Router();
-globalRouter.get(routes.join, getJoin);
+globalRouter.get(routes.join, getJoin, postLogin);
 globalRouter.post(routes.join, postJoin);
 
 globalRouter.get(routes.login, getLogin);
