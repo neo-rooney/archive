@@ -6,11 +6,12 @@ import {
     editProfile,
     changePassword
 } from "../controllers/userController";
+import { olnyPrivate } from "../middlewares";
 
 const userRouter = express.Router();
 
-userRouter.get(routes.editProfile, editProfile);
-userRouter.get(routes.userDetail(), userDetail);
+userRouter.get(routes.editProfile, olnyPrivate, editProfile);
+userRouter.get(routes.userDetail(), olnyPrivate, userDetail);
 userRouter.get(routes.changePassword, changePassword);
 
 export default userRouter;

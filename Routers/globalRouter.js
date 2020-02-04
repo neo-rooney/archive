@@ -8,13 +8,14 @@ import {
     postLogin,
     logout
 } from "../controllers/userController";
+import { olnyPublic } from "../middlewares";
 
 const globalRouter = express.Router();
-globalRouter.get(routes.join, getJoin, postLogin);
-globalRouter.post(routes.join, postJoin);
+globalRouter.get(routes.join, olnyPublic, getJoin);
+globalRouter.post(routes.join, olnyPublic, postJoin, postLogin);
 
-globalRouter.get(routes.login, getLogin);
-globalRouter.post(routes.login, postLogin);
+globalRouter.get(routes.login, olnyPublic, getLogin);
+globalRouter.post(routes.login, olnyPublic, postLogin);
 
 globalRouter.get(routes.home, home);
 globalRouter.get(routes.search, search);

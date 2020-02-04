@@ -2248,3 +2248,164 @@ app.use(routes.videos, videoRouter);
 export default app;
 
 ```
+
+#### express-session
+
+```
+ npm install express-session 
+```
+`app.js`에 다음과 같은 코드 추가
+```javascript
+import session from "express-session";
+
+
+app.use(
+    session({
+        secret: process.env.COOKIE_SECRET,
+        resave: true,
+        saveUninitialized: false
+    })
+);
+```
+
+
+#### connet-mongo
+쿠키를 저장할 저장소를 우리의 데이터 베이스에 연결하는 역할을 함
+```
+npm i connect-mongo
+```
+mongoose를 사용하여 MongoDB와 쿠키저장소를 연결하였다. 따라서 서버를 재시작하더라도 로그인 상태가 유지 될것이다. 
+```javascript
+import MongoStore from "connect-mongo";
+import mongoose from "mongoose";
+
+
+app.use(
+    session({
+        secret: process.env.COOKIE_SECRET,
+        resave: true,
+        saveUninitialized: false,
+        store: new CokieStore({ mongooseConnection: mongoose.connection })
+    })
+);
+```
+
+#### new middleware -OnlyPublic and OnlyPrivate
+OnlyPublic은 로그인된 상태에서는 접근 할 수 없도록 만드는 middleware
+OnlyPublic은 로그인된 상태에서만 접근 할 수 있도록 만드는 middleware
+
+각 용도에 맞게 Routers에 추가
+##### middlewares.js
+```javascript
+import multer from "multer";
+import routes from "./routes";
+
+const multerVideo = multer({ dest: "uploads/videos/" });
+
+export const localsMiddleware = (req, res, next) => {
+    res.locals.siteName = "WeTube";
+    res.locals.routes = routes;
+    res.locals.user = req.user || null;
+    next();
+};
+
+export const olnyPublic = (req, res, next) => {
+    if (req.user) {
+        res.redirect(routes.home);
+    } else {
+        next();
+    }
+};
+
+export const olnyPrivate = (req, res, next) => {
+    if (req.user) {
+        next();
+    } else {
+        res.redirect(routes.home);
+    }
+};
+
+export const uploadVideo = multerVideo.single("videoFile");
+
+```
+
+##### globalRouter.js
+```javascript
+import express from "express";
+import routes from "../routes";
+import { home, search } from "../controllers/videoController";
+import {
+    getJoin,
+    postJoin,
+    getLogin,
+    postLogin,
+    logout
+} from "../controllers/userController";
+import { olnyPublic } from "../middlewares";
+
+const globalRouter = express.Router();
+globalRouter.get(routes.join, olnyPublic, getJoin);
+globalRouter.post(routes.join, olnyPublic, postJoin, postLogin);
+
+globalRouter.get(routes.login, olnyPublic, getLogin);
+globalRouter.post(routes.login, olnyPublic, postLogin);
+
+globalRouter.get(routes.home, home);
+globalRouter.get(routes.search, search);
+globalRouter.get(routes.logout, logout);
+
+export default globalRouter;
+```
+
+##### videoRouter.js
+```javascript
+import express from "express";
+import routes from "../routes";
+import {
+    getUpload,
+    postUpload,
+    videoDetail,
+    getEditVideo,
+    deleteVideo,
+    postEditVideo
+} from "../controllers/videoController";
+import { uploadVideo, olnyPrivate } from "../middlewares";
+
+const videoRouter = express.Router();
+//Upload
+videoRouter.get(routes.upload, olnyPrivate, getUpload);
+videoRouter.post(routes.upload, olnyPrivate, uploadVideo, postUpload);
+
+//video Detail
+videoRouter.get(routes.videoDetail(), videoDetail);
+
+//Edit Video
+videoRouter.get(routes.editVideo(), olnyPrivate, getEditVideo);
+videoRouter.post(routes.editVideo(), olnyPrivate, postEditVideo);
+
+videoRouter.get(routes.deleteVideo(), olnyPrivate, deleteVideo);
+
+export default videoRouter;
+```
+
+##### userRouter.js
+```javascript
+import express from "express";
+import routes from "../routes";
+import {
+    users,
+    userDetail,
+    editProfile,
+    changePassword
+} from "../controllers/userController";
+import { olnyPrivate } from "../middlewares";
+
+const userRouter = express.Router();
+
+userRouter.get(routes.editProfile, olnyPrivate, editProfile);
+userRouter.get(routes.userDetail(), olnyPrivate, userDetail);
+userRouter.get(routes.changePassword, changePassword);
+
+export default userRouter;
+
+```
