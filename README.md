@@ -940,6 +940,7 @@ export const changePassword = (req, res) =>
 1. Editing a Video
 1. Delete a Video
 1. Searching Videos
+
 ---
 
 ### MongoDB and Mongoose
@@ -1283,6 +1284,7 @@ async & await에서 예외를 처리하는 방법은 바로 try catch이다. 프
 ```
 npm install multer
 ```
+
 Multer는 파일 업로드를 위해 사용되는 `multipart/form-data` 를 다루기 위한 node.js 의 미들웨어이다.
 
 #### middlewares.js
@@ -1344,9 +1346,10 @@ videoRouter.get(routes.editVideo, editVideo);
 videoRouter.get(routes.deleteVideo, deleteVideo);
 
 export default videoRouter;
-
 ```
+
 #### app.js
+
 ```javascript
 import express from "express";
 import morgan from "morgan";
@@ -1364,7 +1367,7 @@ const app = express();
 app.use(helmet());
 app.set("view engine", "pug");
 app.use("/uploads", express.static("uploads")); // uploads만을 위한 router필요하므로 지정
-app.use(cookieParser());                        // express.static("uploads)에 의해 해당 Url로 접속하게되면 uploads파일경로로 갈것이다.
+app.use(cookieParser()); // express.static("uploads)에 의해 해당 Url로 접속하게되면 uploads파일경로로 갈것이다.
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("dev"));
@@ -1377,7 +1380,9 @@ app.use(routes.videos, videoRouter);
 
 export default app;
 ```
+
 #### videoController.js
+
 ```javascript
 import routes from "../routes";
 import Video from "../models/Video";
@@ -1396,7 +1401,7 @@ export const search = (req, res) => {
     const {
         query: { term: searchingBy }
     } = req;
-    res.render("search", { pageTitle: "Search", searchingBy, videos }); 
+    res.render("search", { pageTitle: "Search", searchingBy, videos });
 };
 
 export const getUpload = (req, res) =>
@@ -1425,6 +1430,7 @@ export const deleteVideo = (req, res) =>
 ```
 
 #### home.pug
+
 ```pug
 extends layouts/main
 include mixins/videoBlock
@@ -1437,7 +1443,7 @@ block content
                 title:item.title,
                 views:item.views,
                 videoFile:item.fileUrl // 변경
-            }) 
+            })
 ```
 
 ---
@@ -1464,7 +1470,7 @@ export const search = (req, res) => {
     const {
         query: { term: searchingBy }
     } = req;
-    res.render("search", { pageTitle: "Search", searchingBy, videos }); 
+    res.render("search", { pageTitle: "Search", searchingBy, videos });
 };
 
 export const getUpload = (req, res) =>
@@ -1476,7 +1482,7 @@ export const postUpload = async (req, res) => {
         file: { path }
     } = req;
     const newVideo = await Video.create({
-        fileUrl: path.replace(/\\/g, "/"), 
+        fileUrl: path.replace(/\\/g, "/"),
         title,
         description
     });
@@ -1489,8 +1495,8 @@ export const videoDetail = async (req, res) => {
         params: { id }
     } = req;
     try {
-        const video = await Video.findById(id); //URL에 있는 id를 이용하여 DB로부터 데이터를 불러온다. 
-        res.render("videoDetail", { pageTitle: "Video Detail", video });// 데이터를 videoDetail.pug로 전달한다. 
+        const video = await Video.findById(id); //URL에 있는 id를 이용하여 DB로부터 데이터를 불러온다.
+        res.render("videoDetail", { pageTitle: "Video Detail", video }); // 데이터를 videoDetail.pug로 전달한다.
     } catch (error) {
         console.log(error);
         res.redirect(routes.home);
@@ -1509,7 +1515,7 @@ export const deleteVideo = (req, res) =>
 extends layouts/main
 
 block content
-    .videp__player 
+    .videp__player
         video(src=`/${video.fileUrl}`)
     .video__info
         h5.video__title=video.title
@@ -1524,6 +1530,7 @@ block content
 우선 router의 형태가 `/:id/edit` 이므로 function 형태로 router에 접근할 수 있도록 변경한다.
 
 #### routes.js
+
 ```javascript
 // Global
 const HOME = "/";
@@ -1583,9 +1590,10 @@ const routes = {
 };
 
 export default routes;
-
 ```
+
 #### videoRouter.js
+
 ```javascript
 import express from "express";
 import routes from "../routes";
@@ -1617,7 +1625,9 @@ export default videoRouter;
 ```
 
 #### videoController.js - getEditVideo
-수정 페이지에 접속했을 때 양식이 채워져있길 바라므로 DB로 부터 수정하기 이전의 데이터를 불러와 화면에 채워넣어야 한다. 
+
+수정 페이지에 접속했을 때 양식이 채워져있길 바라므로 DB로 부터 수정하기 이전의 데이터를 불러와 화면에 채워넣어야 한다.
+
 ```javascript
 import routes from "../routes";
 import Video from "../models/Video";
@@ -1630,7 +1640,7 @@ export const getEditVideo = async (req, res) => {
     } = req;
     try {
         const video = await Video.findById(id);
-        res.render("editVideo", { pageTitle: `Edit ${video.title}`, video }); 
+        res.render("editVideo", { pageTitle: `Edit ${video.title}`, video });
     } catch (error) {
         console.log(error);
         res.redirect(routes.home);
@@ -1645,7 +1655,9 @@ export const deleteVideo = (req, res) =>
 ```
 
 #### editVideo.pug
-pug로 전달한 데이터를 이용하여 양식을 채워넣는다. 
+
+pug로 전달한 데이터를 이용하여 양식을 채워넣는다.
+
 ```pug
 extends layouts/main
 
@@ -1655,10 +1667,11 @@ block content
             input(type="text", placeholder="Title", name="title", value=video.title)
             textarea(name="description", placeholder="Description")=video.description
             input(type="submit", value="Update Video")
-        a.form-container__link.form-container__link--delete(href=`/videos${routes.deleteVideo}`) Delete Video 
+        a.form-container__link.form-container__link--delete(href=`/videos${routes.deleteVideo}`) Delete Video
 ```
 
 #### videoController.js - postEditVideo
+
 ```javascript
 import routes from "../routes";
 import Video from "../models/Video";
@@ -1671,7 +1684,7 @@ export const getEditVideo = async (req, res) => {
     } = req;
     try {
         const video = await Video.findById(id);
-        res.render("editVideo", { pageTitle: `Edit ${video.title}`, video }); 
+        res.render("editVideo", { pageTitle: `Edit ${video.title}`, video });
     } catch (error) {
         console.log(error);
         res.redirect(routes.home);
@@ -1701,6 +1714,7 @@ export const deleteVideo = (req, res) =>
 ### Delete a Video
 
 #### routes.js
+
 ```javascript
 // Global
 const HOME = "/";
@@ -1800,6 +1814,7 @@ export const deleteVideo = async (req, res) => {
 ### Searching Videos
 
 #### videoController.js
+
 ```javascript
 import routes from "../routes";
 import Video from "../models/Video";
@@ -1826,6 +1841,7 @@ export const search = async (req, res) => {
 ```
 
 #### search.pug
+
 ```pug
 extends layouts/main
 include mixins/videoBlock
@@ -1842,16 +1858,17 @@ block content
                 views:item.views,
                 videoFile:item.fileUrl,
                 id:item.id
-            }) 
+            })
 ```
 
 ## Webpack
-1. Introduction to Webpack
 
 ---
+
 ### Introduction to Webpack
 
 #### Install
+
 ```
 npm install webpack webpack-cli
 npm install css-loader, postcss-loader, sass-loader
@@ -1860,14 +1877,18 @@ npm install node-sass
 npm install babel-loader
 npm install @babel/polyfill
 ```
+
 webpack-cli 는 터미널에서 webpack을 사용할 수 있도록 하는 것
 
 #### What is Webpack
-Webpack은 module bundler이다. 우리가 어떤 파일을 Webpack에게 주면, Webpack은 여러 브라우저에서 호환되는 static 파일로 변환해준다. 
-예를 들어 ES6로 자바스크립트를 작성하면 브라우저가 이해 할 수 있는 javascript로 변환해주고, Sass를 Css로 변환해 준다. 
+
+Webpack은 module bundler이다. 우리가 어떤 파일을 Webpack에게 주면, Webpack은 여러 브라우저에서 호환되는 static 파일로 변환해준다.
+예를 들어 ES6로 자바스크립트를 작성하면 브라우저가 이해 할 수 있는 javascript로 변환해주고, Sass를 Css로 변환해 준다.
 
 #### package.json
+
 `package.json`의 `script`부분을 아래와 같이 변경해 준다.
+
 ```
 "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
@@ -1878,8 +1899,9 @@ Webpack은 module bundler이다. 우리가 어떤 파일을 Webpack에게 주면
 ```
 
 #### webpack.config.js
+
 webpack은 기본적으로 export configuration object를 찾는다. 따라서 `webpack.config.js`파일에 webpack에 관한 규칙들을 정해놓는다고 생각하면 된다.
-우리는 앞으로 사용할 모든 파일의 형식들을 Webpack에게 알려줘야 한다. 
+우리는 앞으로 사용할 모든 파일의 형식들을 Webpack에게 알려줘야 한다.
 주의할 점은 `webpack.config.js`파일 안의 코드들은 server코드와는 연관시켜서는 안된다는 점과 ES6 이전의 javascript로 작성해야한다는 것이다.
 
 ```javascript
@@ -1893,20 +1915,23 @@ const OUTPUT_DIR = path.join(__dirname, "static");
 
 const config = {
     entry: ["@babel/polyfill", ENTRY_FILE], //'파일들이 어디서 왔는가?'를 의미
-    mode: MODE,                             //@babel/polyfill은 구름 크롬이 아직 async를 어떻게 처리해야하는지 모르기 때문에 설치
+    mode: MODE, //@babel/polyfill은 구름 크롬이 아직 async를 어떻게 처리해야하는지 모르기 때문에 설치
     module: {
         rules: [
             {
-                test: /\.(js)$/,//정규표현식으로, 그 파일이 js파일인지 알아보는 역할
+                test: /\.(js)$/, //정규표현식으로, 그 파일이 js파일인지 알아보는 역할
                 use: [
-                    {   //loader은 webpack에게 파일을 처리하는 방법을 알려주는 역할을 담당한다.
-                        loader: "babel-loader" 
+                    {
+                        //loader은 webpack에게 파일을 처리하는 방법을 알려주는 역할을 담당한다.
+                        loader: "babel-loader"
                     }
                 ]
             },
-            {                      //webpack은 config파일에서 아래에서 위로 실행한다는 점 주의!
+            {
+                //webpack은 config파일에서 아래에서 위로 실행한다는 점 주의!
                 test: /\.(scss)$/, //1st : scss파일 찾기
-                use: ExtractCSS.extract([ //5th : CSS부분만 추출
+                use: ExtractCSS.extract([
+                    //5th : CSS부분만 추출
                     {
                         loader: "css-loader" //4th : webpack이 CSS를 이해 할 수 있도록 알려주는 역할
                     },
@@ -1915,7 +1940,8 @@ const config = {
                         options: {
                             plugins() {
                                 return [
-                                    autoprefixer({ //브라우저의 인기도를 바탕으로 호환가능하게 만들어 주는 것
+                                    autoprefixer({
+                                        //브라우저의 인기도를 바탕으로 호환가능하게 만들어 주는 것
                                         overrideBrowserslist: "cover 99.5%"
                                     })
                                 ];
@@ -1929,7 +1955,8 @@ const config = {
             }
         ]
     },
-    output: { //'변환된 파일들을 어디에다가 넣을 것인가?'를 의미
+    output: {
+        //'변환된 파일들을 어디에다가 넣을 것인가?'를 의미
         path: OUTPUT_DIR,
         filename: "[name].js"
     },
@@ -1940,6 +1967,7 @@ module.exports = config;
 ```
 
 #### app.js
+
 ```javascript
 import express from "express";
 import morgan from "morgan";
@@ -1970,5 +1998,107 @@ app.use(routes.users, userRouter);
 app.use(routes.videos, videoRouter);
 
 export default app;
+```
+
+## Styling
+
+### What is Scss
+한 눈에 알아보기 쉽게 CSS코드를 작성하고자 하는 이유와 mixin과의 호환성 및 변수와 함수의 사용을 위해 Scss로 styling을 한다.
+
+파일 구조는 아래와 같다   
+`parials`에는 header, footer, Login에 관한 scss파일을 만든다.  
+`pages`에는 개별 페이지에서 필요한 스타일링을 한다.  
+`config`에는 필요한 변수에 관한 scss파일을 만들고, reset.scss를 넣어 styling의 편의를 도모한다.  
+`main.scss`는 application에 공통으로 들어갈 styling을 한다.  
+모든 scss파일은 `styles.scss`에 import되고 `styles.scss`파일은 `main.js`에서 import된다. 
+
+![photo1](https://user-images.githubusercontent.com/52039229/73718101-e607f300-475e-11ea-9561-4c4ebcbd9acd.JPG)
+
+#### main.scss
+```scss
+html,
+body {
+    height: 100%;
+}
+body {
+    background-color: #f5f5f5;
+    color: $black;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    font-size: 14px;
+}
+
+main {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    min-height: 70vh;
+}
+```
+#### _variagles.scss
+```scss
+$red: #ea232c;
+$dark-red: #bb2f2a;
+$grey: #f5f5f5;
+$black: #444444;
+$dark-grey: #e7e7e7;
+```
+
+#### header.scss
+아래와 같이 HTML처럼 구조를 살려 코딩할 수 있다는 점이 편했다.  
+또한 변수를 사용할 수 있는것이 장점이었다.
+```scss
+.header {
+    background-color: $red; // _variagles.scss에서 정의한 변수 사용
+    margin-bottom: 50px;
+    .header__wrapper {
+        padding: 5px 0px;
+        width: 100%;
+        margin: 0 auto;
+        max-width: 1200px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        align-items: center;
+        .header__column {
+            i {
+                color: white;
+                font-size: 40px;
+            }
+            &:nth-child(2) {
+                width: 100%;
+                justify-self: center;
+            }
+            &:last-child {
+                justify-self: end;
+            }
+            ul {
+                display: flex;
+                color: white;
+                font-weight: 600;
+                text-transform: uppercase;
+                li:not(:last-child) {
+                    margin-right: 15px;
+                }
+            }
+            form {
+                width: 100%;
+                input {
+                    padding: 7px 10px;
+                    width: 100%;
+                    border-radius: 5px;
+                    font-size: 14px;
+                    color: $black;
+                    font-weight: 600;
+                    &::placeholder {
+                        font-weight: 300;
+                        color: rgba(0, 0, 0, 0.7);
+                    }
+                }
+            }
+        }
+    }
+}
 
 ```
+
+## User Authenication
