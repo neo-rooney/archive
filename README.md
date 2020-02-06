@@ -2843,3 +2843,85 @@ passport.use(
 ```
 
 그 외 나머지 부분은 github 로그인과 동일!
+
+## Relationships and Route Protection
+
+### Edit Profile
+
+#### editProfile.pug
+```pug
+extends layouts/main
+
+block content
+    .form-container
+        form(action=`/users${routes.editProfile}`, method="post",enctype="multipart/form-data")
+            .fileUpload
+                label(for="avatar") Avatar
+                input(type="file", id="avatar", name="avatar", accept="image/*")
+            input(type="text" ,placeholder="Name", name="name", value=loggedUser.name)
+            input(type="email" ,placeholder="Email" ,name="email", value=loggedUser.email)
+            input(type="submit", value="Update Profile" )
+```
+
+#### userController.js
+```javascript
+.
+.
+.
+export const getEditProfile = (req, res) =>
+    res.render("editProfile", { pageTitle: "EditvProfile" });
+
+export const postEditProfile = async (req, res) => {
+    const {
+        body: { name, email },
+        file
+    } = req;
+    try {
+        await User.findByIdAndUpdate(req.user.id, {
+            name,
+            email,
+            avatarUrl: file ? file.path : req.user.avatarUrl
+        });
+        res.redirect(routes.me);
+    } catch (error) {
+        res.render("editProfile", { pageTitle: "Edit Profile" });
+    }
+};
+.
+.
+.
+
+```
+
+#### middlewares.js
+multer middle 추가
+```javascript
+const multerAvatar = multer({ dest: "uploads/avatars/" });
+export const uploadAvatar = multerAvatar.single("avatar");
+```
+
+#### userRouter.js
+```javascript
+import express from "express";
+import routes from "../routes";
+import {
+    userDetail,
+    getEditProfile,
+    changePassword,
+    postEditProfile
+} from "../controllers/userController";
+import { olnyPrivate, uploadAvatar } from "../middlewares";
+
+const userRouter = express.Router();
+
+userRouter.get(routes.editProfile, olnyPrivate, getEditProfile);
+userRouter.post(routes.editProfile, olnyPrivate, uploadAvatar, postEditProfile);
+
+userRouter.get(routes.changePassword, olnyPrivate, changePassword);
+userRouter.get(routes.userDetail(), userDetail);
+
+export default userRouter;
+```
+
+### Change Password
+
