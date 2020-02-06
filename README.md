@@ -3088,3 +3088,227 @@ export const deleteVideo = async (req, res) => {
     res.redirect(routes.home);
 };
 ```
+
+## Custom Video Player
+
+### videoPlayer.pug
+```pug
+mixin videoPlayer(video = {})
+    .videoPlayer#jsVideoPlayer
+        video(src=`/${video.src}`)
+        .videoPlayer__controls
+            .videoPlayer__column
+                input.videoPlayer__volume#jsVolume(type="range", min="0", max="1",step="0.1")
+                span#jsVolumeBtn
+                    i.fas.fa-volume-up
+                span
+                    span#currentTiem 00:00:00
+                    |/ 
+                    span#totalTime 00:00:00
+            .videoPlayer__column
+                span#jsPlayButton
+                    i.fas.fa-play
+            .videoPlayer__column
+                span#jsFullScreen
+                    i.fas.fa-expand
+```
+
+### videoPlayer.scss
+```scss
+.videoPlayer {
+    position: relative;
+    &:hover {
+        .videoPlayer__controls {
+            opacity: 1;
+        }
+    }
+    video {
+        width: 100%;
+        max-width: 100%;
+    }
+    .videoPlayer__controls {
+        opacity: 0;
+        transition: opacity 0.4s linear;
+        color: white;
+        position: absolute;
+        z-index: 9;
+        bottom: 0px;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 10px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        font-size: 16px;
+        .videoPlayer__column:first-child {
+            display: flex;
+            align-items: center;
+            i {
+                margin-right: 10px;
+            }
+        }
+        .videoPlayer__column:last-child {
+            justify-self: end;
+        }
+        .videoPlayer__column:nth-child(2) {
+            justify-self: center;
+        }
+        i {
+            font-size: 25px;
+            cursor: pointer;
+        }
+    }
+    .videoPlayer__volume {
+        position: absolute;
+        padding: 0;
+        opacity: 1;
+        top: -60px;
+        left: -25px;
+        transform: rotate(-90deg);
+        z-index: 10;
+        width: 80px;
+
+        input {
+            background-color: rgba(0, 0, 0, 0.7);
+            &::-webkit-slider-runnable-track {
+                background-color: $grey;
+                height: 5px;
+            }
+            &::-webkit-slider-thumb {
+                all: unset;
+                background-color: $red;
+                height: 15px;
+                width: 15px;
+                border-radius: 50%;
+                position: relative;
+                top: -5px;
+            }
+        }
+    }
+    .videoPlayer__column:last-child {
+        justify-self: end;
+    }
+}
+```
+
+### videoPlayer.js
+```javascript
+const videoContrainer = document.getElementById("jsVideoPlayer");
+const videoPlayer = document.querySelector("#jsVideoPlayer video");
+const playBtn = document.getElementById("jsPlayButton");
+const volumnBtn = document.getElementById("jsVolumeBtn");
+const fullScrnBtn = document.getElementById("jsFullScreen");
+const currentTime = document.getElementById("currentTiem");
+const totalTime = document.getElementById("totalTime");
+const volumeRange = document.getElementById("jsVolume");
+
+function handlePlayClick() {
+    if (videoPlayer.paused) {
+        videoPlayer.play();
+        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    } else {
+        videoPlayer.pause();
+        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+    }
+}
+
+function handleVolumnClick() {
+    if (videoPlayer.muted) {
+        videoPlayer.muted = false;
+        volumnBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+        volumeRange.value = videoPlayer.volume;
+    } else {
+        videoPlayer.muted = true;
+        volumnBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+        volumeRange.value = 0;
+    }
+}
+
+function goSmallScreen() {
+    fullScrnBtn.innerHTML = '<i class="fas fa-expand"></i>';
+    fullScrnBtn.addEventListener("click", goFullScreen);
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+    }
+}
+
+function goFullScreen() {
+    if (videoContainer.requestFullscreen) {
+        videoContainer.requestFullscreen();
+    } else if (videoContainer.mozRequestFullScreen) {
+        videoContainer.mozRequestFullScreen();
+    } else if (videoContainer.webkitRequestFullscreen) {
+        videoContainer.webkitRequestFullscreen();
+    } else if (videoContainer.msRequestFullscreen) {
+        videoContainer.msRequestFullscreen();
+    }
+    fullScrnBtn.innerHTML = '<i class="fas fa-compress"></i>';
+    fullScrnBtn.removeEventListener("click", goFullScreen);
+    fullScrnBtn.addEventListener("click", goSmallScreen);
+}
+const formatDate = seconds => {
+    const secondsNumber = parseInt(seconds, 10);
+    let hours = Math.floor(secondsNumber / 3600);
+    let minutes = Math.floor((secondsNumber - hours * 3600) / 60);
+    let totalSeconds = secondsNumber - hours * 3600 - minutes * 60;
+
+    if (hours < 10) {
+        hours = `0${hours}`;
+    }
+    if (minutes < 10) {
+        minutes = `0${minutes}`;
+    }
+    if (seconds < 10) {
+        totalSeconds = `0${totalSeconds}`;
+    }
+    return `${hours}:${minutes}:${totalSeconds}`;
+};
+
+function getCurrentTime() {
+    currentTime.innerHTML = formatDate(Math.floor(videoPlayer.currentTime));
+}
+
+function setTotalTime() {
+    const totalTimeString = formatDate(videoPlayer.duration);
+    totalTime.innerHTML = totalTimeString;
+    setInterval(getCurrentTime, 1000);
+}
+
+function handleEnded() {
+    videoPlayer.currentTime = 0;
+    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+}
+
+function handleDrag(e) {
+    const {
+        target: { value }
+    } = e;
+    videoPlayer.volume = value;
+    if (value > 0.6) {
+        volumnBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+    } else if (value > 0.3) {
+        volumnBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
+    } else {
+        volumnBtn.innerHTML = '<i class="fas fa-volume-off"></i>';
+    }
+}
+
+function init() {
+    videoPlayer.volume = 0.5;
+    playBtn.addEventListener("click", handlePlayClick);
+    volumnBtn.addEventListener("click", handleVolumnClick);
+    fullScrnBtn.addEventListener("click", goFullScreen);
+    videoPlayer.addEventListener("loadedmetadata", setTotalTime);
+    videoPlayer.addEventListener("ended", handleEnded);
+    volumeRange.addEventListener("input", handleDrag);
+}
+
+if (videoContrainer) {
+    init();
+}
+```
