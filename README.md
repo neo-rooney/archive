@@ -3041,3 +3041,50 @@ block content
             else
                 span.video__comment-number #{video.comments.length} comments 
 ```
+
+### Protecting Vedeo Routes
+
+#### videoController.js
+```javascript
+.
+.
+.
+export const getEditVideo = async (req, res) => {
+    const {
+        params: { id }
+    } = req;
+    try {
+        const video = await Video.findById(id);
+        if (video.creator !== req.user.id) { //올린사람만 접근 가능
+            throw Error();
+        } else {
+            res.render("editVideo", {
+                pageTitle: `Edit ${video.title}`,
+                video
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.redirect(routes.home);
+    }
+};
+.
+.
+.
+export const deleteVideo = async (req, res) => {
+    const {
+        params: { id }
+    } = req;
+    try {
+        const video = await Video.findById(id);
+        if (video.creator !== req.user.id) { //올린 사람만 접근 가능
+            throw Error();
+        } else {
+            await Video.findByIdAndRemove({ _id: id });
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    res.redirect(routes.home);
+};
+```
