@@ -3312,3 +3312,100 @@ if (videoContrainer) {
     init();
 }
 ```
+
+## Custom Video Recorder
+
+### upload.pug
+```pug
+extends layouts/main
+
+block content
+    
+    .form-container
+        .record-container#jsRecordContainer
+            video#jsVideoPreview
+            button#jsRecordBtn Start Recording 
+        form(action=`/videos${routes.upload}`, method="post", enctype="multipart/form-data")
+            div.fileUpload
+                label(for="file") Video File
+                input(type="file", id="file", name="videoFile", required=true, accept="video/*")
+            input(type="text", placeholder="Title", name="title", required=true)
+            textarea(name="description", placeholder="Description", required=true)
+            input(type="submit", value="Upload Video")
+```
+
+### videoRecorder.scss
+```scss
+.record-container {
+    width: 100%;
+    max-width: 320px;
+    margin-bottom: 50px;
+    video {
+        background-color: $black;
+        width: 100%;
+        margin-bottom: 20x;
+    }
+}
+
+```
+
+### videoRecorder.js
+```javascript
+const recorderContainer = document.getElementById("jsRecordContainer");
+const recordBtn = document.getElementById("jsRecordBtn");
+const videoPreview = document.getElementById("jsVideoPreview");
+
+let streamObject;
+let videoRecorder;
+
+const handleVideoData = e => {
+    const { data: videoFile } = e;
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(videoFile);
+    link.download = "recorded.webm";
+    document.body.appendChild(link);
+    link.click();
+};
+
+const stopRecording = () => {
+    videoRecorder.stop();
+    recordBtn.removeEventListener("click", stopRecording);
+    recordBtn.addEventListener("click", getVideo);
+    recordBtn.innerHTML = "Start Recording";
+};
+
+const startRecording = () => {
+    videoRecorder = new MediaRecorder(streamObject);
+    videoRecorder.start();
+    videoRecorder.addEventListener("dataavailable", handleVideoData);
+    recordBtn.addEventListener("click", stopRecording);
+};
+
+const getVideo = async () => {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: { width: 1280, height: 720 }
+        });
+        videoPreview.srcObject = stream;
+        videoPreview.muted = true;
+        videoPreview.play();
+        recordBtn.innerHTML = "Stop recording";
+        streamObject = stream;
+        startRecording();
+    } catch (error) {
+        recordBtn.innerHTML = "Cant record";
+    } finally {
+        recordBtn.removeEventListener("click", getVideo);
+    }
+};
+
+function init() {
+    recordBtn.addEventListener("click", getVideo);
+}
+
+if (recorderContainer) {
+    init();
+}
+
+```
