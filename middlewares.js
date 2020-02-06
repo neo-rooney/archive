@@ -11,7 +11,7 @@ export const localsMiddleware = (req, res, next) => {
     next();
 };
 
-export const olnyPublic = (req, res, next) => {
+export const onlyPublic = (req, res, next) => {
     if (req.user) {
         res.redirect(routes.home);
     } else {
@@ -19,7 +19,7 @@ export const olnyPublic = (req, res, next) => {
     }
 };
 
-export const olnyPrivate = (req, res, next) => {
+export const onlyPrivate = (req, res, next) => {
     if (req.user) {
         next();
     } else {

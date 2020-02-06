@@ -2925,3 +2925,72 @@ export default userRouter;
 
 ### Change Password
 
+#### ChangePassword.pug
+```pug
+extends layouts/main
+
+block content
+    .form-container
+        form(action=`/users${routes.changePassword}`, method="post")
+            input(type="password", name="oldPassword", placeholder="Current Password")
+            input(type="password", name="newPassword", placeholder="New Password")
+            input(type="password", name="newPassword1", placeholder="Verify New Password")
+            input(type="submit", value="Change Password") 
+```
+
+#### userController.js
+```javascript
+.
+.
+.
+export const getChangePassword = (req, res) =>
+    res.render("changePassword", { pageTitle: "Change Password" });
+
+export const postChangePassword = async (req, res) => {
+    const {
+        body: { oldPassword, newPassword, newPassword1 }
+    } = req;
+    try {
+        if (newPassword !== newPassword1) {
+            res.status(400);
+            res.redirect(`/users${routes.changePassword}`);
+            return;
+        }
+        await req.user.changePassword(oldPassword, newPassword);
+        res.redirect(routes.me);
+    } catch (error) {
+        res.status(400);
+        res.redirect(`/users${routes.changePassword}`);
+    }
+};
+.
+.
+.
+```
+
+
+#### userRouter.js
+```javascript
+import express from "express";
+import routes from "../routes";
+import {
+    userDetail,
+    getEditProfile,
+    postEditProfile,
+    getChangePassword,
+    postChangePassword
+} from "../controllers/userController";
+import { onlyPrivate, uploadAvatar } from "../middlewares";
+
+const userRouter = express.Router();
+
+userRouter.get(routes.editProfile, onlyPrivate, getEditProfile);
+userRouter.post(routes.editProfile, onlyPrivate, uploadAvatar, postEditProfile);
+
+userRouter.get(routes.changePassword, onlyPrivate, getChangePassword);
+userRouter.post(routes.changePassword, onlyPrivate, postChangePassword);
+
+userRouter.get(routes.userDetail(), userDetail);
+
+export default userRouter;
+```
