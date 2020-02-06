@@ -2994,3 +2994,50 @@ userRouter.get(routes.userDetail(), userDetail);
 
 export default userRouter;
 ```
+
+### Adding Creator to Video
+
+#### videoController.js
+
+```javascript
+export const videoDetail = async (req, res) => {
+    const {
+        params: { id }
+    } = req;
+    try {
+        const video = await Video.findById(id).populate("creator");//populate 객체를 가져오는 함수
+        res.render("videoDetail", { pageTitle: video.title, video });
+    } catch (error) {
+        console.log(error);
+        res.redirect(routes.home);
+    }
+};
+```
+
+#### videoDetail.pug
+```pug
+extends layouts/main
+
+block content
+    .video-detail__container
+        .video__player
+            video(src=`/${video.fileUrl}`)
+        .video__info
+            if loggedUser&&(video.creator.id === loggedUser.id) //로그인 안한상태에서도 들어갈수 있게!
+                a(href=routes.editVideo(video.id))
+                    button Edit video
+            h5.video__title=video.title
+            p.video__description=video.description
+            if video.views === 1
+                span.video__views 1 view
+            else 
+                span.video__views #{video.views} views
+            .video__author
+                |Upload by 
+                a(href=routes.userDetail(video.creator.id))= video.creator.name
+        .video__comments
+            if video.comments.length === 1
+                span.video__comment-number 1 comment
+            else
+                span.video__comment-number #{video.comments.length} comments 
+```
