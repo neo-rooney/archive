@@ -3501,3 +3501,125 @@ function handleEnded() { //비디오 재생이 끝나면 regiserView 호출
 ```
 
 ### API Adding a Comment
+
+HTTP request 요청을
+Axios는 HTTP통신을 하는데 매우 인기있는 Javascript라이브러리
+Fetch API 대신 사용
+
+#### install
+
+```
+npm install axios
+```
+
+#### routes.js
+
+사용 할 URL 추가
+
+```javascript
+const ADD_COMMENT = "/:id/comment";
+```
+
+#### videoController.js
+
+```javascript
+.
+.
+.
+export const postAddComment = async (req, res) => {
+    const {
+        params: { id },
+        body: { comment123 },
+        user
+    } = req;
+    console.log(req.body);
+    try {
+        const video = await Video.findById(id);
+        const newComment = await Comment.create({
+            text: comment123,
+            creator: user.id
+        });
+        video.comments.push(newComment.id);
+        video.save();
+    } catch (error) {
+        console.log(error);
+        res.status(400);
+    } finally {
+        res.end();
+    }
+};
+```
+
+#### apiRouter.js
+
+```javascreipt
+import express from "express";
+import routes from "../routes";
+import {
+    postRegisterView,
+    postAddComment
+} from "../controllers/videoController";
+
+const apiRouter = express.Router();
+
+apiRouter.post(routes.registerView, postRegisterView);
+apiRouter.post(routes.addComment, postAddComment);
+
+export default apiRouter;
+```
+
+#### addComment.js
+
+assets > js 폴더 안에 addcommet.js 생성
+main.js에 추가 !!
+
+```javascript
+import axios from "axios";
+const addCommentForm = document.getElementById("jsAddComment");
+const commentList = document.getElementById("jsCommentList");
+const commentNumber = document.getElementById("jsCommentNumber");
+
+const increaseNumber = () => {
+    commentNumber.innerHTML = parseInt(commentNumber.innerHTML, 10) + 1;
+};
+
+const addComment = comment => {
+    const li = document.createElement("li");
+    const span = document.createElement("span");
+    span.innerHTML = comment;
+    li.appendChild(span);
+    commentList.prepend(li);
+    increaseNumber();
+};
+
+const sendComment = async comment => {
+    const videoId = window.location.href.split("/videos/")[1];
+    const response = await axios({
+        //fetch 대신 사용
+        url: `/api/${videoId}/comment`,
+        method: "POST",
+        data: {
+            comment123: comment
+        }
+    });
+    if (response.status === 200) {
+        addComment(comment);
+    }
+};
+
+const handleSubmit = event => {
+    event.preventDefault();
+    const commentInput = addCommentForm.querySelector("input");
+    const comment = commentInput.value;
+    sendComment(comment);
+    commentInput.value = "";
+};
+
+function init() {
+    addCommentForm.addEventListener("submit", handleSubmit);
+}
+
+if (addCommentForm) {
+    init();
+}
+```

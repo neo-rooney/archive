@@ -1,5 +1,6 @@
 import routes from "../routes";
 import Video from "../models/Video";
+import Comment from "../models/Comment";
 
 export const home = async (req, res) => {
     try {
@@ -51,7 +52,9 @@ export const videoDetail = async (req, res) => {
         params: { id }
     } = req;
     try {
-        const video = await Video.findById(id).populate("creator");
+        const video = await Video.findById(id)
+            .populate("creator")
+            .populate("comments");
         res.render("videoDetail", { pageTitle: video.title, video });
     } catch (error) {
         console.log(error);
@@ -65,7 +68,7 @@ export const getEditVideo = async (req, res) => {
     } = req;
     try {
         const video = await Video.findById(id);
-        if (video.creator !== req.user.id) {
+        if (String(video.creator) !== req.user.id) {
             throw Error();
         } else {
             res.render("editVideo", {
@@ -82,10 +85,14 @@ export const getEditVideo = async (req, res) => {
 export const postEditVideo = async (req, res) => {
     const {
         params: { id },
-        body: { title, description }
+        body: { title1111, description1111 }
     } = req;
+    console.log(req.body);
     try {
-        await Video.findOneAndUpdate({ _id: id }, { title, description });
+        await Video.findOneAndUpdate(
+            { _id: id },
+            { title: title1111, description: description1111 }
+        );
         res.redirect(routes.videoDetail(id));
     } catch (error) {
         console.log(error);
@@ -119,6 +126,29 @@ export const postRegisterView = async (req, res) => {
         video.save();
         res.status(200);
     } catch (error) {
+        res.status(400);
+    } finally {
+        res.end();
+    }
+};
+
+export const postAddComment = async (req, res) => {
+    const {
+        params: { id },
+        body: { comment123 },
+        user
+    } = req;
+    console.log(req.body);
+    try {
+        const video = await Video.findById(id);
+        const newComment = await Comment.create({
+            text: comment123,
+            creator: user.id
+        });
+        video.comments.push(newComment.id);
+        video.save();
+    } catch (error) {
+        console.log(error);
         res.status(400);
     } finally {
         res.end();
