@@ -2429,7 +2429,9 @@ export default userRouter;
 ```
 
 ### Github Log In
-github 홈페이지 > setting > Developer settings > OAuth Apps 에 등록 
+
+github 홈페이지 > setting > Developer settings > OAuth Apps 에 등록
+
 ```
 npm install passport-github
 ```
@@ -2799,6 +2801,7 @@ block content
 ```
 
 ### Facebook Login
+
 https://developers.facebook.com/ 에 등록
 
 설정 상태 : 라이브로 !
@@ -2813,15 +2816,17 @@ npm install passport-facebook
 ```
 
 #### ngrok
+
 http주소를 https로 바꿔주기 위함
 cmd 창 켜서 따로 실행
+
 ```
 npm install -g ngrok
 ngrok.exe http 4004
 ```
 
-
 #### passport.js
+
 ```javascript
 .
 .
@@ -2849,6 +2854,7 @@ passport.use(
 ### Edit Profile
 
 #### editProfile.pug
+
 ```pug
 extends layouts/main
 
@@ -2864,6 +2870,7 @@ block content
 ```
 
 #### userController.js
+
 ```javascript
 .
 .
@@ -2894,13 +2901,16 @@ export const postEditProfile = async (req, res) => {
 ```
 
 #### middlewares.js
+
 multer middle 추가
+
 ```javascript
 const multerAvatar = multer({ dest: "uploads/avatars/" });
 export const uploadAvatar = multerAvatar.single("avatar");
 ```
 
 #### userRouter.js
+
 ```javascript
 import express from "express";
 import routes from "../routes";
@@ -2926,6 +2936,7 @@ export default userRouter;
 ### Change Password
 
 #### ChangePassword.pug
+
 ```pug
 extends layouts/main
 
@@ -2935,10 +2946,11 @@ block content
             input(type="password", name="oldPassword", placeholder="Current Password")
             input(type="password", name="newPassword", placeholder="New Password")
             input(type="password", name="newPassword1", placeholder="Verify New Password")
-            input(type="submit", value="Change Password") 
+            input(type="submit", value="Change Password")
 ```
 
 #### userController.js
+
 ```javascript
 .
 .
@@ -2968,8 +2980,8 @@ export const postChangePassword = async (req, res) => {
 .
 ```
 
-
 #### userRouter.js
+
 ```javascript
 import express from "express";
 import routes from "../routes";
@@ -3005,7 +3017,7 @@ export const videoDetail = async (req, res) => {
         params: { id }
     } = req;
     try {
-        const video = await Video.findById(id).populate("creator");//populate 객체를 가져오는 함수
+        const video = await Video.findById(id).populate("creator"); //populate 객체를 가져오는 함수
         res.render("videoDetail", { pageTitle: video.title, video });
     } catch (error) {
         console.log(error);
@@ -3015,6 +3027,7 @@ export const videoDetail = async (req, res) => {
 ```
 
 #### videoDetail.pug
+
 ```pug
 extends layouts/main
 
@@ -3030,21 +3043,22 @@ block content
             p.video__description=video.description
             if video.views === 1
                 span.video__views 1 view
-            else 
+            else
                 span.video__views #{video.views} views
             .video__author
-                |Upload by 
+                |Upload by
                 a(href=routes.userDetail(video.creator.id))= video.creator.name
         .video__comments
             if video.comments.length === 1
                 span.video__comment-number 1 comment
             else
-                span.video__comment-number #{video.comments.length} comments 
+                span.video__comment-number #{video.comments.length} comments
 ```
 
 ### Protecting Vedeo Routes
 
 #### videoController.js
+
 ```javascript
 .
 .
@@ -3092,6 +3106,7 @@ export const deleteVideo = async (req, res) => {
 ## Custom Video Player
 
 ### videoPlayer.pug
+
 ```pug
 mixin videoPlayer(video = {})
     .videoPlayer#jsVideoPlayer
@@ -3103,7 +3118,7 @@ mixin videoPlayer(video = {})
                     i.fas.fa-volume-up
                 span
                     span#currentTiem 00:00:00
-                    |/ 
+                    |/
                     span#totalTime 00:00:00
             .videoPlayer__column
                 span#jsPlayButton
@@ -3114,6 +3129,7 @@ mixin videoPlayer(video = {})
 ```
 
 ### videoPlayer.scss
+
 ```scss
 .videoPlayer {
     position: relative;
@@ -3191,6 +3207,7 @@ mixin videoPlayer(video = {})
 ```
 
 ### videoPlayer.js
+
 ```javascript
 const videoContrainer = document.getElementById("jsVideoPlayer");
 const videoPlayer = document.querySelector("#jsVideoPlayer video");
@@ -3316,15 +3333,16 @@ if (videoContrainer) {
 ## Custom Video Recorder
 
 ### upload.pug
+
 ```pug
 extends layouts/main
 
 block content
-    
+
     .form-container
         .record-container#jsRecordContainer
             video#jsVideoPreview
-            button#jsRecordBtn Start Recording 
+            button#jsRecordBtn Start Recording
         form(action=`/videos${routes.upload}`, method="post", enctype="multipart/form-data")
             div.fileUpload
                 label(for="file") Video File
@@ -3335,6 +3353,7 @@ block content
 ```
 
 ### videoRecorder.scss
+
 ```scss
 .record-container {
     width: 100%;
@@ -3346,10 +3365,10 @@ block content
         margin-bottom: 20x;
     }
 }
-
 ```
 
 ### videoRecorder.js
+
 ```javascript
 const recorderContainer = document.getElementById("jsRecordContainer");
 const recordBtn = document.getElementById("jsRecordBtn");
@@ -3407,5 +3426,78 @@ function init() {
 if (recorderContainer) {
     init();
 }
-
 ```
+
+## API + AJAX
+
+### Videos View
+
+#### routes.js
+
+API로 사용할 URL 추가
+
+```javascript
+//API
+
+const API = "/api";
+const REGISTER_VIEW = "/:id/view";
+Router 폴더에 `apiRouter.js` 파일 새로 생성
+DB를 변경시킬것이므로 POST
+```
+
+####apiRouter.js
+
+```javascript
+import express from "express";
+import routes from "../routes";
+import { postRegisterView } from "../controllers/videoController";
+
+const apiRouter = express.Router();
+
+apiRouter.post(routes.registerView, postRegisterView);
+
+export default apiRouter;
+```
+
+#### videoController.js
+
+page를 rendering하지 않는 Api Controller 생성
+
+```javascript
+export const postRegisterView = async (req, res) => {
+    const {
+        params: { id }
+    } = req;
+    try {
+        const video = await Video.findById(id);
+        video.view += 1;
+        video.save();
+        res.status(200);
+    } catch (error) {
+        res.status(400);
+    } finally {
+        res.end();
+    }
+};
+```
+
+#### videoPlayer.js
+
+```javacript
+const registerView = () => {
+    const videoId = window.location.href.split("/videos/")[1];
+    fetch(`/api/${videoId}/view`, {
+        method: "POST"
+    });
+};
+.
+.
+.
+function handleEnded() { //비디오 재생이 끝나면 regiserView 호출
+    registerView();
+    videoPlayer.currentTime = 0;
+    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+}
+```
+
+### API Adding a Comment
