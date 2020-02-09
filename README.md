@@ -3623,14 +3623,153 @@ if (addCommentForm) {
     init();
 }
 ```
+
 ## AW3
+
+AW3의 S3에 동영상과 프로필 사진 파일을 업로드 한다.
+
+### 설치
 
 ```
 npm install aws-sdk
 npm install multer-s3
 ```
 
+### middlewares.js
+
+```javascript
+import multer from "multer";
+import multerS3 from "multer-s3";
+import aws from "aws-sdk";
+import routes from "./routes";
+
+const s3 = new aws.S3({
+    accessKeyId: process.env.AWS_KEY,
+    secretAccessKey: process.env.AWS_PRIVATE_KEY,
+    region: "ap-northeast-1"
+});
+
+const multerVideo = multer({
+    storage: multerS3({
+        s3,
+        acl: "public-read",
+        bucket: "rooneywetube/video"
+    })
+});
+const multerAvatar = multer({
+    storage: multerS3({
+        s3,
+        acl: "public-read",
+        bucket: "rooneywetube/avator"
+    })
+});
+export const uploadVideo = multerVideo.single("videoFile");
+export const uploadAvatar = multerAvatar.single("avatar");
+
+export const localsMiddleware = (req, res, next) => {
+    res.locals.siteName = "WeTube";
+    res.locals.routes = routes;
+    res.locals.loggedUser = req.user || null;
+    next();
+};
+
+export const onlyPublic = (req, res, next) => {
+    if (req.user) {
+        res.redirect(routes.home);
+    } else {
+        next();
+    }
+};
+
+export const onlyPrivate = (req, res, next) => {
+    if (req.user) {
+        next();
+    } else {
+        res.redirect(routes.home);
+    }
+};
+```
+
+### videoController.js & userController.js
+
+파일 경로를 아래와 같이 변경해준다.
+
+#### videoController.js
+
+```javascript
+export const postUpload = async (req, res) => {
+    const {
+        body: { title, description },
+        file: { location }
+    } = req;
+    const newVideo = await Video.create({
+        // fileUrl: path.replace(/\\/g, "/"),
+        fileUrl: location,
+        title,
+        description,
+        creator: req.user.id
+    });
+    req.user.videos.push(newVideo.id);
+    req.user.save();
+    res.redirect(routes.videoDetail(newVideo.id));
+};
+```
+
+#### userController.js
+
+```javascript
+export const postEditProfile = async (req, res) => {
+    const {
+        body: { name, email },
+        file
+    } = req;
+    try {
+        await User.findByIdAndUpdate(req.user.id, {
+            name,
+            email,
+            avatarUrl: file ? file.location : req.user.avatarUrl
+        });
+        res.redirect(routes.me);
+    } catch (error) {
+        res.redirect(routes.editProfile);
+    }
+};
+```
+
+추가로 videoBlock.pug와 videoPlayer.pug에서 파일의 경로를 바꿔준다
+
+```
+src=video.videoFile
+```
+
+### get-blob-duration
+
+AWS의 S3를 사용하게 되면 녹화한 파일을 올릴 경우 비디오 전체 재생 길이를 받아 오지 못하는 오류가 발생하는데 이를 해결하기 위해 아래 2가치 패키지를 설치해준다.
+
 ```
 npm install get-blob-duration
 npm add @babel/runtime
 ```
+
+설치가 완료되면 videoPlayer.js 을 아래와 같이 변경하면 녹화해서 업로드한 파일도 재생길이를 정상적으로 받아오는 것을 확인 할 수 있다.
+
+```javascript
+import getBlobDuration from "get-blob-duration";
+.
+.
+.
+async function setTotalTime() {
+    const blob = await fetch(videoPlayer.src).then(response => response.blob());
+    const duration = await getBlobDuration(blob);
+    const totalTimeString = formatDate(duration);
+    totalTime.innerHTML = totalTimeString;
+    setInterval(getCurrentTime, 1000);
+}
+```
+
+## Migrating the DB to MongoLab
+
+MongoDB Atlas 사용
+Local에 DB를 저장하는것이 아닌 Cloud에 저장
+
+## Building for Production

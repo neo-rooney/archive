@@ -5,10 +5,15 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "dev:server": "nodemon --exec babel-node init.js --delay 2 --ignore 'scss' ",
-        "dev:assets": "cross-env WEBPACK_ENV=development webpack -w",
-        "build:assets": "cross-env WEBPACK_ENV=production webpack",
-        "tunnel": "lt --port 4004"
+        "dev:server": "nodemon --exec babel-node src/init.js --delay 2 --ignore '.scss' ",
+        "dev:assets": "cd src &&cross-env WEBPACK_ENV=development webpack -w",
+        "build:assets": "cd src &&cross-env WEBPACK_ENV=production webpack",
+        "build:server": "babel src --out-dir build --ignore 'src/assets,'src/static','src/webpack.config.js'",
+        "build": "npm run build:server && npm run build:assets && cp -R src/static build && cp -R src/views build",
+        "prebuild": "rm -rf build",
+        "tunnel": "lt --port 4004",
+        "start": "node build/init.js",
+        "prestart": " npm run build"
     },
     "author": "Rooney",
     "license": "ISC",
@@ -52,6 +57,7 @@
         "webpack-cli": "^3.3.10"
     },
     "devDependencies": {
+        "@babel/cli": "^7.8.4",
         "eslint": "^6.8.0",
         "nodemon": "^2.0.2",
         "prettier": "^1.19.1"
