@@ -3623,3 +3623,14 @@ if (addCommentForm) {
     init();
 }
 ```
+## AW3
+
+```
+npm install aws-sdk
+npm install multer-s3
+```
+
+```
+npm install get-blob-duration
+npm add @babel/runtime
+```
