@@ -15,7 +15,9 @@ passport.use(
         {
             clientID: process.env.GH_ID,
             clientSecret: process.env.GH_SECRET,
-            callbackURL: `http://localhost:4004${routes.githubCallback}`
+            callbackURL: process.env.PRODUCTION
+                ? "https://quiet-brook-26955.herokuapp.com/auth/github/callback"
+                : `http://localhost:4004${routes.githubCallback}`
         },
         githubLoginCallback
     )
