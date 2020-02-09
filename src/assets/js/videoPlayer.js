@@ -53,14 +53,14 @@ function goSmallScreen() {
 }
 
 function goFullScreen() {
-    if (videoContainer.requestFullscreen) {
-        videoContainer.requestFullscreen();
-    } else if (videoContainer.mozRequestFullScreen) {
-        videoContainer.mozRequestFullScreen();
-    } else if (videoContainer.webkitRequestFullscreen) {
-        videoContainer.webkitRequestFullscreen();
-    } else if (videoContainer.msRequestFullscreen) {
-        videoContainer.msRequestFullscreen();
+    if (videoContrainer.requestFullscreen) {
+        videoContrainer.requestFullscreen();
+    } else if (videoContrainer.mozRequestFullScreen) {
+        videoContrainer.mozRequestFullScreen();
+    } else if (videoContrainer.webkitRequestFullscreen) {
+        videoContrainer.webkitRequestFullscreen();
+    } else if (videoContrainer.msRequestFullscreen) {
+        videoContrainer.msRequestFullscreen();
     }
     fullScrnBtn.innerHTML = '<i class="fas fa-compress"></i>';
     fullScrnBtn.removeEventListener("click", goFullScreen);
