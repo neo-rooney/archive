@@ -1,15 +1,4 @@
-# Shopping mall Searching page
-
-## 작업환경
-
--   NodeJS
--   npm
--   lite-server
--   git
-
-```
-npm install lite-server -g
-```
+# Shopping mall Searching page by vanillaJS
 
 ## 검색폼
 
@@ -35,3 +24,11 @@ npm install lite-server -g
 -   [x] 번호, 추천 검색어 목록이 탭 아래 위치한다.
 -   [x] 목록에서 검색어를 클릭하면 선택된 검색어로 검색 결과 화면으로 이동
 -   [x] 검색폼에 선택된 추천 검색어 설정
+
+## 최근 검색어 구현
+
+-   [x]최근 검색어 목록이 탭 아래 위치한다.
+-   [x] 목록에서 검색어를 클릭하면 선택된 검색 결과 화면으로 이동한다.
+-   [x] 검색일자, 버튼 목록이 탭 아래 위치한다.
+-   [x] 목록에서 x 버튼을 클릭하면 선택된 검색어가 목록에서 삭제
+-   [x] 검색시마다 최근 검색어 목록에 추가된다.

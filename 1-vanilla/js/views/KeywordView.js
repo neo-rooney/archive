@@ -11,13 +11,18 @@ KeywordView.setup = function(el) {
     return this;
 };
 
+KeywordView.messages = {
+    NO_KEYWORDS: "추천 검색어가 없습니다."
+};
+
 //by Rooney, 데이터를 받으면 getKeywordsHtml메서드 실행_200214
 KeywordView.render = function(data = []) {
     this.el.innerHTML = data.length
         ? this.getKeywordsHtml(data)
-        : "추천 검색어가 없습니다.";
-    this.bindeClickEvent();
+        : this.messages.NO_KEYWORDS;
     this.show();
+    this.bindeClickEvent();
+    return this;
 };
 
 //by Rooney, 받은 데이터로 innerHTML 안에 들어갈 문자열 생성/클릭한 요소의 value dataset으로 전달_200214
