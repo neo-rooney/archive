@@ -50,4 +50,11 @@ FormView.onClickReset = function(e) {
     this.showResetBtn(false);
 };
 
+//by Rooney, @click 이벤트가 발생한 요소를 검색창의 value로 입력_200214
+//by Rooney, value가 입력되면 showResetBtn 메서드 실행_200214
+FormView.setValue = function(value = "") {
+    this.inputEl.value = value;
+    this.showResetBtn(this.inputEl.value.length);
+};
+
 export default FormView;
