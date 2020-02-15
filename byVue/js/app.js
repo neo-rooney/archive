@@ -9,7 +9,12 @@ new Vue({
         //by Rooney,index.html의 v-model='query'와 바인딩_200214
         query: "",
         submitted: false,
+        tabs: ["추천 검색어", "최근 검색어"],
+        selectedTab: "",
         searchResult: []
+    },
+    created() {
+        this.selectedTab = this.tabs[0];
     },
     methods: {
         //by Rooney,검색 폼에서 엔터를 누를 경우 동작하는 methods_200215
@@ -21,6 +26,9 @@ new Vue({
             if (!this.query.length) {
                 this.onReset();
             }
+        },
+        onClickTab(tab) {
+            this.selectedTab = tab;
         },
         search() {
             SearchModel.list().then(data => {
