@@ -358,3 +358,91 @@ export default {
 
 <style></style>
 ```
+
+## 동적 라우트 매칭
+
+라우터의 링크가 정적이지 않고 동적으로 변하는 경우 동적 라우트 매칭을 해주어야 한다. 다시말해 어떠한 패턴을 가진 라우터를 동일한 컴포넌트에 매핑해야하는 경우 동적 라우트 매칭을 사용해야한다. 예를 들어 `/b/1` 과 `/b/2`를 동일한 컴포넌트에 매핑해야 하는 경우라고 생각해보자. 일단 라우터의 링크가 동적으로 변할 수 있게 만들어 준다.
+
+```javascript
+// 'router/index.js`
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "../components/Home.vue";
+import Login from "../components/Login.vue";
+import NotFound from "../components/NotFound.vue";
+import Board from "../components/Board.vue";
+
+Vue.use(VueRouter);
+
+const routes = [
+  { path: "/", component: Home },
+  { path: "/login", component: Login },
+  //:bid의 경우 변수처럼 동적으로 변할 수 있다.
+  { path: "/b/:bid", component: Board },
+  { path: "*", component: NotFound }
+];
+
+const router = new VueRouter({
+  mode: "history",
+  routes
+});
+
+export default router;
+```
+
+다음으로 어느 경우에나 매핑될 동일한 컴포넌트를 만들어준다.
+
+```vue
+//Board.vue
+<template>
+  <div>
+    Board
+    <div>bid : {{ bid }}</div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      bid: 0
+    };
+  },
+  created() {
+    this.bid = this.$route.params.bid;
+  }
+};
+</script>
+
+<style scoped></style>
+```
+
+`index.js`에서 Vue.use()함수를 이용하여 vue-router를 미들웨어로 사용했기 때문에 this.\$route라는 변수를 통해 라우터 정보에 접근 할 수 있다.
+
+```vue
+//Home.vue
+<template>
+  <div>
+    Home
+    <div>
+      Board List:
+      <ul>
+        <li>
+          <router-link to="/b/1">Board 1</router-link>
+        </li>
+        <li>
+          <router-link to="/b/2">Board 2</router-link>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {};
+</script>
+
+<style scoped></style>
+```
+
+`Home.vue`에서 다음과 같이 라우터 링크를 만든 경우 `Board 1`을 클릭하여 Board 컴포넌트에 접근하는 경우 bid = 1 이 될것이다.
