@@ -164,3 +164,145 @@ new Vue({
 ```
 
 참고로 Vue-router의 기본 설정은 hash모드다. URL 해시를 사용하기 때문에 URL이 변경될 때 페이지가 다시 로드되지 않는다. 따라서 해시를 제거하기 위해 history모드를 사용한다.
+
+## Refactoring vue-router code
+
+위의 Router 코드는 모두 main.js에 작성되어있다. 코드는 기능별로 작게 쪼개서 관리하는것이 유지보수나 코드의 가독성 부분에서 나은 방법이므로 코드를 기능별로 나누는 작업을 진행한다.
+
+먼저 router 기능에 관한 부분은 `"src/router/index.js"`로 옮기는 작업을 진행한다.
+
+```javascript
+// 'src/router/index.js'
+import Vue from "vue";
+import vueRouter from "vue-router";
+import App from "../App.vue";
+
+Vue.use(vueRouter);
+
+const Login = { template: "<div>Login Page</div>" };
+const NotFound = { template: "<div>Page not found</div>" };
+
+const routes = [
+  { path: "/", component: App },
+  { path: "/login", component: Login },
+  { path: "*", component: NotFound }
+];
+
+const router = new VueRouter({
+  mode: "history",
+  routes
+});
+```
+
+index.js를 보면 Component에 관한 코드들이 보인다. 이 부분들도 따로 `'src/components'`디렉토리에 `Home.vue` `Login.vue` `NotFound.vue`로 나누는 작업을 진행한다.
+
+```vue
+// Home.vue
+<template>
+  <div>
+    Home
+  </div>
+</template>
+
+<script>
+export default {};
+</script>
+
+<style scoped></style>
+```
+
+```vue
+// Login.vue
+<template>
+  <div>
+    Login
+  </div>
+</template>
+
+<script>
+export default {};
+</script>
+
+<style scoped></style>
+```
+
+```vue
+// NotFound.vue
+<template>
+  <div>
+    Page not Found
+  </div>
+</template>
+
+<script>
+export default {};
+</script>
+
+<style scoped></style>
+```
+
+최종적으로 `router/index.js`의 코드는 아래와 같이 변경해야 할 것이다.
+
+```javascript
+// 'router/index.js'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "../components/Home.vue";
+import Login from "../components/Login.vue";
+import NotFound from "../components/NotFound.vue";
+
+Vue.use(VueRouter);
+
+const routes = [
+  { path: "/", component: Home },
+  { path: "/login", component: Login },
+  { path: "*", component: NotFound }
+];
+
+const router = new VueRouter({
+  mode: "history",
+  routes
+});
+
+export default router;
+```
+
+모듈로 export한 router는 `main.js`에서 import해서 사용하도록 한다.
+
+```javascript
+//main.js
+import Vue from "vue";
+import App from "./App.vue";
+import router from "./router";
+
+new Vue({
+  el: "#app",
+  router,
+  render: h => h(App)
+});
+```
+
+`main.js`에서 render 함수를 통해 App.vue를 렌더링하게 코드를 변경하였다. 브라우저의 Root URL로 접속하게 되면 App.vue가 렌더링 될 것이다. App.vue에 다른 URL로 접속한 경우 해당 컴포넌트를 보여줄 부분이 필요하다.
+
+```Vue
+//App.vue
+<template>
+  <div id="app">
+    여기서부터 코드를 시작합니다!
+    <router-view></router-view>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "app",
+  data() {
+    return {};
+  }
+};
+</script>
+
+<style></style>
+```
+
+`router-view` 마크업 부분에 다른 URL로 접속한 경우 해당 컴포넌트가 렌더링되어 표시될 것이다. App.vue 같은 경우에는 라우팅되어서 변하지 않는 Header나 footer 등을 구성하는데 사용하면 된다.

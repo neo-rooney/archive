@@ -1,5 +1,8 @@
 <template>
-  <div id="app">여기서부터 코드를 시작합니다!</div>
+  <div id="app">
+    여기서부터 코드를 시작합니다!
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
@@ -11,5 +14,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
