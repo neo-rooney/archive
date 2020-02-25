@@ -114,3 +114,53 @@ new Vue({
 ```
 
 콘솔창에서 `window.location.pathname`를 입력해보면 해당 Url의 엔드포인트가 반환되는 것을 확인 할 수 있다. 위의 코드대로 실행해보면 "localhost:8080/" 의 경우 App.vue가 렌더링 되는것을 확인 할 수 있고, "localhost:8080/login"의 경우 Login 컴포넌트가 렌더링 되는 것을 확인 할 수 있다. 그 이외의 엔드포인트를 입력하는 경우 "Page not found" 컴포넌트가 렌더링 된다.
+
+## Vue-router
+
+만약 query 전달해야 한다거나 좀 더 복잡한 인증플로우 등을 구현하기 위해서는 Vue-router을 사용하는 것이 바람직하다. Vue-router를 이용하여 라우팅하는 것은 `브라우져 라우팅`이다. 브라우져 라우팅을 하는 어플리케이션을 `SPA(Single Page App)`이라고 한다.
+
+```bash
+# install vue-router
+npm i vue-router
+```
+
+위에서 Vanilla JS로 구현한 Router를 Vue-router를 사용하여 재구성한다.
+
+```javascript
+import Vue from "vue";
+import App from "./App.vue";
+//1. 설치한 vue-router를 import 한다.
+import vueRouter from "vue-router";
+
+//2. middleware로 vue-router를 사용한다.
+Vue.use(vueRouter);
+
+const Login = { template: "<div>Login Page</div>" };
+const NotFound = { template: "<div>Page not found</div>" };
+
+//3. routes 배열을 정의한다.
+//   routes 배열은 코드 작성 순서에 영향을 받는다.
+//   따라서 "/","/logon"이 아닌 모든 경우에는 NotFound가 렌더링된다.
+const routes = [
+  { path: "/", component: App },
+  { path: "/login", component: Login },
+  { path: "*", component: NotFound }
+];
+
+//4. 새로운 vue-router 객체를 생성한다.
+//   history mode를 사용한다.
+const router = new VueRouter({
+  mode: "history",
+  routes
+});
+
+//5.render함수를 템플릿에 'router-view'마크업을 전달한다.
+//  router-view'마크업부분에 렌더링되는 템플릿이 표시된다.
+new Vue({
+  el: "#app",
+  router,
+  render: h => h({ template: "<router-view></router-view>" })
+});
+```
+
+참고로 Vue-router의 기본 설정은 hash모드다. URL 해시를 사용하기 때문에 URL이 변경될 때 페이지가 다시 로드되지 않는다. 따라서 해시를 제거하기 위해 history모드를 사용한다.
