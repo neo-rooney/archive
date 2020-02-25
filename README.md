@@ -100,7 +100,7 @@ new Vue({
   computed: {
     VueComponent() {
       return (
-        //참고: javascript에서 유효한 프로퍼티의 이름의 경우 대괄호를 사용하여 객체의 값을 읽는다.
+        //참고: javascript에서 유효한 프로퍼티의 이름이 아닌 경우 대괄호를 사용하여 객체의 값을 읽는다.
         routes[window.location.pathname] || {
           template: "<div>Page not found</div>"
         }
@@ -284,7 +284,7 @@ new Vue({
 
 `main.js`에서 render 함수를 통해 App.vue를 렌더링하게 코드를 변경하였다. 브라우저의 Root URL로 접속하게 되면 App.vue가 렌더링 될 것이다. App.vue에 다른 URL로 접속한 경우 해당 컴포넌트를 보여줄 부분이 필요하다.
 
-```Vue
+```vue
 //App.vue
 <template>
   <div id="app">
@@ -305,4 +305,56 @@ export default {
 <style></style>
 ```
 
-`router-view` 마크업 부분에 다른 URL로 접속한 경우 해당 컴포넌트가 렌더링되어 표시될 것이다. App.vue 같은 경우에는 라우팅되어서 변하지 않는 Header나 footer 등을 구성하는데 사용하면 된다.
+`router-view` 마크업 부분에 다른 URL로 접속한 경우 해당 컴포넌트가 렌더링되어 표시될 것이다. App.vue 같은 경우에는 라우팅되어도 변하지 않는 Header나 footer 등을 구성하는데 사용하면 된다.
+
+## router-link
+
+`router-link`는 라우터 지원 앱에서 사용자 네이게이션을 가능하게하는 컴포넌트이다. `router-link`는 다음과 같은 이유로 a태그보다 선호된다
+
+- 히스토리 모드와 해시 모드에서 모두 동일하게 작동하므로 모드를 변경하기로 결정한 경우 링크를 변경해야하는 번거로움이 없다.
+- 클릭이벤트를 차단하여 브라우저가 페이지를 다시 로드하지 않도록 한다.
+
+위에서 말했듯 App.vue의 경우에는 라우팅되어도 변하지 않는 요소들을 구성하는데 사용된다. App.vue에서 사용할 Navbar Component를 만들어서 해당 링크를 누르면 해당 페이지가 렌더링 되는 네비게이션바를 만든다. `component/Navbar.vue`에 코드를 작성한다.
+
+```vue
+//Navbar.vue
+<template>
+  <div>
+    <router-link to="/">Home</router-link>
+    <router-link to="/login">Login</router-link>
+  </div>
+</template>
+
+<script>
+export default {};
+</script>
+
+<style scoped></style>
+```
+
+만든 Component를 사용하기 위해 App.vue에 해당 컴포넌드를 import하고 Component로 등록한 후 위치시킬곳에 마크업한다.
+
+```vue
+//App.vue
+<template>
+  <div id="app">
+    <Navbar />
+    <router-view></router-view>
+  </div>
+</template>
+
+<script>
+import Navbar from "./components/Navbar.vue";
+export default {
+  name: "app",
+  components: {
+    Navbar
+  },
+  data() {
+    return {};
+  }
+};
+</script>
+
+<style></style>
+```
