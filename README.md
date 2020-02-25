@@ -541,7 +541,7 @@ export default {
 <style scoped></style>
 ```
 
-`Board`컴포넌트에 `Card`컴포넌트가 랜더링 될 `router-view`마크업을 표시해 주고 Card 컴포넌트에 접근 할 수 있는 `router-lick`마크업을 만든다. Board1 에서 Card 1을 클릭하게 되면 `/b/1/c/1`링크로 접근 하는 것을 확인 할 수 있다. 여기서 문제가 발생하게 되는데 Card 1으로 접근 한 후 Card 2를 클릭하게 되면 `/b/1/c/2`로 링크는 변하지만 화면의 숫자가 1로 유지 되는 것을 볼 수 있다. 그 이유는 `created` hook을 사용하여 `cid`변수에 현재 라우터의 정보를 저장했기 때문이다. `created` hook의 특성상 Card 1을 클릭한 경우 Card 컴포넌트가 생성되고 `cid`의 값에 1이 저장 되는데 Card 2를 다시 클릭한다고해서 Card 컴포넌트가 재 생성되는 것이 아니기 때문이다. 이런 경우 Vue에서는 `watch` 속성을 사용 할 수 있다.
+`Board`컴포넌트에 `Card`컴포넌트가 랜더링 될 `router-view`마크업을 표시해 주고 Card 컴포넌트에 접근 할 수 있는 `router-lick`마크업을 만든다. 이 때 `v-bind` 속성을 이용하여 링크를 바인딩 해주어야한다. 어떤 Board 버튼을 클릭하느냐에 따라 그 값이 달라지기 때문이다. Board1 에서 Card 1을 클릭하게 되면 `/b/1/c/1`링크로 접근 하는 것을 확인 할 수 있다. 여기서 문제가 발생하게 되는데 Card 1으로 접근 한 후 Card 2를 클릭하게 되면 `/b/1/c/2`로 링크는 변하지만 화면의 숫자가 1로 유지 되는 것을 볼 수 있다. 그 이유는 `created` hook을 사용하여 `cid`변수에 현재 라우터의 정보를 저장했기 때문이다. `created` hook의 특성상 Card 1을 클릭한 경우 Card 컴포넌트가 생성되고 `cid`의 값에 1이 저장 되는데 Card 2를 다시 클릭한다고해서 Card 컴포넌트가 재 생성되는 것이 아니기 때문이다. 이런 경우 Vue에서는 `watch` 속성을 사용 할 수 있다.
 
 ```vue
 //Card.vue
@@ -574,3 +574,94 @@ export default {
 ```
 
 `watch` 속성을 사용한 경우 Vue는 `$route` 변수를 지켜보다가 그 값이 변한 경우 `cid`에 새로운 라우터 정보를 저장 할 것이다.
+
+## 데이터 불러오기
+
+`Board`컴포넌트의 경우 Card 리스트가 렌더링되는데 실제로는 서버로부터 카드에 대한 데이터를 불러온 후 카드리스트가 렌더링 될 것이다. 아직 서버를 구성하지 않았으므로 setTimeout 메서드를 사용하여 시뮬레이션을 진행해 본다.
+
+```vue
+//Board.vue
+<template>
+  <div>
+    Board
+    <div v-if="loading">loading board...</div>
+    <div v-else>
+      <div>bid : {{ bid }}</div>
+      <router-link :to="`/b/${bid}/c/1`">Card 1</router-link>
+      <router-link :to="`/b/${bid}/c/2`">Card 2</router-link>
+    </div>
+    <hr />
+    <router-view></router-view>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      bid: 0,
+      loading: false
+    };
+  },
+  created() {
+    this.fetchData();
+  },
+  methods: {
+    fetchData() {
+      this.loading = true;
+      setTimeout(() => {
+        this.bid = this.$route.params.bid;
+        this.loading = false;
+      }, 500);
+    }
+  }
+};
+</script>
+
+<style scoped></style>
+```
+
+`fetchData`라는 메서드를 정의하고 Board 컴포넌트가 생성 될 때 `fetchData` 메서드를 호출 하도록 하였다. `v-if`속성을 이용하여 `loading 변수`의 값이 `ture`인 경우에는 loading 문구가 보여지도록 했고 0.5초 후에 `loading 변수`의 값을 `false`로 바꾸어 Card 리스트가 보여지도록 하였다.
+
+```vue
+//Card.vue
+<template>
+  <div>
+    Card
+    <div v-if="loading">loading card ...</div>
+    <div v-else>
+      <div>cid : {{ cid }}</div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      cid: 0,
+      loading: false
+    };
+  },
+  watch: {
+    $route: {
+      handler: "fetchData",
+      immediate: true
+    }
+  },
+  methods: {
+    fetchData() {
+      this.loading = true;
+      setTimeout(() => {
+        this.cid = this.$route.params.cid;
+        this.loading = false;
+      }, 500);
+    }
+  }
+};
+</script>
+
+<style scoped></style>
+```
+
+`Card` 컴포넌트의 경우에도 동일하게 서버로부터 데이터를 받아온 후 받아온 데이터를 보여주는 시뮬레이션을 구성해본다. 동일하게 `fetchData` 메서드를 정의하고 `fetchData`의 실행에 따라 `loading 변수`의 값이 달라지게 하였다. 다만 `Card` 컴포넌트의 경우 앞서 설명한 바와같이 `watch`속성에서 해당 메서드를 실행해주어야한다는 차이 점이 있다. `watch`속성을 위의 코드와 같이 객체 형태로 구성 할 수 있고, `immediate`속성에 `true`값을 주게되면 '즉시 실행'되므로 `created` hook과 동일한 기능을 하게된다 .따라서 기존의 `created` hook을 제거하였다.
