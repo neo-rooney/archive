@@ -665,3 +665,233 @@ export default {
 ```
 
 `Card` 컴포넌트의 경우에도 동일하게 서버로부터 데이터를 받아온 후 받아온 데이터를 보여주는 시뮬레이션을 구성해본다. 동일하게 `fetchData` 메서드를 정의하고 `fetchData`의 실행에 따라 `loading 변수`의 값이 달라지게 하였다. 다만 `Card` 컴포넌트의 경우 앞서 설명한 바와같이 `watch`속성에서 해당 메서드를 실행해주어야한다는 차이 점이 있다. `watch`속성을 위의 코드와 같이 객체 형태로 구성 할 수 있고, `immediate`속성에 `true`값을 주게되면 '즉시 실행'되므로 `created` hook과 동일한 기능을 하게된다 .따라서 기존의 `created` hook을 제거하였다.
+
+## Axios
+
+서버로부터 데이터를 받아오기위해서 Axios를 사용한다.
+
+```bash
+#axios install
+npm install axios
+```
+
+`Home.vue`에서 데이터를 받아와 표시해본다
+
+```vue
+<template>
+  <div>
+    Home
+    <div>
+      Board List:
+      <div v-if="loading">Loading...</div>
+      <div v-else>
+        Api result :
+        <pre>{{ apiRes }}</pre>
+      </div>
+      <div v-if="error">{{ error }}</div>
+      <ul>
+        <li>
+          <router-link to="/b/1">Board 1</router-link>
+        </li>
+        <li>
+          <router-link to="/b/2">Board 2</router-link>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      loading: false,
+      apiRes: "",
+      error: ""
+    };
+  },
+  created() {
+    this.fetchData();
+  },
+  methods: {
+    fetchData() {
+      this.loading = true;
+      axios
+        .get("http://localhost:3000/health")
+        .then(res => {
+          this.apiRes = res.data;
+        })
+        .catch(res => {
+          this.error = res.response.data;
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    }
+  }
+};
+</script>
+
+<style scoped></style>
+```
+
+axios는 promise를 반환한다. 따라서 비동기처리로 then을 사용 할 수 있다. axios 문서를 읽어보면 데이터의 body는 `res.data`로 들어오고, 에러의 경우에는 `res.response.data`로 들어오게 된다.
+
+## 에러처리
+
+보드 목록을 조회하기 위해서는 api주소에 token이 필요하다 토큰이 없는 경우에는 401 에러를 반환한다. 에러가 발생한 경우 login페이지로 redirect 할 수 있도록 로직을 구성한다.
+
+`Home.vue`
+
+```vue
+<template>
+  <div>
+    Home
+    <div>
+      Board List:
+      <div v-if="loading">Loading...</div>
+      <div v-else>
+        <div v-for="b in boards" :key="b.id">{{ b }}</div>
+      </div>
+      <ul>
+        <li>
+          <router-link to="/b/1">Board 1</router-link>
+        </li>
+        <li>
+          <router-link to="/b/2">Board 2</router-link>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      loading: false,
+      boards: ""
+    };
+  },
+  created() {
+    this.fetchData();
+  },
+  methods: {
+    fetchData() {
+      this.loading = true;
+      axios
+        .get("http://localhost:3000/boards")
+        .then(res => {
+          this.boards = res.data;
+        })
+        .catch(res => {
+          this.$router.replace("/login"); // $router로 vue-router로 접근 가능하다.
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    }
+  }
+};
+</script>
+
+<style scoped></style>
+```
+
+## axios 분리하기
+
+axios와 같은 라이브러리를 사용하는 경우 위의 `Home.vue`에서 사용한 것과 같이 라이브러리에 의존하는 코드를 사용하면 코드의 유지, 보수의 어려움이 생길 것이다. 나중에 라이브러리를 바꾸는 상황이 생길경우 해당 라이브러리를 사용한 모든 코드를 찾아 바꿔야 하는 문제점이 생긴다. 따라서 api호출을 하는 코드들을 따로 분리하여 코드를 작성한다.  
+`src/api/index.js`에 api통신에 관한 코드를 작성한다.
+
+```javascript
+import axios from "axios";
+import router from "../router";
+
+const DOMAIN = "http://localhost:3000";
+const UNAUTHORIZED = 401;
+const onUnauthorized = () => {
+  router.push("/login");
+};
+
+const request = (method, url, data) => {
+  return axios({
+    method,
+    url: DOMAIN + url,
+    data
+  })
+    .then(result => {
+      result.data;
+    })
+    .catch(result => {
+      const { status } = result.response;
+      if (status === UNAUTHORIZED) return onUnauthorized();
+      throw Error(result);
+    });
+};
+
+export const board = {
+  fetch() {
+    return request("get", "/boards");
+  }
+};
+```
+
+따라서 `Home.vue`코드는 아래와 같이 변경될 것이다.
+
+```vue
+<template>
+  <div>
+    Home
+    <div>
+      Board List:
+      <div v-if="loading">Loading...</div>
+      <div v-else>
+        <div v-for="b in boards" :key="b.id">{{ b }}</div>
+      </div>
+      <ul>
+        <li>
+          <router-link to="/b/1">Board 1</router-link>
+        </li>
+        <li>
+          <router-link to="/b/2">Board 2</router-link>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script>
+import { board } from "../api";
+
+export default {
+  data() {
+    return {
+      loading: false,
+      boards: ""
+    };
+  },
+  created() {
+    this.fetchData();
+  },
+  methods: {
+    fetchData() {
+      this.loading = true;
+      board
+        .fetch()
+        .then(data => {
+          this.boards = data;
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    }
+  }
+};
+</script>
+
+<style scoped></style>
+```
