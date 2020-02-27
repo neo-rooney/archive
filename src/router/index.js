@@ -8,13 +8,22 @@ import Card from "../components/Card.vue";
 
 Vue.use(VueRouter);
 
+const requireAuth = (to, from, next) => {
+  console.log(to);
+  const isAuth = localStorage.getItem("token");
+  //접근하려했던 url을 기억했다가 login하면 그 곳으로 다시 보내준다.
+  const loginPath = `/login?rpath=${encodeURIComponent(to.path)}`;
+  isAuth ? next() : next(loginPath);
+};
+
 const routes = [
-  { path: "/", component: Home },
+  { path: "/", component: Home, beforeEnter: requireAuth },
   { path: "/login", component: Login },
   {
     path: "/b/:bid",
     component: Board,
-    children: [{ path: "c/:cid", component: Card }]
+    beforeEnter: requireAuth,
+    children: [{ path: "c/:cid", component: Card, beforeEnter: requireAuth }]
   },
   { path: "*", component: NotFound }
 ];

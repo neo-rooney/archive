@@ -895,3 +895,54 @@ export default {
 
 <style scoped></style>
 ```
+
+## 네비게이션 가드
+
+네비게이션 가드란 뷰 라우터로 특정 URL에 접근할 때 해당 URL의 접근을 막는 방법이다. 사용자의 인증 정보가 없으면 특정 페이지에 접근하지 못하게 할 때 사용하는 기술이다.
+
+`router/index.js`
+
+```javascript
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "../components/Home.vue";
+import Login from "../components/Login.vue";
+import NotFound from "../components/NotFound.vue";
+import Board from "../components/Board.vue";
+import Card from "../components/Card.vue";
+
+Vue.use(VueRouter);
+
+const requireAuth = (to, from, next) => {
+  console.log(to);
+  const isAuth = localStorage.getItem("token");
+  //접근하려했던 url을 기억했다가 login하면 그 곳으로 다시 보내준다.
+  const loginPath = `/login?rpath=${encodeURIComponent(to.path)}`;
+  isAuth ? next() : next(loginPath);
+};
+
+const routes = [
+  { path: "/", component: Home, beforeEnter: requireAuth },
+  { path: "/login", component: Login },
+  {
+    path: "/b/:bid",
+    component: Board,
+    beforeEnter: requireAuth,
+    children: [{ path: "c/:cid", component: Card, beforeEnter: requireAuth }]
+  },
+  { path: "*", component: NotFound }
+];
+
+const router = new VueRouter({
+  mode: "history",
+  routes
+});
+
+export default router;
+```
+
+특정 라우터로 이동하기 직전에 함수를 호출하려면 beforeEnter을 사용한다. 각각의 컴포넌트의 라이플 사이클 단계에서 사용할 수 있는 다른 메서드들이 여러가지 있는데 사용하려는 의도에 따라 사용하면 된다.
+
+- beforeRouteUpdate // 라우터 업데이트 될 때
+- beforeRouteLeave // 현재 라우터를 떠날 때
+- beforeRouteEnter // 현재 라우터로 들어오기 직전
