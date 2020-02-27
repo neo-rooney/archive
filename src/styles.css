@@ -1,0 +1,23 @@
+svg {
+    border: 1px solid;
+    width: 600px;
+    height: 300px;
+}
+.bar {
+    fill: skyblue;
+}
+
+.bar:hover {
+    fill: blue;
+}
+
+.text {
+    font-size: 12px;
+    fill: white;
+    font-weight: bold;
+}
+
+.grid line {
+    stroke: lightgrey;
+    stroke-opacity: 0.7;
+}
