@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+//by Rooney, dotenv로 환경변수 관리_200210
 import dotenv from "dotenv";
 dotenv.config();
 

@@ -26,6 +26,18 @@
 
 ---
 
+## 서버 구축 작업 요약
+
+1. npm init > package.json 생성
+1. git init > 버전 관리
+1. .gitignore > node_modules, package-lock.json 제외
+1. npm install express
+1. script 수정 > node index.js 를 npm start로
+1. babel install > script "babel-node index.js"
+1. nodemon 설치 > script " nodemon --exec babel-node index.js --delay 2"
+1. middleware 설치
+1. MVC 패턴 적용 - Controller
+
 ### Create My First Express Server
 
 ```javascript
@@ -45,7 +57,12 @@ app.listen(PORT, handleListening); //PORT number
 
 ### Handlig Routes with Express
 
-라우팅은 애플리케이션 엔드 포인트(URL)의 정의, 그리고 URL가 클라이언트 요청에 응답하는 방식을 말한다.
+라우팅은 애플리케이션 엔드 포인트(URL)의 정의, 그리고 URL가 클라이언트 요청에 응답하는 방식을 말한다.  
+\*HTTP 동작 방식  
+get과 post 모두 서버로 클라이언트가 데이터를 보낸다는 점에서는 차이가 없다. 다만 get의 경우 URI 뒤에 query string 형식으로 데이터를 보내기 때문에 보낼 수 있는 데이터의 길이에 제한이 있다. post의 경우 body에 데이터를 담아서 보내기 때문에 길이의 제한이 없다. get과 post를 사용하는 케이스는 아래와 같다.
+
+-   get : 서버로 부터 데이터를 읽어와 화면에 보여주는 경우
+-   post : 서버로 데이터를 보내고 DB등의 데이터를 변경 할 경우
 
 ```javascript
 const express = require("express"); //require => node modules을 어딘가에서 가져오는 역할
@@ -85,11 +102,12 @@ babel은 최신 버전의 자바스크립트 문법을 브라우저가 이해할
 #### Babel install
 
 ```sh
-npm install @bable/node
+npm install @babel/node
 npm install @babel/preset-env
 npm install @babel/core
 ```
 
+babel 자체는 아무것도 하지 않는다. babel/preset-env를 설치하고 .babelrc에 babel에 관한 설정 등을 넣어줘야 변환이 된다.  
 .babelrc 파일을 프로젝트 root 폴더에 생성하고 아래와 같은 코드를 입력해준다
 
 ```
@@ -142,12 +160,12 @@ npm install nodemon -D
 
 뒤에 -D를 붙이는것은 package.json에서 dependencies가 아닌 devDependencies에 추가되길 원하기 때문이다. dependencies는 우리가 만들 프로그램에 필요한 필수요소들이 추가되는 곳이고, devDependencies에는 프로그래밍을 할 때 편리한 도구들이 추가되는 곳이다.
 
-package.json의 script에 아래와 같이 코드를 추가해준다.
+package.json의 script에 아래와 같이 코드를 추가해준다. delay 2를 넣어주는 이유는 babel이 변환을 완료할 때 까지 기다려 주길 원하기 때문이다. delay를 생략하면 일단 재시작하고 babel이 변환을 완료한 후 다시 시작해서 서버가 2번 재시작 될 것이다.(소소한 오류)
 
 ```
 "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "nodemon --exec babel-node index.js"
+        "start": "nodemon --exec babel-node index.js --delay 2"
     }
 ```
 
@@ -918,16 +936,16 @@ export const changePassword = (req, res) =>
 
 ### Pages
 
--   [] Home
--   [] Join
--   [] Login
+-   [x] Home
+-   [x] Join
+-   [x] Login
 -   [x] Search
--   [] User Detail
--   [] Edit Profile
--   [] Change Password
--   [] Upload
--   [] Video Detail
--   [] Edit Video
+-   [x] User Detail
+-   [x] Edit Profile
+-   [x] Change Password
+-   [x] Upload
+-   [x] Video Detail
+-   [x] Edit Video
 
 ## MongoDB
 
@@ -2132,7 +2150,7 @@ npm install passport-local-mongoose
 
 #### User.js
 
-`init.js`에 해당 파일을 추가해서 db가 해당 모델을 알 수 있도로 한다.
+`User.js`에 해당 파일을 추가해서 db가 해당 모델을 알 수 있도로 한다.
 
 ```javascript
 import mongoose from "mongoose";
@@ -3772,4 +3790,8 @@ async function setTotalTime() {
 MongoDB Atlas 사용
 Local에 DB를 저장하는것이 아닌 Cloud에 저장
 
-## Building for Production
+## Flash Message
+
+```
+npm install express-flash
+```

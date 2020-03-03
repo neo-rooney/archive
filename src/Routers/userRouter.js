@@ -1,3 +1,4 @@
+//by Rooney, localhost:4000/user로부터 시작되는 ex)localhost:4000/user/userEdtail 등에 관한 Router_200210
 import express from "express";
 import routes from "../routes";
 import {

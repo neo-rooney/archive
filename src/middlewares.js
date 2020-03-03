@@ -9,6 +9,7 @@ const s3 = new aws.S3({
     region: "ap-northeast-1"
 });
 
+//by Rooney, AWS S3에 파일을 업로드_200211
 const multerVideo = multer({
     storage: multerS3({
         s3,
@@ -16,6 +17,8 @@ const multerVideo = multer({
         bucket: "rooneywetube/video"
     })
 });
+
+//by Rooney, AWS S3에 파일을 업로드_200211
 const multerAvatar = multer({
     storage: multerS3({
         s3,
@@ -23,9 +26,12 @@ const multerAvatar = multer({
         bucket: "rooneywetube/avator"
     })
 });
+
+// by Rooney, 파일 업로드를 위한 middleware_200210
 export const uploadVideo = multerVideo.single("videoFile");
 export const uploadAvatar = multerAvatar.single("avatar");
 
+// by Rooney, local 변수를 global 변수로 사용하기 위한 middleware_200210
 export const localsMiddleware = (req, res, next) => {
     res.locals.siteName = "WeTube";
     res.locals.routes = routes;
@@ -33,6 +39,7 @@ export const localsMiddleware = (req, res, next) => {
     next();
 };
 
+// by Rooney, login을 하지 않아야만 접근 가능(ex 회원가입)하게 하기 위한 middleware_200210
 export const onlyPublic = (req, res, next) => {
     if (req.user) {
         res.redirect(routes.home);
@@ -40,7 +47,7 @@ export const onlyPublic = (req, res, next) => {
         next();
     }
 };
-
+// by Rooney, login을 해야만 접근 가능(ex 비디오 업로드 등)하게 하기 위한 middleware_200210
 export const onlyPrivate = (req, res, next) => {
     if (req.user) {
         next();

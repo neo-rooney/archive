@@ -1,3 +1,4 @@
+//by Rooney, localhost로부터 바로 시작되는 ex)localhost:4000/join 등에 관한 Router_200210
 import express from "express";
 import routes from "../routes";
 import passport from "passport";

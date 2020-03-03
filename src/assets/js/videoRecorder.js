@@ -5,6 +5,7 @@ const videoPreview = document.getElementById("jsVideoPreview");
 let streamObject;
 let videoRecorder;
 
+//by Rooney, 녹화된 비디오를 다운로드_200211
 const handleVideoData = e => {
     const { data: videoFile } = e;
     const link = document.createElement("a");
@@ -14,6 +15,7 @@ const handleVideoData = e => {
     link.click();
 };
 
+//by Rooney, 비디오 녹화 종료_200211
 const stopRecording = () => {
     videoRecorder.stop();
     recordBtn.removeEventListener("click", stopRecording);
@@ -21,6 +23,7 @@ const stopRecording = () => {
     recordBtn.innerHTML = "Start Recording";
 };
 
+//by Rooney, 비디오를 녹화_200211
 const startRecording = () => {
     videoRecorder = new MediaRecorder(streamObject);
     videoRecorder.start();
@@ -28,6 +31,7 @@ const startRecording = () => {
     recordBtn.addEventListener("click", stopRecording);
 };
 
+//by Rooney, 미디어 접근 권한을 물어보고 카메라에 의해 비춰지는 모습을 화면에 표시_200211
 const getVideo = async () => {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({

@@ -2,6 +2,7 @@ import routes from "../routes";
 import Video from "../models/Video";
 import Comment from "../models/Comment";
 
+//by Rooney, 모든 Video에 관한 데이터를 videos에 담아 home.pug에 전달_200210
 export const home = async (req, res) => {
     try {
         const videos = await Video.find({}).sort({ _id: -1 }); //최신 순으로 정렬
@@ -12,6 +13,9 @@ export const home = async (req, res) => {
     }
 };
 
+//by Rooney, term은 header.pug의 form에서 input에 입력한 값을 get한것
+//regex는 정규표현식으로 검색어를 포함하는 제목을 찾기 위함
+//i 는 insensitive로 대소문자를 구분하지 않겠다는 의미_200210
 export const search = async (req, res) => {
     const {
         query: { term: searchingBy }
@@ -27,10 +31,13 @@ export const search = async (req, res) => {
     res.render("search", { pageTitle: "Search", searchingBy, videos });
 };
 
+//by Rooney, upload page를 rander_200211
 export const getUpload = (req, res) => {
     res.render("upload", { pageTitle: "Upload" });
 };
 
+//by Rooney, 유저가 업로드 하려는 비디오를 새로운 Video Model로 만들고 DB에 파일 경로 저장
+//파일 자체는 AWS S3에 저장_200211
 export const postUpload = async (req, res) => {
     const {
         body: { title, description },
@@ -48,6 +55,8 @@ export const postUpload = async (req, res) => {
     res.redirect(routes.videoDetail(newVideo.id));
 };
 
+//by Rooney, video에 관한 데이터를 id를 key값으로 모두 가져옴
+//pupulate를 사용하여 user, commets에 관한 데이터도 객체 형테로 모두 가져옴_200210
 export const videoDetail = async (req, res) => {
     const {
         params: { id }
@@ -63,6 +72,7 @@ export const videoDetail = async (req, res) => {
     }
 };
 
+//by Rooney, URL의 id 값으로 video데이터를 불러옴_200211
 export const getEditVideo = async (req, res) => {
     const {
         params: { id }
@@ -83,12 +93,12 @@ export const getEditVideo = async (req, res) => {
     }
 };
 
+//by Rooney, URL의 id 값으로 video데이터를 불러와서 수정한 값으로 변경하고 저장_200211
 export const postEditVideo = async (req, res) => {
     const {
         params: { id },
         body: { title1111, description1111 }
     } = req;
-    console.log(req.body);
     try {
         await Video.findOneAndUpdate(
             { _id: id },
@@ -100,6 +110,8 @@ export const postEditVideo = async (req, res) => {
         res.redirect(routes.home);
     }
 };
+
+//by Rooney, URL의 id 값으로 video데이터를 찾고 삭제_200211
 export const deleteVideo = async (req, res) => {
     const {
         params: { id }
