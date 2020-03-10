@@ -1,0 +1,25 @@
+{
+    "name": "@rooneyhooks/use-tabs",
+    "version": "1.0.0",
+    "description": "React Hook to controll your tabs in document",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/CHEOLHUN/create-hook_react-hook.git"
+    },
+    "keywords": [
+        "react",
+        "hooks",
+        "title"
+    ],
+    "author": "Rooney",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/CHEOLHUN/create-hook_react-hook/issues"
+    },
+    "homepage": "https://github.com/CHEOLHUN/create-hook_react-hook#readme",
+    "peerDependencies": {
+        "react": "^16.13.0",
+        "react-dom": "^16.13.0"
+    }
+}

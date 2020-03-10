@@ -4,11 +4,13 @@
 
 -   버튼을 클릭하면 comfirm Alert 창이 뜨고 확인을 누를 경우 첫 번째 매개변수로 넣어준 함수가 실행되고, 취소를 누를 경우 두 번째 매개 변수로 넣어준 함수가 실행된다.
 
-> Usage
+> install
 
 ```bash
 npm install @rooneyhooks/use-confirm
 ```
+
+> Usage
 
 ```javascript
 import useTitle from "@rooneyhooks/use-confirm";
