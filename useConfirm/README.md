@@ -6,7 +6,13 @@
 
 > Usage
 
+```bash
+npm install @rooneyhooks/use-confirm
+```
+
 ```javascript
+import useTitle from "@rooneyhooks/use-confirm";
+
 export default function App() {
     const deleteWorld = () => console.log("Deleting the world ...");
     const abort = () => console.log("Abort");
