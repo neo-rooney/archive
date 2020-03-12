@@ -1,8 +1,9 @@
-import { getMovies } from "./db";
+import { getMovies, getById } from "./db";
 
 const revolvers = {
     Query: {
-        movies: (_, { limit, rating }) => getMovies(limit, rating)
+        movies: (_, { limit, rating }) => getMovies(limit, rating),
+        movie: (_, { id }) => getById(id)
     }
 };
 

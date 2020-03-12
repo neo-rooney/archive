@@ -1,5 +1,5 @@
 {
-    "name": "movieql_graphQL",
+    "name": "basic-theory-graphql_graphql",
     "version": "1.0.0",
     "description": "Movie api with GraphQL",
     "main": "index.js",

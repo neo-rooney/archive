@@ -1,5 +1,7 @@
 # Moive api with GraphQL
 
+## Basic Theory
+
 > Problems solved by GraphQL
 > 보통 프로젝트를 진행할 때 백엔드 개발자들이 구축한 Restful API를 통해 데이터를 받는다. 이 때 `Over-fetching` , `Under-fetching` 문제가 발생한다. 이를 해결한 것이 `GraphQL`이다.
 
