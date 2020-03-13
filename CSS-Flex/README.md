@@ -36,23 +36,23 @@ display 속성에는 크게 `block` `inline` `inline-block` 그리고 `flex`가 
 ## Why we need Flexbox
 
 앞서 살펴본 display 속성을 이용하여 `한 줄에 동일 한 좌우 간격을 갖는 box 3개`를 생성한다고 가정해보자. `<div>태그`를 이용하여 박스를 만들고 `width`와 `height`를 줘서 박스를 생성 할 것이다. div태그의 경우 `display`의 default값이 `block` 이므로 한 열로 늘어선 box 3개가 생성 될 것이다.  
-![box1](/image/box1.jpg)
+![box1](./image/box1.jpg)
 
 한 줄에 박스 3개를 생성한다 하였으므로, `display:inline-block`을 이용 할 수 있을 것이다.  
-![box2](/image/box2.jpg)
+![box2](./image/box2.jpg)
 
 이제 박스가 한 줄에 위치했으므로 동일한 좌우 간격을 주기위해서 margine을 이용한다.
-![box3](/image/box3.jpg)
+![box3](./image/box3.jpg)
 
 좌우 간격을 동일하게 만들었으나 창크기를 줄이거나 늘리는 경우 애써 맞춘 간격이 망가지게 된다. 항상 이런식으로 간격을 조정하며 layout을 구성 할 수는 없다. 컴퓨터의 정확한 계산 능력과 귀찮은것을 싫어하는 개발자의 요구에 탄생한것이 바로 `Flexible Box Module`이다.
 
 ## Basic of Flexbox
 
 위에서 한 동일한 작업을 Flexbox를 이용하여 작업한다. 박스를 생성하는 것까지는 동일하다. 다만 바로 인접한 부모 태그(사진의 경우 <body>)에 display 속성을 주어야 하는것이 차이점이다.  
-![box4](/image/box4.jpg)
+![box4](./image/box4.jpg)
 
 부모태그에 `display:flex`속성을 주게 되면 마치 `inline-block`속성을 준 것처럼 한 줄에 박스가 늘어서게 된다. 좌우 간격을 동일하게 하기 위해서 사용 할 수 있는 속성은 `justify-content: space-around`이다.  
-![box5](/image/box5.jpg)
+![box5](./image/box5.jpg)
 
 위에서 직접 margin을 갖고 조정한것보다 훨씬 간편하게 간격을 조정 할 수 있다. 창 크기가 커지거나 줄어들어도 알아서 동일한 간격을 조정해주기도 한다.
 
@@ -77,23 +77,23 @@ flex-direction:column경우
 ## Flex Direction
 
 `flex-direction: row-reverse` 와 `flex-direction: column-reverse` 에대해 알아보고자 한다. 기본적으로 브라우저의 경우 `좌 -> 우` 방향과 `상 ->하` 방향이 기본 방향이다. 모니터의 형태가 사각형이므로 `왼쪽 위 꼭지점`이 시작점이고, 그 곳을 기준으로 오른쪽 아래 방향으로 가는 구조이다. `flex-direction`의 경우 default값이 `row`이다. `row-reverse`값을 주는 경우 기본 방향이 `우 -> 좌`로 변경 될 것이다. 따라서 flex-box의 요소들의 순서가 변하게 되고 시작점이 `오른쪽 위 꼭지점`이 될 것이다.  
-![box6](/image/box6.jpg)
+![box6](./image/box6.jpg)
 
 `column-reverse`의 경우 기본 방향이 `하 -> 상`으로 변경 될 것이다. 따라서 flex-box의 요소들의 순서가 변하게 되고, 시작점이 `왼쪽 아래 꼭지점`이 될 것이다.  
-![box7](/image/box7.jpg)
+![box7](./image/box7.jpg)
 
 ## Flex Wrap
 
 Flex box의 경우 창의 크기가 늘어나거나 줄어들면 알아서 간격이 조정된다. 창의 크기가 줄어들다가 box들이 서로 겹쳐지게 되면 박스의 크기도 같이 줄어들게 된다. 우리가 지정한 width 값이 무시 되는 것이다. 이는 `flex-wrap`의 default 값이 `nowrap`이기 때문이다.  
-![box8](/image/box8.jpg)
+![box8](./image/box8.jpg)
 
 `flex-wrap`의 값을 `wrap`으로 주는 경우에는 간격이 줄어드는 경우에도 우리가 지정한 width 값을 지키게 되고 그 이하로 줄어드는 경우에는 박스가 밑으로 내려가게 된다.
-![box9](/image/box9.jpg)
+![box9](./image/box9.jpg)
 
 ## Align Self
 
 align Self의 경우에는 flex-container(부모 태그)에 주는 속성이 아닌 flex-box에 직접 주는 속성이다. 앞서 axis에서 설명했는 `align`은 Cross axis를 조정하는 속성이다. 따라서 `flex-direction:row`인 경우에는 `좌우` 방향을 조정하고, `flex-direction:column`인 경우에는 상하 방향을 조정 할 것이다. `flex-direction:row`인 경우에 특정 box에 `alin-self:flex-end`속성을 주는 경우 그 box만 아래 방향으로 이동 하는 것을 볼 수 있다.  
-![box10](/image/box10.jpg)
+![box10](./image/box10.jpg)
 
 `flex-direction:column`인 경우에 특정 box에 `alin-self:flex-end`속성을 주는 경우 그 box만 왼쪽 방향으로 이동 하는 것을 볼 수 있다.  
-![box11](/image/box11.jpg)
+![box11](./image/box11.jpg)
