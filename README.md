@@ -36,7 +36,7 @@ yarn add morgan
 ```bash
 #Create script code in package.json in root
  "script": {
-      "dev": "nodemon -exec babel-node src/server.js"
+      "dev": "nodemon --exec babel-node src/server.js"
   }
 ```
 
