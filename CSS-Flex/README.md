@@ -60,7 +60,7 @@ display 속성에는 크게 `block` `inline` `inline-block` 그리고 `flex`가 
 
 앞서 사용한 `justify-content`속성의 경우 `Main Axis`을 조정하는 것이고, `align-items` 속성을 이용하여 `Cross Axis`를 조정할 수 있다. `display:flex`의 경우 정렬방향은 `row(가로)방향`이 default값이다. 즉 `flex-direction:row`의 경우에 `Main Axis`가 좌우 방향이 되고, `justify-content`는 `Main Axis`(좌우방향)정렬을 조정하게 된다. `Cross Axis`는 상하 방향이되고, `align-items` 속성은 `Cross Axis`(상하방향) 정렬을 결정하게 된다. 다만 상하 방향의 정렬의 경우 높이가 존재해야만 조정이가능하므로 부모태그에 높이가 있는 경우에만 적용된다.
 
-`flex-direction: column`의 경우에는 `Main Axis`가 상하 방향이 된다. 따라서 `justity-content`를 조정하는 경우 상하 방향의 정렬이 조정되게 된다. 위에서와 마찬가지로 상하 방향의 정렬의 경우에는 부모 컴포넌트에 높이가 존재해야만 적용이 된다. `Cross Axis`는 좌우 방향이 될것이므로 `align-items`속서을 조정하는 경우에는 상하 방향이 조정 될 것이다.
+`flex-direction: column`의 경우에는 `Main Axis`가 상하 방향이 된다. 따라서 `justity-content`를 조정하는 경우 상하 방향의 정렬이 조정되게 된다. 위에서와 마찬가지로 상하 방향의 정렬의 경우에는 부모 태그에 높이가 존재해야만 적용이 된다. `Cross Axis`는 좌우 방향이 될것이므로 `align-items`속서을 조정하는 경우에는 상하 방향이 조정 될 것이다.
 
 다소 햇갈릴수 있으나 쉽게 정리하면 아래와 같다.
 

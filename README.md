@@ -1,6 +1,6 @@
 # CSS Masterclass
 
-CSS Masterclass course (Flexbox, Grid, PostCSS, CSSNext)
+CSS Masterclass course (Flexbox, Grid, PostCSS, CSSNext)  
 해당 디렉토리에 들어가면 보다 자세한 설명을 볼 수 있습니다.
 
 ### [CSS Flex]
@@ -13,9 +13,9 @@ CSS Masterclass course (Flexbox, Grid, PostCSS, CSSNext)
 
 ### CSS Grid
 
--   [ ] CSS Grid Basics ( Row, columns and gaps)
--   [ ] Auto columns, auto rows
--   [ ] Template Areas
+-   [x] CSS Grid Basics ( Row, columns and gaps)
+-   [x] Auto columns, auto rows
+-   [x] Template Areas
 -   [ ] fr unit, repeat
 -   [ ] minmax, max-content, min-content
 -   [ ] auto-fill, auto-fit
