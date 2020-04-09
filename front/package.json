@@ -1,0 +1,18 @@
+{
+  "name": "twitterMyself_front",
+  "version": "1.0.0",
+  "description": "twitter_front clone cording myself by nuxt",
+  "main": "index.js",
+  "repository": "https://github.com/CHEOLHUN/twitterMyself_nuxt",
+  "author": "Rooney",
+  "license": "MIT",
+  "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^5.13.0",
+    "nuxt": "^2.12.2",
+    "nuxt-fontawesome": "^0.4.0",
+    "vue": "^2.6.11"
+  },
+  "scripts": {
+    "dev": "nuxt"
+  }
+}
