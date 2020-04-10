@@ -1,14 +1,20 @@
 <template>
   <div>
-    <!-- 해더 -->
+    <Header/>
     <!-- Login Form -->
-    <font-awesome-icon icon="cog" />
     <nuxt />
   </div>
 </template>
 
 <script>
-export default {};
+import Header from "@/components/Header.vue";
+
+export default {
+  name: "MainLayout",
+  components: {
+    Header
+  }
+};
 </script>
 
 <style scoped>

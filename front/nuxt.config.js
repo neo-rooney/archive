@@ -11,4 +11,5 @@ module.exports = {
       },
     ],
   },
+  css: ["css/global.css"],
 };
