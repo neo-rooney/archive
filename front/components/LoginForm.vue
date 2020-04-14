@@ -1,22 +1,45 @@
 <template>
   <div>
-    <form action="submit" class="LoginForm__Layout">
+    <form action="submit" class="LoginForm__Layout" v-if="me" @submit.prevent="onSubmitLogin">
       <div class="LoginForm__FormLayout Email">
         <span class="LoginForm__TextForm Email">Email</span>
-        <input type="email" required class="LoginForm__InputForm Email" />
+        <input type="email" required class="LoginForm__InputForm Email" v-model="email" />
       </div>
       <div class="LoginForm__FormLayout Password">
         <span class="LoginForm__TextForm Password">Password</span>
-        <input type="password" required class="LoginForm__InputForm Password" />
+        <input type="password" required class="LoginForm__InputForm Password" v-model="password" />
       </div>
       <input type="submit" value="Login" class="LoginForm__LoginBtn" />
     </form>
+    <div v-else>
+      <div>님이 로그인 하셨습니다.</div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "LoginForm"
+  name: "LoginForm",
+  computed: {
+    me() {
+      return this.$store.state.users.me;
+    }
+  },
+  data() {
+    return {
+      email: "",
+      password: ""
+    };
+  },
+  methods: {
+    onSubmitLogin() {
+      this.$store.dispatch("users/logIn", {
+        email: this.email,
+        password: this.password,
+        nickname: "Rooney"
+      });
+    }
+  }
 };
 </script>
 
@@ -58,19 +81,19 @@ export default {
   outline: none;
 }
 
-.LoginForm__LoginBtn{
-    border: none;
-    border-radius: 5px;
-    width: 50%;
-    height: 30px;
-    background-color: #45b416;
-    color:#ffffff;
-    font-size: 16px;
-    align-self: flex-end;
+.LoginForm__LoginBtn {
+  border: none;
+  border-radius: 5px;
+  width: 50%;
+  height: 30px;
+  background-color: #45b416;
+  color: #ffffff;
+  font-size: 16px;
+  align-self: flex-end;
 }
 
 .LoginForm__LoginBtn:active,
-.LoginForm__LoginBtn:focus{
-    outline: none;
+.LoginForm__LoginBtn:focus {
+  outline: none;
 }
 </style>
