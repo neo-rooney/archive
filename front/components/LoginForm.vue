@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form action="submit" class="LoginForm__Layout" v-if="me" @submit.prevent="onSubmitLogin">
+    <form action="submit" class="LoginForm__Layout" v-if="!me" @submit.prevent="onSubmitLogin">
       <div class="LoginForm__FormLayout Email">
         <span class="LoginForm__TextForm Email">Email</span>
         <input type="email" required class="LoginForm__InputForm Email" v-model="email" />
@@ -11,8 +11,12 @@
       </div>
       <input type="submit" value="Login" class="LoginForm__LoginBtn" />
     </form>
-    <div v-else>
-      <div>님이 로그인 하셨습니다.</div>
+    <div v-else class="LoginForm__LayoutLogin">
+      <div class="LoginForm__LoginInfo">
+        <div class="LoginForm__Nickname">{{me.nickname}}</div>
+        <div class="LoginForm__NicknameNotice">님이 로그인 하셨습니다.</div>
+      </div>
+      <button class="LoginForm__LogoutBtn" @click="onClickLogout">Logout</button>
     </div>
   </div>
 </template>
@@ -38,6 +42,9 @@ export default {
         password: this.password,
         nickname: "Rooney"
       });
+    },
+    onClickLogout(){
+      this.$store.dispatch("users/logOut")
     }
   }
 };
@@ -93,7 +100,42 @@ export default {
 }
 
 .LoginForm__LoginBtn:active,
-.LoginForm__LoginBtn:focus {
+.LoginForm__LoginBtn:focus,
+.LoginForm__LogoutBtn:active,
+.LoginForm__LogoutBtn:focus {
   outline: none;
+}
+
+.LoginForm__LayoutLogin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  height: 100px;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 7px 15px 0 rgba(39, 56, 85, 0.1);
+}
+
+.LoginForm__LoginInfo {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+}
+
+.LoginForm__Nickname {
+  color: #45b416;
+}
+
+.LoginForm__LogoutBtn {
+  position: absolute;
+  bottom: 30px;
+  border: none;
+  border-radius: 5px;
+  width: 50%;
+  height: 30px;
+  background-color: #45b416;
+  color: #ffffff;
+  font-size: 16px;
 }
 </style>

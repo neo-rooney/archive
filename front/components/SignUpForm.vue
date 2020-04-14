@@ -52,10 +52,16 @@ export default {
           password: this.password,
           confirmPassword: this.confirmPassword
         };
-        console.log(target);
-        this.$router.push({
-          path: "/"
-        });
+        this.$store
+          .dispatch("users/signUp", target)
+          .then(() => {
+            this.$router.push({
+              path: "/"
+            });
+          })
+          .catch(error => {
+            console.log(error);
+          });
       }
     }
   }
