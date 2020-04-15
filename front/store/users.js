@@ -1,5 +1,8 @@
 export const state = () => ({
-  me: null
+  me: {
+    email: "bch3454@naver.com",
+    nickname:"rooney"
+  },
 });
 
 export const mutations = {
@@ -17,5 +20,8 @@ export const actions = {
   },
   logOut({ commit }, payload) {
     commit("setMe", null);
-  }
+  },
+  changeNickname({ commit }, payload) {
+    commit("setMe", payload);
+  },
 };

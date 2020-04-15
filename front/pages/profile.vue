@@ -1,9 +1,18 @@
 <template>
-  <div>profile</div>
+  <div>
+    <ProfileInfo />
+  </div>
 </template>
 
 <script>
-export default {};
+import ProfileInfo from "@/components/ProfileInfo.vue";
+
+export default {
+  name: "profile",
+  components: {
+    ProfileInfo
+  }
+};
 </script>
 
 <style scoped>

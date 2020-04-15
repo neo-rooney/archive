@@ -55,9 +55,10 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 200px;
+  height: min-content;
   padding: 30px;
   border-radius: 20px;
+  box-sizing: border-box;
   box-shadow: 0 7px 15px 0 rgba(39, 56, 85, 0.1);
 }
 
@@ -97,6 +98,7 @@ export default {
   color: #ffffff;
   font-size: 16px;
   align-self: flex-end;
+  cursor: pointer;
 }
 
 .LoginForm__LoginBtn:active,
@@ -137,5 +139,6 @@ export default {
   background-color: #45b416;
   color: #ffffff;
   font-size: 16px;
+  cursor: pointer;
 }
 </style>

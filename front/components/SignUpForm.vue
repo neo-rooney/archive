@@ -47,7 +47,7 @@ export default {
         alert("닉네임을 입력해주세요");
       } else {
         const target = {
-          email: this.eamil,
+          email: this.email,
           nickname: this.nickname,
           password: this.password,
           confirmPassword: this.confirmPassword
