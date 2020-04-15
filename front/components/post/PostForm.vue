@@ -1,16 +1,50 @@
 <template>
-  <div class="PostFrom__Container">
-    <textarea placeholder="어떤 신기한 일이 있었나요?" class="PostFrom__Textarea"></textarea>
+  <form class="PostFrom__Container" @submit.prevent.capture="onSubmitContents">
+    <textarea placeholder="어떤 신기한 일이 있었나요?" class="PostFrom__Contents" v-model="content"></textarea>
     <div class="PostFrom__ButtonBox">
-      <button class="PostFrom__Btn Image">사진</button>
+      <button type="button" class="PostFrom__Btn Image" @click.stop="UploadPhoto">사진</button>
       <input type="submit" class="PostFrom__Btn Post" value="POST" />
     </div>
-  </div>
+  </form>
 </template>
 
 <script>
 export default {
-  name: "PostFrom"
+  name: "PostForm",
+  computed: {
+    user() {
+      return this.$store.state.users.me;
+    }
+  },
+  data() {
+    return {
+      content: ""
+    };
+  },
+  methods: {
+    async onSubmitContents() {
+      try {
+        await this.$store.dispatch("posts/postContent", {
+          id: Date.now(),
+          content: this.content,
+          user: {
+            email: this.user.email,
+            nickname: this.user.nickname
+          },
+          Commnets: [],
+          image: [],
+          createAt: Date.now()
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.content = "";
+      }
+    },
+    UploadPhoto() {
+      console.log("사진");
+    }
+  }
 };
 </script>
 
@@ -25,19 +59,23 @@ export default {
   margin-bottom: 20px;
 }
 
-.PostFrom__Textarea {
+.PostFrom__Contents {
   width: 100%;
   height: 130px;
+  padding: 15px;
+  box-sizing: border-box;
+  border: 1px solid #45b416;
+  resize: none;
+  font-size: 16px;
 }
 
-.PostFrom__Textarea:active,
-.PostFrom__Textarea:focus {
+.PostFrom__Contents:active,
+.PostFrom__Contents:focus {
   outline: none;
 }
 
-.PostFrom__Textarea::placeholder {
+.PostFrom__Contents::placeholder {
   font-size: 16px;
-  padding: 15px;
 }
 
 .PostFrom__ButtonBox {

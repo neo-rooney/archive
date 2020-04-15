@@ -1,14 +1,11 @@
 export const state = () => ({
-  me: {
-    email: "bch3454@naver.com",
-    nickname:"rooney"
-  },
+  me: null,
 });
 
 export const mutations = {
   setMe(state, payload) {
     state.me = payload;
-  }
+  },
 };
 
 export const actions = {

@@ -36,15 +36,23 @@ export default {
     };
   },
   methods: {
-    onSubmitLogin() {
-      this.$store.dispatch("users/logIn", {
-        email: this.email,
-        password: this.password,
-        nickname: "Rooney"
-      });
+    async onSubmitLogin() {
+      try {
+        await this.$store.dispatch("users/logIn", {
+          email: this.email,
+          password: this.password,
+          nickname: "Rooney"
+        });
+      } catch (error) {
+        console.log(error);
+      }
     },
-    onClickLogout(){
-      this.$store.dispatch("users/logOut")
+    async onClickLogout() {
+      try {
+        await this.$store.dispatch("users/logOut");
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 };

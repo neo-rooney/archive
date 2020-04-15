@@ -37,7 +37,7 @@ export default {
     };
   },
   methods: {
-    onSubmitForm() {
+    async onSubmitForm() {
       const regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
       if (this.password !== this.confirmPassword) {
         alert("비밀번호가 다릅니다. 확인해 주세요");
@@ -49,19 +49,17 @@ export default {
         const target = {
           email: this.email,
           nickname: this.nickname,
-          password: this.password,
-          confirmPassword: this.confirmPassword
+          password: this.password
         };
-        this.$store
-          .dispatch("users/signUp", target)
-          .then(() => {
-            this.$router.push({
-              path: "/"
-            });
-          })
-          .catch(error => {
-            console.log(error);
+        try {
+          await this.$store.dispatch("users/signUp", target);
+        } catch (error) {
+          console.log(error);
+        } finally {
+          this.$router.push({
+            path: "/"
           });
+        }
       }
     }
   }
