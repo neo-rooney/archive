@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import Header from "@/components/Header.vue";
-import LoginForm from "@/components/LoginForm.vue";
+import Header from "@/components/common/Header.vue";
+import LoginForm from "@/components/common/LoginForm.vue";
 
 export default {
   name: "MainLayout",

@@ -1,9 +1,21 @@
 <template>
-  <div>Home</div>
+  <div>
+    <PostForm />
+    <PostCard />
+  </div>
 </template>
 
 <script>
-export default {};
+import PostForm from "@/components/post/PostForm.vue";
+import PostCard from "@/components/post/postCard.vue";
+
+export default {
+  name: "Home",
+  components: {
+    PostForm,
+    PostCard
+  }
+};
 </script>
 
 <style scoped>

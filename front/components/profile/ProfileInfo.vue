@@ -2,11 +2,11 @@
   <div class="ProfileInfo__Container">
     <div class="ProfileInfo__InfoLayout Email">
       <span class="ProfileInfo__InfoTitle Email">Email</span>
-      <span class="ProfileInfo__InfoData Email">{{me.email}}</span>
+      <span class="ProfileInfo__InfoData Email">{{user.email}}</span>
     </div>
     <div class="ProfileInfo__InfoLayout Nickname">
       <span class="ProfileInfo__InfoTitle Nickname">Nickname</span>
-      <span v-show="!isModify" class="ProfileInfo__InfoData Nickname">{{me.nickname}}</span>
+      <span v-show="!isModify" class="ProfileInfo__InfoData Nickname">{{user.nickname}}</span>
       <form
         v-show="isModify"
         action="submit"
@@ -24,7 +24,7 @@
 export default {
   name: "ProfileInfo",
   computed: {
-    me() {
+    user() {
       return this.$store.state.users.me;
     }
   },
@@ -32,16 +32,10 @@ export default {
     return {
       isModify: false,
       buttonTitle: "수정",
-      nickname: ""
+      nickname: this.$store.state.users.me.nickname
     };
   },
-  mounted() {
-    this.settingNickname();
-  },
   methods: {
-    settingNickname() {
-      this.nickname = this.me.nickname;
-    },
     onClickModityBtn() {
       this.isModify = !this.isModify;
       if (this.isModify) {
@@ -53,7 +47,7 @@ export default {
     },
     onChangeNickname() {
       this.$store.dispatch("users/changeNickname", {
-        email: this.me.email,
+        email: this.user.email,
         nickname: this.nickname
       });
     }
