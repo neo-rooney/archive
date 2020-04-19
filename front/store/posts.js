@@ -8,9 +8,12 @@ export const mutations = {
   },
   deleteContent(state, payload) {
     const newArr = state.content.filter((item) => item.id !== payload.id);
-    console.log("newArr >>>", newArr);
     state.content = newArr;
   },
+  postComment(state, payload) {
+    const index = state.content.findIndex(item => item.id === payload.postId)
+    state.content[index].Commnets.unshift(payload)
+  }
 };
 
 export const actions = {
@@ -20,4 +23,7 @@ export const actions = {
   deleteContent({ commit }, payload) {
     commit("deleteContent", payload);
   },
+  postCommnet({ commit }, payload) {
+    commit("postComment", payload)
+  }
 };

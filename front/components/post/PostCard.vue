@@ -12,7 +12,11 @@
     <div class="PostCard__IconBox">
       <font-awesome-icon icon="retweet" class="PoastCard__Icon Retweet" />
       <font-awesome-icon icon="heart" class="PoastCard__Icon Heart" />
-      <font-awesome-icon icon="comment-alt" class="PoastCard__Icon CommentAlt" />
+      <font-awesome-icon
+        icon="comment-alt"
+        class="PoastCard__Icon CommentAlt"
+        @click="onClickCommentBtn"
+      />
       <font-awesome-icon
         icon="ellipsis-h"
         class="PoastCard__Icon Ellipsis"
@@ -23,12 +27,31 @@
       <button class="PostCard__ModifyBtn">수정</button>
       <button class="PostCard__DeleteBtn" @click="deletePost">삭제</button>
     </div>
+    <div class="PostCard__CommentContainer" v-if="comment">
+      <CommentForm :postId="postData.id" />
+      <ul>
+        <li v-for="item in postData.Commnets" :key="item.id" class="PostCard__CommentLayout">
+          <div class="PostCard__CommentAvatar">
+            <span>{{item.user.nickname[0]}}</span>
+          </div>
+          <div class="PostCard__CommentContentLayout">
+            <div class="PostCard__CommentNickname">{{item.user.nickname}}</div>
+            <span class="PostCard__CommentContent">{{item.content}}</span>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
+import CommentForm from "@/components/post/CommentForm.vue";
+
 export default {
   name: "PostCard",
+  components: {
+    CommentForm
+  },
   props: {
     postData: {
       type: Object,
@@ -37,12 +60,16 @@ export default {
   },
   data() {
     return {
-      isMore: false
+      isMore: false,
+      comment: false
     };
   },
   methods: {
     onClickMoreBtn() {
       this.isMore = !this.isMore;
+    },
+    onClickCommentBtn() {
+      this.comment = !this.comment;
     },
     async deletePost() {
       try {
@@ -141,5 +168,47 @@ export default {
 }
 .PostCard__ModifyBtn {
   margin-bottom: 5px;
+}
+
+.PostCard__CommentContainer {
+  width: 100%;
+  height: min-content;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 7px 15px 0 rgba(39, 56, 85, 0.1);
+  box-sizing: border-box;
+  margin-top: 20px;
+}
+
+.PostCard__CommentLayout {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 30px;
+  margin-top: 10px;
+}
+
+.PostCard__CommentAvatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #45b416;
+  width: 30px;
+  height: 100%;
+  font-size: 18px;
+  border-radius: 50%;
+  color: #ffffff;
+}
+.PostCard__CommentContentLayout {
+  margin-left: 10px;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.PostCard__CommentNickname {
+  color: #45b416;
+  font-size: 14px;
+  padding-bottom: 3px;
 }
 </style>
