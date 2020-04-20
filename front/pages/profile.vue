@@ -1,22 +1,48 @@
 <template>
   <div>
     <ProfileInfo />
-    <Following />
-    <Follower />
+    <Follow title="팔로잉" :users="following" :remove="removeFollowing" />
+    <Follow title="팔로워" :users="follower" :remove="removeFollower" />
   </div>
 </template>
 
 <script>
 import ProfileInfo from "@/components/profile/ProfileInfo.vue";
-import Following from "@/components/profile/Following.vue";
-import Follower from "@/components/profile/Follower.vue";
+import Follow from "@/components/profile/Follow.vue";
 
 export default {
   name: "profile",
   components: {
     ProfileInfo,
-    Following,
-    Follower
+    Follow
+  },
+  computed: {
+    following() {
+      return this.$store.state.users.following;
+    },
+    follower() {
+      return this.$store.state.users.follower;
+    }
+  },
+  methods: {
+    async removeFollowing(id) {
+      try {
+        await this.$store.dispatch("users/removeFollowing",{
+          id
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async removeFollower(id) {
+      try {
+        await this.$store.dispatch("users/removeFollower",{
+          id
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    }
   }
 };
 </script>
