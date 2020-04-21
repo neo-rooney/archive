@@ -43,7 +43,13 @@ export default {
         console.log(e);
       }
     }
-  }
+  },
+  head(){
+    return {
+      title:"프로필"
+    }
+  },
+  middleware:'authenticated'
 };
 </script>
 
