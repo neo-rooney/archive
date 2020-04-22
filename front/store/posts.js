@@ -21,7 +21,7 @@ export const mutations = {
     state.contents[index].Commnets.unshift(payload);
   },
   loadContents(state, payload) {
-    const DIFF = TOTAL_CONTENTS - LIMIT;
+    let DIFF = TOTAL_CONTENTS - state.contents.length;
     const fakeContents = Array(DIFF > LIMIT ? LIMIT : DIFF)
       .fill()
       .map((item) => ({
