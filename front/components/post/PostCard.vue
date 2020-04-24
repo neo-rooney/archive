@@ -1,16 +1,16 @@
 <template>
   <div class="PostCard__Container">
     <div class="PostCard__Retweet">rooney님이 리트윗하셨습니다.</div>
-    <nuxt-link :to="`/post/${postData.id}`">
-      <div class="PostCard__ContentLayout">
-        <div class="PostCard__AuthorLayout">
+    <div class="PostCard__ContentLayout">
+      <div class="PostCard__AuthorLayout">
+        <nuxt-link :to="`/user/${postData.id}`">
           <div class="PostCard__Author">{{postData.user.nickname}}</div>
-          <button class="PostCard__FollowBtn">팔로우</button>
-        </div>
-        <div class="PostCard__Content">{{postData.content}}</div>
-        <div class="PostCard__CreateAt">{{postData.createAt}}</div>
+        </nuxt-link>
+        <button class="PostCard__FollowBtn">팔로우</button>
       </div>
-    </nuxt-link>
+      <div class="PostCard__Content">{{postData.content}}</div>
+      <div class="PostCard__CreateAt">{{postData.createAt}}</div>
+    </div>
     <div class="PostCard__IconBox">
       <font-awesome-icon icon="retweet" class="PoastCard__Icon Retweet" />
       <font-awesome-icon icon="heart" class="PoastCard__Icon Heart" />
@@ -85,6 +85,12 @@ export default {
 </script>
 
 <style scoped>
+a {
+  text-decoration: none;
+}
+a::after {
+  text-decoration: none;
+}
 .PostCard__Container {
   position: relative;
   height: min-content;

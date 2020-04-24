@@ -7,7 +7,9 @@
     <div class="Header__RightMenu">
       <div class="Header__SearchMenu">
         <font-awesome-icon icon="search" class="Header__SearchIcon" />
-        <input type="text" placeholder="검색" class="Header__SearchInput" />
+        <form action="submit" @submit.prevent="onSubmitKeyword">
+          <input v-model="keyword" type="text" placeholder="검색" class="Header__SearchInput" />
+        </form>
       </div>
       <nuxt-link to="/profile" class="Header__ProfileLink">프로필</nuxt-link>
       <nuxt-link to="/signUp" class="Header__SignUpLink">회원가입</nuxt-link>
@@ -17,7 +19,20 @@
 
 <script>
 export default {
-  name: "Header"
+  name: "Header",
+  data() {
+    return {
+      keyword: ""
+    };
+  },
+  methods: {
+    onSubmitKeyword() {
+      this.$router.push({
+        path: `/hashTag/${this.keyword}`
+      });
+      this.keyword = "";
+    }
+  }
 };
 </script>
 
@@ -43,6 +58,12 @@ export default {
 
 .Header__RightMenu {
   display: flex;
+  align-items: center;
+}
+
+.Header__SearchMenu{
+  display: flex;
+  align-items: center;
 }
 
 .Header__SignUpLink {
@@ -64,7 +85,7 @@ export default {
 
 .Header__SearchInput:focus {
   outline: none;
-  color:#ffffff
+  color: #ffffff;
 }
 
 .Header__SearchInput::placeholder {
