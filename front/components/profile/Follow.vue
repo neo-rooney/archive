@@ -7,6 +7,7 @@
         <span class="Follow__UserName">{{item.name}}</span>
       </div>
     </div>
+    <button v-if="hasMore" @click="loadFunction" class="Follow__MoreButton">더보기</button>
   </div>
 </template>
 
@@ -25,6 +26,14 @@ export default {
     remove: {
       type: Function,
       default: () => {}
+    },
+    loadFunction: {
+      type: Function,
+      default: () => {}
+    },
+    hasMore:{
+      type:Boolean,
+      default:true
     }
   }
 };
@@ -61,9 +70,25 @@ export default {
   color: #45b416;
   margin-right: 10px;
   font-size: 18px;
+  cursor: pointer;
 }
 
 .Follow__UserName {
   font-size: 18px;
+}
+.Follow__MoreButton{
+  width: 100%;
+  height: 30px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  color:#ffffff;
+  background-color: #45b416;
+  cursor: pointer;
+}
+
+.Follow__MoreButton:focus,
+.Follow__MoreButton:active{
+  outline: none;
 }
 </style>
