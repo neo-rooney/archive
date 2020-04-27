@@ -2,7 +2,7 @@ module.exports = {
   head: {
     title: "Node Bird",
   },
-  modules: ["nuxt-fontawesome"],
+  modules: ["@nuxtjs/axios", "nuxt-fontawesome"],
   fontawesome: {
     imports: [
       {

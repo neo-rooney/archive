@@ -8,6 +8,8 @@
   "license": "MIT",
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
+    "@nuxtjs/axios": "^5.10.1",
+    "axios": "^0.19.2",
     "nuxt": "^2.12.2",
     "nuxt-fontawesome": "^0.4.0",
     "vue": "^2.6.11"
