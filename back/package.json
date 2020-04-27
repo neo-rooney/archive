@@ -1,0 +1,23 @@
+{
+  "name": "twitter-clone-myself-back",
+  "version": "1.0.0",
+  "description": "twitter clone cording to vue express mysql",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CHEOLHUN/twitterMyself_nuxt.git"
+  },
+  "author": "rooney",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CHEOLHUN/twitterMyself_nuxt/issues"
+  },
+  "homepage": "https://github.com/CHEOLHUN/twitterMyself_nuxt#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
