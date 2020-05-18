@@ -6,6 +6,7 @@ Instragram clone with Express Prisma React and React Native
 
 1. [Setting](#Setting)
 1. [Create Server](#Create-Server)
+1. [Prisma](#Prisma)
 
 ### Setting
 
@@ -127,3 +128,7 @@ server.start({ port: PORT }, () =>
 ```
 
 `server.js`에서 `schema.js`에서 만든 `schema`를 import 한 후 서버 생성자 함수의 인자로 넣어주면 각자 만든 Query를 사용 할 수 있게 된다. 앞으로 추가하게될 모든 Query나 Mutation등에 대해서도 별도의 설정없이 `api` 디렉토리안에 데이터별로 디렉토리를 생성하여 만들어주기만 하면 사용할 수 있다. `api`디렉토리에는 `schema`와 `resolver`에 관련된 파일 외의 다른 파일을 생성하면 에러가 발생하므로 주의하도록 한다.
+
+### Prisma
+
+프리즈마는 Object-Relational Mapping(객체 관계 연결, ORM)
