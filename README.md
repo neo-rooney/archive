@@ -132,3 +132,4 @@ server.start({ port: PORT }, () =>
 ### Prisma
 
 프리즈마는 Object-Relational Mapping(객체 관계 연결, ORM)
+프리즈마는 어플리케이션에서 필요한 모델을 graphQL로 정의할 수 있다.
