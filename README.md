@@ -196,3 +196,105 @@ type User {
 ```
 위와 같이 코드를 입력하고 `prisma deploy`명령어를 실행시키면 아래 사진과 같이 prisma console에 User라는 이름의 데이터 모델(query)이 생성된 것을 확인 할 수 있다.
 ![프리즈마 deploy](./imageForReadme/prismaDeploy.JPG)  
+
+#### DataModel with Prisma
+```bash
+#datamodel.prisma
+type User {
+  id: ID! @id
+  username: String! @unique
+  email: String! @unique
+  firstName: String @default(value: "")
+  lastName: String! @default(value: "")
+  bio: String
+  followers: [User!]! @relation(name: "FollowRelation")
+  following: [User!]! @relation(name: "FollowRelation")
+  posts: [Post!]!
+  likes: [Like!]!
+  comments: [Comment!]!
+  rooms: [Room!]!
+  loginSecret:String
+}
+
+type Post {
+  id: ID! @id
+  location: String
+  caption: String!
+  user: User!
+  files: [File!]!
+  likes: [Like!]!
+  comments: [Comment!]!
+}
+
+type Like {
+  id: ID! @id
+  user: User!
+  post: Post!
+}
+
+type Comment {
+  id: ID! @id
+  text: String!
+  user: User!
+  post: Post!
+}
+
+type File {
+  id: ID! @id
+  url: String!
+  post: Post!
+}
+
+type Room {
+  id: ID! @id
+  participants: [User!]!
+  messages: [Message!]!
+}
+
+type Message {
+  id: ID! @id
+  text: String!
+  from: User! @relation(name: "From")
+  to: User! @relation(name: "To")
+  room: Room!
+}
+```
+위 코드와 같이 graphQL과 prisma 문법을 사용하여 데이터 모델을 정의한다. 몇가지 살펴와야하는 부분이 있는데 보다 자세한 내용은 공식문서를 참조하도록 한다.  
+[공식문서 바로가기](https://v1.prisma.io/docs/1.34/datamodel-and-migrations/datamodel-MYSQL-knul/#sdl-directives)  
+  
+##### id: ID! @id
+모든 데이더 모델에 공통적으로 들어가있는것이 있는데 바로 id이다. 경우에따라 id를 생략 할 수도 있지만 생략하게 되면 resolver를 prisma가 자동으로 생성해 주지 않는다. 프리즈마의 편한점은 resolver를 데이터 모델을 기반으로 자동으로 생성해 주는 것이다. 기존의 mongoDB나 mysql만 사용하는 경우 데이터베이스 안의 데이터를 생성하고 삭제하고 수정하는 등의 행위를 하기 위해서 별도의 코드를 작성해야했다. 그러나 prisma를 이용하면 별도의 코드 작성은 불필요하다. 
+
+##### @unique/@default/@relation
+- @unique의 경우 데이터베이스안에 중복된 값으 존재할 수 없다는 의미이다. @unique 키워드를 부여한 값을 통해서 특정 데이터를 찾을 수 있다.
+
+- @default의 경우 초기값을 지정해주는데 사용한다. 
+
+- @relation의 경우 데이터간의 양방향 관계를 설정하는데 사용한다.
+
+##### createUser
+위 코드를 delopy하고 prisma.yml 파일에 적혀있는 endpoint 주소를 브라우져에 입력하여 ployground를 실행하도록 한다. (참고로 endpoint는 타인에게 알려줘서는 안된다. 해당 ploygound에서 데이터의 변경이 가능하기 때문이다.)  
+![프리즈마 deploy](./imageForReadme/datamodel.JPG)
+
+엔드포인트에 들어가게 되면 우리가 설정한 데이터를 기반으로한 query와 mutation이 자동으로 생성되있는것을 확인 할 수 있다. 이를 통해 유저를 생성할 수도 있고 유저 정보르 변경할 수도 있으며 유저를 삭제 할 수도 있다. (post, comment등 모든 데이터에 대해 가능하다.)
+![프리즈마 deploy](./imageForReadme/datamodel2.JPG)
+위 사진과 같이 mutation을 실행시키면 유저가 생성된것을 확인 할 수 있다. 아래 사진과 같이 prisma console에서도 확인 가능하다.(간혹 모든 입력을 정확히 했는데 에러가 발생하는 경우 크롬을 사용한다면 localStorage를 삭제한다음 로그아웃하고 다시 로그인하면 에러가 사라지는 경우가 있다. prisma console 버그인듯하다.)
+![프리즈마 deploy](./imageForReadme/datamodel3.JPG)
+
+#### findUser
+![프리즈마 deploy](./imageForReadme/datamodel4.JPG)
+위 사진에서 보듯 우리가 데이터 모델을 설정 할 때 @unique키워드를 부여한 데이터를 가지고 특정 User를 찾을 수 있는 것을 확인 할 수 있다. 
+
+#### relation data
+앞서 데이터를 정의할 때 몇몇 데이터에 @relation 키워드를 부여하였다. 그 중 followers와 following 의  양방향 관계에 대해 살펴본다. 
+
+- rooney와 hun 이라는 username을 갖는 두 사용자가 있다.
+- rooney가 hun을 following 한다.
+- hun의 followers에 rooney가 자동으로 추가될 것이다.
+
+위의 시나리도대로 진행된다면 정상적으로 양방향 관계가 설정된것이다. 아래 사진 처럼 user정보를 update한다.
+![프리즈마 deploy](./imageForReadme/datamodel5.JPG)
+정상적으로 hun을 following 한것을 확인 할 수 있다.
+이제 hun의 데이터를 살펴보도록 한다.
+![프리즈마 deploy](./imageForReadme/datamodel6.JPG)
+hun 데이터의 followers에 rooney가 추가 된것을 확인 할 수 있다.
