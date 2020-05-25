@@ -138,7 +138,7 @@ export default {
 
 `fileLoader`가 api 디렉토리 안의 모든 파일을 가져오는 역할을 담당한다. `**`은 api디렉토리안의 `모든 디렉토리`를 의미하며, `*.graphql`은 `.graphql`확장자를 갖는 모든 파일을 의미한다. 즉 api 디렉토리 안의 `.graphql`확장자를 갖는 모든 파일을 가져와 `allTypes` 변수에 저장하는 것이다. `resolver`도 이와 같은 원리로 `allResolvers` 변수에 저장한다. 그 후 `mergeTypes`에 의해서 가져온 모든 `.graphql`파일을 하나의 타입으로 만들고, `mergeResolvers`에 의해서 모든 `resolver`파일을 하나의 resolver로 만든다 마지막으로 `makeExecutableSchema`로 `schema`와 `resolver`를 하나로 합쳐 주게된다.
 
-```javascript
+```js
 //server.js
 require("dotenv").config();
 import { GraphQLServer } from "graphql-yoga";
@@ -321,6 +321,119 @@ export default {
 };
 ```
 우리가 설정해 놓은 서버 주소(localhost:4000)에 접속해어 해당 쿼리를 날려본다.
-![프리즈마 deploy](./imageForReadme/prismaClient.JPG)
+![프리즈마 client](./imageForReadme/prismaClient.JPG)
 위 사진과 같이 콘솔창에 user들에 대한 정보가 찍히는 것을 확인 할 수있다. 이렇게 프리즈마 서버에 있는 데이터에 서버가 접근 할 수 있게 되는 것이다. 
 
+
+이제 api 폴더 안에 `models.graphql`이라는 파일을 만들고 `datamodel.prisma`에 작성한것과 똑같이 데이터 모델에 관한 정의를 해주도록 한다. 기억해야할 점은 `datamodel.prisma`에 새로운 데이터 모델을 추가했다면 `models.graphql`에도 똑같이 데이터를 추가해주어야 한다는 점이다. 그리고 `datamodel.prisma`에서 사용해주었던 @id, @unique, @default, @relation는 prisma 문법이므로 제거해주어야 한다.
+```bash
+# @/src/api/models.graphql
+type User {
+  id: ID! 
+  username: String! 
+  email: String! 
+  firstName: String 
+  lastName: String! 
+  bio: String
+  followers: [User!]! 
+  following: [User!]! 
+  posts: [Post!]!
+  likes: [Like!]!
+  comments: [Comment!]!
+  rooms: [Room!]!
+  loginSecret: String
+}
+
+type Post {
+  id: ID! 
+  location: String
+  caption: String!
+  user: User!
+  files: [File!]!
+  likes: [Like!]!
+  comments: [Comment!]!
+}
+
+type Like {
+  id: ID! 
+  user: User!
+  post: Post!
+}
+
+type Comment {
+  id: ID! 
+  text: String!
+  user: User!
+  post: Post!
+}
+
+type File {
+  id: ID! 
+  url: String!
+  post: Post!
+}
+
+type Room {
+  id: ID! 
+  participants: [User!]!
+  messages: [Message!]!
+}
+
+type Message {
+  id: ID! 
+  text: String!
+  from: User! 
+  to: User! 
+  room: Room!
+}
+```
+
+src폴더 아래 User라는 폴더를 새로 만들고 `AllUser`라는 폴더를 새로 만든다. 폴더 안에 폴더 이름과 같은 graphql파일과 javascript파일을 새로 생성해준다.
+
+```bash
+# @/src/api/User/AllUser/AllUser.graghql
+type Query {
+  allUser: [User!]!
+}
+```
+
+```js
+// @/src/api/User/AllUser/AllUser.js
+import { prisma } from "../../../../generated/prisma-client";
+
+export default {
+  Query: {
+    allUser: () => prisma.users(),
+  },
+};
+
+```
+
+서버 주소를 통해 playground에 접속해서 `allUser` query를 날려보도록 한다.
+아래 사진과 같은 결과를 얻을 수 있다.
+![프리즈마 client](./imageForReadme/prismaClient2.JPG)
+
+User폴더 안에  `AllUser`라는 폴더를 새로 만든다. 폴더 안에 폴더 이름과 같은 graphql파일과 javascript파일을 새로 생성해준다.
+
+```bash
+# @/src/api/User/AllUser/UserById.graghql
+type Query{
+  userById(id: String!): User!
+}
+```
+
+```js
+// @/src/api/User/AllUser/UserById.js
+import { prisma } from "../../../../generated/prisma-client"
+
+export default {
+  Query: {
+    userById: async (_, args) => {
+      const { id } = args
+      return await prisma.user({id})
+    }
+  }
+}
+```
+userById 쿼리에 id값을 넣어 날려보면 아래와 같은 결과를 얻을 수 있다.
+![프리즈마 client](./imageForReadme/prismaClient3.JPG)
