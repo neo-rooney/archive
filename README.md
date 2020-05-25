@@ -298,3 +298,29 @@ type Message {
 이제 hun의 데이터를 살펴보도록 한다.
 ![프리즈마 deploy](./imageForReadme/datamodel6.JPG)
 hun 데이터의 followers에 rooney가 추가 된것을 확인 할 수 있다.
+
+#### Intergrating prisma in our server
+prisma 서버와 정보를 주고 받으려면 prisma client를 다운받아야 한다. prisma client를 다운 받기 위해서는 아래와 같은 명령어를 콘솔에 입력해야 한다.
+```bash
+prisma generate
+```
+
+앞선 실습에서는 모두 prisma endpoint에서 직접 데이터를 생성하거나 변경하였다. 그러나 실제 어플리케이션에서는 클라이언트에서 서버로 어떤 행위(데이터의 생성, 삭제 등)에 대한 요청을 서버로 보내게 될 것이다. 그런 후 서버에서 prisma 서버로 클라이언트가 요청한 행위를 요청하게 되어 데이터의 변경이 일어나게 될 것이다. 
+
+아래와 같이 코드를 입력하고 서버를 실행시킨다.(prisma-client-lib 모듈이 없다고 에러가 뜰 수 도 있는데 yarn add prisma-client-lib로 해당 모듈을 설치해준다!)
+```js
+import {prisma} from "../../../generated/prisma-client"
+
+export default {
+  Query: {
+    sayHello: async () => {
+      console.log(await prisma.users())
+      return "Hello"
+    }
+  },
+};
+```
+우리가 설정해 놓은 서버 주소(localhost:4000)에 접속해어 해당 쿼리를 날려본다.
+![프리즈마 deploy](./imageForReadme/prismaClient.JPG)
+위 사진과 같이 콘솔창에 user들에 대한 정보가 찍히는 것을 확인 할 수있다. 이렇게 프리즈마 서버에 있는 데이터에 서버가 접근 할 수 있게 되는 것이다. 
+
