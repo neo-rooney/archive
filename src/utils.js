@@ -12,8 +12,6 @@ export const generateSecret = () => {
   return `${adjectives[randomNumber]} ${nouns[randomNumber]}`;
 };
 
-console.log(process.env.SENDGRID_PASSWORD);
-
 const sendMail = (email) => {
   const options = {
     auth: {
