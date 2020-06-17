@@ -457,6 +457,7 @@ userById 쿼리에 id값을 넣어 날려보면 아래와 같은 결과를 얻�
 
 1. [Create Account](#Create-Account)
 1. [Request Secret](#Request-Secret)
+1. [Passport JWT](#Passport-JWT)
 
 #### Create Account
 
@@ -533,7 +534,9 @@ export const nouns = [
   ...
 ]
 ```
+
 utils.js에서는 앞서 저장한 형용사 배열과 명사 배열에서 무작위로 임의의 문자를 뽑는 코드를 작성한다.
+
 ```js
 //@/src/utils.js
 import { adjectives, nouns } from "./words";
@@ -543,7 +546,9 @@ export const generateSecret = () => {
   return `${adjectives[randomNumber]} ${nouns[randomNumber]}`;
 };
 ```
+
 이제 이 임의의 문자열을 user정보에 저장하는 api를 작성하도록 한다. User 폴더에 `requestSecret`라는 폴더를 만들고 동일한 이름의 graphql파일과 js파일을 생성하고 아래와 같이 코드를 입력한다.
+
 ```bash
 #  @/src/api/User/createAccount/requestSecret.graphql
 type Mutation {
@@ -552,8 +557,8 @@ type Mutation {
 ```
 
 ```js
- // @/src/api/User/createAccount/requestSecret.js
- import { generateSecret } from "../../../utils";
+// @/src/api/User/createAccount/requestSecret.js
+import { generateSecret } from "../../../utils";
 import { prisma } from "../../../../generated/prisma-client";
 
 export default {
@@ -571,22 +576,28 @@ export default {
   },
 };
 ```
+
 아래 사진과 같이 서버에서 요청을 보내면 true 값이 반환되는 것을 확인 할 수 있다.
 ![request Secret](./imageForReadme/requsetSecret.JPG)
 prisma console에서 확인해보면 임의의 문자가 데이터에 저장된 것을 확인 할 수 있다.
 ![request Secret](./imageForReadme/requsetSecret2.JPG)
 
 이제 이 임의의 문자를 유저의 이메일로 전송해 주어야 하는데, 서버에서 유저의 이메일로 메일을 발송하기 위해서 `nodemailer`라는 모듈을 사용한다.
+
 ```bash
 yarn add nodemailer
 ```
-또 send grid라는 외부메일 서비스를 이용할 것인데 이를 위해서는 모듈을 설치해주어야하고 send grid 회원가입을 진행해야한다.  
+
+또 send grid라는 외부메일 서비스를 이용할 것인데 이를 위해서는 모듈을 설치해주어야하고 send grid 회원가입을 진행해야한다.
+
 ```bash
 yarn add nodemailer-sendgrid-transport
 ```
-[send grid 사이트 바로가기]("https://sendgrid.com/")  
+
+[send grid 사이트 바로가기]("https://sendgrid.com/")
 
 회원가입을 진행 한 후 `utils.js`파일에 아래와 같은 코드를 추가로 작성한다.
+
 ```js
 // @/src/utils.js
 import dotenv from "dotenv";
@@ -623,14 +634,17 @@ export const sendSecretMail = (address, secret) => {
   return sendMail(email);
 };
 ```
+
 회원가입한 아이디와 비밀번호를 `.env`파일에 저장한 후에 불러와서 사용하도록 한다. 여기서 `sendSecretMail`에서 `from` 프로퍼티의 값으로 이메일을 입력하게 되는데 아래와 같은 에러가 보일 수 도 있다.(에러가 발생하지 않는 다면 패스!)
+
 ```bash
 The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements
 ```
-https://app.sendgrid.com/settings/sender_auth 위 경로에서 `Single Sender Verification` 인증을 하면 정상적으로 작동 할 것이다.  
 
+https://app.sendgrid.com/settings/sender_auth 위 경로에서 `Single Sender Verification` 인증을 하면 정상적으로 작동 할 것이다.
 
 테스트를 하기 위해 `server.js`파일에 아래와 같은 코드를 추가한다.
+
 ```js
 // @/src/server.js
 import dotenv from "dotenv";
@@ -647,7 +661,6 @@ sendSecretMail("nevertheless0402@gmail.com", "!23");
 
 const PORT = process.env.PORT || 4000;
 
-
 const server = new GraphQLServer({ schema });
 
 server.express.use(logger("dev"));
@@ -659,3 +672,99 @@ server.start({ port: PORT }, () =>
 
 실제 본인이 사용하는 이메일을 입력하고, 임의의 문자열을 아무렇게나 입력하게 되면 아래 사진과 같이 메일이 발송된것을 확인 할 수 있다.
 ![request Secret](./imageForReadme/requsetSecret3.JPG)
+
+#### Passport JWT
+
+##### JSON Web Tokens
+
+JSON Web Tokens 이란 로그인한 사용자의 정보를 서버의 세션에 저장하고 사용자를 식별하는 인증 표준입니다. 작동 로직은 아래와 같습니다.
+
+1. 사용자의 이메일로 secret key를 전송합니다.
+1. 사용자는 로그인을 하기 위해서 email과 secret key를 입력해야 합니다.
+1. 사용자가 입력한 email을 이용하여 DB에서 해당 email을 갖는 사용자를 검색합니다. 해당 사용자의 secret key와 입력한 secret key가 동일한 경우 jsonwebtoken을 이용하여 토큰을 생성합니다. 생성된 토큰은 브라우져의 localstorage 또는 쿠키에 저장됩니다.
+1. 서버에 JSON Web Tokens을 검증하는 미들웨어를 구축합니다.
+1. 사용자가 서버에 요청을 보내는 경우 언제나 미들웨어를 통과해야 정상적인 통신이 이루어지게 됩니다.
+1. 따라서 로그인된 사용하는 http Header에 발급받은 토큰을 실어서 요청을 보내야 합니다.
+
+차례대로 구성해보도록 하겠습니다. 먼저 `jsonwebtoken'을 설치해주도록 합니다.
+
+```bash
+yarn add jsonwebtoken
+```
+
+1 ~ 3에 해당하는 코드는 아래와 같습니다.
+```js
+//utils.js
+import { adjectives, nouns } from "./words";
+import nodemailer from "nodemailer";
+import sgTransport from "nodemailer-sendgrid-transport";
+import jwt from "jsonwebtoken";
+.
+.
+.
+export const generateToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET);
+```
+`sign()`메서드는 기본 값으로 HMAC SHA256알고리즘을 사용합니다. 첫 번째 인자로는 payload, 즉 내용을 작성합니다. payload부분은 따로 암호화가 진행되지 않으므로 중요한 정보는 포함시키지 않는것이 좋습니다. 두 번째 인자로는 비밀키를 전달합니다. 해당 비밀키를 통해 암호화를 진행하므로 비밀키가 노출되지 않는다면 데이터의 무결성을 보장 할 수 있습니다. 
+
+```js
+import { prisma } from "../../../../generated/prisma-client";
+import { generateToken } from "../../../utils";
+
+export default {
+  Mutation: {
+    confirmSecret: async (_, args) => {
+      const { email, secret } = args;
+      const user = await prisma.user({ email });
+      if (user.loginSecret === secret) {
+        return generateToken(user.id);
+      } else {
+        throw Error("Wrong email/secret combination");
+      }
+    },
+  },
+};
+```
+사용자가 입력한 이메을을 통해서 prisma console에 해당 email을 갖는 유저가 있는지 찾습니다. 찾은 유저의 loginSecret 값과 입력한 loginSecret 값이 동일한 경우 토큰을 생성하여 반환하도록 합니다. 
+
+미들웨어를 구축하기 위하여 아래 모듈을 설치하도록 합니다. 
+```bash
+yarn add passport passport-jwt
+```
+4 ~ 6 번에 해당하는 코드는 아래와 같습니다. 
+```js
+// @/src/passport.js
+import passport from "passport";
+import { Strategy, ExtractJwt } from "passport-jwt";
+import { prisma } from "../generated/prisma-client";
+
+const jwtOptions = {
+  // header에 bearer스키마에 담겨온 토큰 해석할 것
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  // 해당 비밀키로 복호화
+  secretOrKey: process.env.JWT_SECRET,
+};
+
+const verifyUser = async (payload, done) => {
+  try {
+    const user = await prisma.user({ id: payload.id });
+    if (user !== null) {
+      return done(null, user);
+    } else {
+      return done(null, false);
+    }
+  } catch (error) {
+    return done(error, false);
+  }
+};
+
+export const authenticateJwt = (req, res, next) =>
+  passport.authenticate("jwt", { sessions: false }, (error, user) => {
+    if (user) {
+      req.user = user;
+    }
+    next();
+  })(req, res, next);
+
+passport.use(new Strategy(jwtOptions, verifyUser));
+passport.initialize()
+```
