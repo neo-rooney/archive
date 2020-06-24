@@ -2,8 +2,16 @@ const express = require("express");
 
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.get("/", (req, res) => {
   res.send("안녕 벡엔드");
+});
+
+app.post("/user", (req, res) => {
+  req.body.email;
+  req.body.password;
+  req.body.nicknamel;
 });
 
 app.listen(3085, () => {
