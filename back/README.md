@@ -3,6 +3,7 @@
 1. [벡엔드 코딩 준비하기](#벡엔드-코딩-준비하기)
 1. [시퀄라이즈 도입하기](#시퀄라이즈-도입하기)
 1. [서버로 데이터 보내기](#서버로-데이터-보내기)
+1. [데이터 형식 정의하기](#데이터-형식-정의하기)
 
 ## 벡엔드 코딩 준비하기
 
@@ -104,6 +105,14 @@ module.exports = db;
 
 5. config > config.json 수정하기
 
+- mysql 5.7 이상의 버전에서는 홈페이지에서 다운로드 후 설치 완료 시점에서 임시 비밀번호 팝업이 뜬다.
+- 터미널에서 임시 비밀번호를 이용하여 mysql에 들어가준다. 이 때 mysql 명령어가 입력되지 않을 수 있는데 이는 환경설정이 되어있지 않아서이다.
+- mysql -u root -p 명령어를 입력해서 mysql에 들어가준다.
+  -set password=password('비밀번호'); 를 입력하여 임시 비밀번호를 변경해준다.
+- 변경된 비밀번호를 사용한다.
+
+출처: https://jlblog.me/163 [JLBlog]
+
 ```bash
 {
   "development": {
@@ -152,6 +161,111 @@ app.post("/user", (req, res) => {
   req.body.email;
   req.body.password;
   req.body.nicknamel;
+});
+
+app.listen(3085, () => {
+  console.log(`백엔드 서버 ${3085}번 포트에서 작동중...`);
+});
+```
+
+## 데이터 형식 정의하기
+
+1. models > user.js 만들기
+1. user.js
+
+```js
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define(
+    "User",
+    {
+      email: {
+        type: DataTypes.STRING(40), //DB 데이터 타입 지정
+        allowNull: false, //DB 데이터 필수여부 설정
+      },
+      nickname: {
+        type: DataTypes.STRING(20),
+        allowNull: false,
+      },
+      password: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+      },
+    },
+    {
+      charset: "utf8", //DB에서 한글 사용에 대한 환경설정
+      collate: "utf8_general_ci", //DB에서 한글 사용에 대한 환경설정
+    }
+  );
+  User.associate = (db) => {};
+  return User;
+};
+```
+
+3. index.js에서 설정한 데이터 형식 가져오기
+
+```js
+//index.js
+const Sequelize = require("sequelize");
+const env = process.env.NODE_ENV || "development";
+const config = require(__dirname + "/../config/config.json")[env];
+const db = {};
+
+const sequelize = new Sequelize(
+  config.database,
+  config.username,
+  config.password,
+  config
+);
+
+db.User = require("./user")(sequelize, Sequelize); //위치 중요!
+
+Object.keys(db).forEach((modelName) => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
+
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+module.exports = db;
+```
+
+4. DB 생성하기
+
+- 콘솔에서 아래와 같이 입력(back 디렉토리에서!)
+
+```js
+npx sequelize db:create
+```
+
+5. app.js에서 db 불러오기
+
+```js
+const express = require("express");
+const db = require("./models");
+const app = express();
+
+db.sequelize.sync(); //DB 불러와서 실행
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.get("/", (req, res) => {
+  res.send("안녕 벡엔드");
+});
+
+app.post("/user", async (req, res, next) => {
+  try {
+    const newUser = await db.User.create({
+      emai: req.body.email,
+      password: req.body.password,
+      nickname: req.body.nicknamel,
+    });
+    res.status(201).json(newUser);
+  } catch (err) {
+    console.log(error);
+    next(err);
+  }
 });
 
 app.listen(3085, () => {
