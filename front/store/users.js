@@ -38,7 +38,7 @@ export const mutations = {
         id: Math.random().toString(),
         name: Math.floor(Math.random() * 1000),
       }));
-    state.followings =state.followings.concat(fakeUsers);
+    state.followings = state.followings.concat(fakeUsers);
     state.hasMoreFollowings = LIMIT === fakeUsers.length;
   },
   loadFollowers(state) {
@@ -53,20 +53,25 @@ export const mutations = {
     state.hasMoreFollowers = LIMIT === fakeUsers.length;
   },
   resetFollowings(state) {
-    state.followings = []
+    state.followings = [];
   },
   resetFollowers(state) {
-    state.followers = []
+    state.followers = [];
   },
 };
 
 export const actions = {
   signUp({ commit }, payload) {
-    this.$axios.post("http://localhost:3085/user", {
+    this.$axios.post("/user", {
       email: payload.email,
+      password: payload.password,
       nickname: payload.nickname,
-      password:payload.password
     });
+    // this.$axios.post("http://localhost:3085/user", {
+    //   email: payload.email,
+    //   nickname: payload.nickname,
+    //   password:payload.password
+    // });
     commit("setMe", payload);
   },
   logIn({ commit }, payload) {

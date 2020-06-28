@@ -1,6 +1,8 @@
 const express = require("express");
-
+const db = require("./models");
 const app = express();
+
+db.sequelize.sync();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -8,10 +10,18 @@ app.get("/", (req, res) => {
   res.send("안녕 벡엔드");
 });
 
-app.post("/user", (req, res) => {
-  req.body.email;
-  req.body.password;
-  req.body.nicknamel;
+app.post("/user", async (req, res, next) => {
+  try {
+    const newUser = await db.User.create({
+      emai: req.body.email,
+      password: req.body.password,
+      nickname: req.body.nicknamel,
+    });
+    res.status(201).json(newUser)
+  } catch (err) {
+    console.log(error);
+    next(err)
+  }
 });
 
 app.listen(3085, () => {
