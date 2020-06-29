@@ -7,6 +7,7 @@
 1. [CORS](#CORS)
 1. [bcrypt](#bcrypt)
 1. [모델 수정](#모델-수정)
+1. [Login 개념](#Login-개념)
 
 ## 벡엔드 코딩 준비하기
 
@@ -424,6 +425,7 @@ app.post("/user", async (req, res, next) => {
 ```
 
 2. 서버단에서 중복여부를 감지 못할 수도 있으므로 user.js의 DB 모델 수정
+
 ```js
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
@@ -454,6 +456,7 @@ module.exports = (sequelize, DataTypes) => {
 ```
 
 3. DB 모델을 수정하는 경우 자동으로 반영되는것이 아니므로 app.js에 코드 추가해야됌
+
 ```js
 const express = require("express");
 const db = require("./models");
@@ -467,6 +470,143 @@ db.sequelize.sync({ force: true }); //추가된 부분
 .
 .
 ```
+
 - force: true 한 경우 기존의 DB데이터 모두 초기화되므로 실서버에서는 사용하지 않음
 - 실 서버에서는 migration 사용해야함
 
+## Login 개념
+
+- Flow
+  1. 프론트로부터 email과 password가 req.body에 실려서 넘어옴
+  1. 백엔드에서 DB에 해당 이메일이 있는지, 비밀번호가 일치하는지 여부를 검사함
+  1. 일치한다면 서버의 session의 cookie에 유저 정보를 저장함
+  1. 만들어진 cookie를 프론트 서버로 돌려보내고 프론트 서버는 이를 저장
+  1. 로그인된 유저는 앞으로 요청을 보낼 때 마다 Header에 쿠키를 넣어서 요청을 보냄
+  1. 서버는 Header에 실려서온 cookie가 유효한지 여부를 검사하고 유효하다면 해당 요청에 대한 응답을 보내줌
+
+1. passport 설치
+
+```bash
+yarn add passport passport-local
+```
+
+2. root > passport 디렉토리 생성 > index.js 생성
+
+```js
+//root > passport > index.js
+const passport = require("passport");
+
+module.exports = () => {
+  passport.serializeUser(() => {});
+  passport.deserializeUser(() => {});
+};
+```
+
+3. app.js에 passport 인식
+```js
+const express = require("express");
+const db = require("./models");
+const cors = require("cors");
+const bcrypt = require("bcrypt");
+const passportConfig = require("./passport"); //내가 만든 passport 파일
+const passport = require("passport"); //설치한 passport 모듈
+const morgan = require("morgan");
+
+const app = express();
+
+db.sequelize.sync();
+passportConfig(); //서버가 시작될 때 내가 생성한 passport와 연결
+
+app.use(morgan("dev"));
+app.use(cors("http://localhost:3000"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(passport.initialize()); //middleware로 passport 모듈 사용
+app.use(passport.session());
+
+app.get("/", (req, res) => {
+  res.send("안녕 벡엔드");
+});
+.
+.
+.
+```
+
+4. 쿠키를 저장 할 세션 middleware 추가
+```js
+const express = require("express");
+const db = require("./models");
+const cors = require("cors");
+const bcrypt = require("bcrypt");
+const passportConfig = require("./passport"); //내가 만든 passport 파일
+const passport = require("passport"); //설치한 passport 모듈
+const session = require("express-session");
+const morgan = require("morgan");
+
+const app = express();
+
+db.sequelize.sync();
+passportConfig(); //서버가 시작될 때 내가 생성한 passport와 연결
+
+app.use(morgan("dev"));
+app.use(cors("http://localhost:3000"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(
+  session({
+    resave: false,
+    saveUninitialized: false,
+    secret: "cookiesecret", //쿠키를 암호화하고 복호화 하는데 사용하는 키
+  })
+);
+app.use(passport.initialize()); //middleware로 passport 모듈 사용
+app.use(passport.session());
+
+app.get("/", (req, res) => {
+  res.send("안녕 벡엔드");
+});
+.
+.
+.
+```
+
+5. 유저 정보를 저장할 쿠키를 미들웨어로 추가
+```js
+const express = require("express");
+const db = require("./models");
+const cors = require("cors");
+const bcrypt = require("bcrypt");
+const passportConfig = require("./passport"); //내가 만든 passport 파일
+const passport = require("passport"); //설치한 passport 모듈
+const session = require("express-session");
+const morgan = require("morgan");
+const cookie = require("cookie-parser");
+
+
+const app = express();
+
+db.sequelize.sync();
+passportConfig(); //서버가 시작될 때 내가 생성한 passport와 연결
+
+app.use(morgan("dev"));
+app.use(cors("http://localhost:3000"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookie("cookiesecret"));
+app.use(
+  session({
+    resave: false,
+    saveUninitialized: false,
+    secret: "cookiesecret", //쿠키를 암호화하고 복호화 하는데 사용하는 키
+  })
+);
+app.use(passport.initialize()); //middleware로 passport 모듈 사용
+app.use(passport.session());
+
+app.get("/", (req, res) => {
+  res.send("안녕 벡엔드");
+});
+.
+.
+.
+```

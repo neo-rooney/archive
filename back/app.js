@@ -2,14 +2,32 @@ const express = require("express");
 const db = require("./models");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
+const passportConfig = require("./passport");
+const passport = require("passport");
+const session = require("express-session");
+const cookie = require("cookie-parser");
+const morgan = require("morgan");
 
 const app = express();
 
-db.sequelize.sync({ force: true });
+db.sequelize.sync();
+passportConfig();
 
+app.use(morgan("dev"));
 app.use(cors("http://localhost:3000"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookie("cookiesecret"));
+app.use(
+  session({
+    resave: false,
+    saveUninitialized: false,
+    secret: "cookiesecret",
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.get("/", (req, res) => {
   res.send("안녕 벡엔드");
 });
@@ -37,6 +55,11 @@ app.post("/user", async (req, res, next) => {
     console.error(error);
     return next(error);
   }
+});
+
+app.post("/user/login", (req, res) => {
+  req.body.email;
+  req.body.password;
 });
 
 app.listen(3085, () => {
