@@ -6,6 +6,8 @@
 1. [데이터 형식 정의하기](#데이터-형식-정의하기)
 1. [CORS](#CORS)
 1. [bcrypt](#bcrypt)
+1. [모델 수정](#모델-수정)
+
 ## 벡엔드 코딩 준비하기
 
 1. Node 설치
@@ -273,9 +275,11 @@ app.listen(3085, () => {
   console.log(`백엔드 서버 ${3085}번 포트에서 작동중...`);
 });
 ```
+
 ## CORS
 
 1. front 코드 axios url 변경
+
 ```js
 export const state = () => ({
   me: null,
@@ -306,11 +310,13 @@ export const actions = {
 ```
 
 2. cors 설치
+
 ```bash
 yarn add cors
 ```
 
 3. app.js에 cors 추가
+
 ```js
 const express = require("express");
 const db = require("./models");
@@ -331,16 +337,20 @@ app.get("/", (req, res) => {
 .
 .
 ```
+
 ## bcrypt
+
 - 프론트의 req.body, 백앤드의 res에서 비밀번호가 그대로 노출되는 문제가 있음
 - 따라서 비밀번호를 db에 저장하기 전에 암호화하는 과정이 필요, 이 때 사용하는것이 bcrypt
 
 1. bcrypt 설치
+
 ```bash
 yarn add bcrypt
 ```
 
 2. app.js에서 비밀번호 암호화
+
 ```js
 const express = require("express");
 const db = require("./models");
@@ -357,12 +367,106 @@ app.post("/user", async (req, res, next) => {
       password: hash,
       nickname: req.body.nickname,
     });
-    res.status(201).json(newUser);
+    return res.status(201).json(newUser);
   } catch (error) {
     console.error(error);
+    return next(error)
   }
 });
 .
 .
 .
 ```
+
+## 모델 수정
+
+- 회원가입시 중복된 이메일 있는지 여부를 확인해야한다.
+
+1. app.js에서 db에 데이터 저장하기 전에 검증하는 로직 추가
+
+```js
+const express = require("express");
+const db = require("./models");
+const cors = require("cors");
+const bcrypt = require("bcrypt");
+
+const app = express();
+.
+.
+.
+app.post("/user", async (req, res, next) => {
+  try {
+    const hash = await bcrypt.hash(req.body.password, 12);
+
+    const exUser = await db.User.findOne({
+      email: req.body.email,
+    })
+    if(exUser){//이미 회원가입 되어있는 경우
+      return res.status(403).json({ //403 금지 에러
+        errorCode: 1,
+        message:'이미 회원가입되어있습니다.'
+      })
+    }
+    const newUser = await db.User.create({ //
+      email: req.body.email,
+      password: hash,
+      nickname: req.body.nickname,
+    });
+    return res.status(201).json(newUser);
+  } catch (error) {
+    console.error(error);
+    return next(error);
+  }
+});
+.
+.
+.
+```
+
+2. 서버단에서 중복여부를 감지 못할 수도 있으므로 user.js의 DB 모델 수정
+```js
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define(
+    "User",
+    {
+      email: {
+        type: DataTypes.STRING(40),
+        allowNull: false,
+        unique: true, //중복금지
+      },
+      nickname: {
+        type: DataTypes.STRING(20),
+        allowNull: false,
+      },
+      password: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+      },
+    },
+    {
+      charset: "utf8",
+      collate: "utf8_general_ci",
+    }
+  );
+  User.associate = (db) => {};
+  return User;
+};
+```
+
+3. DB 모델을 수정하는 경우 자동으로 반영되는것이 아니므로 app.js에 코드 추가해야됌
+```js
+const express = require("express");
+const db = require("./models");
+const cors = require("cors");
+const bcrypt = require("bcrypt");
+
+const app = express();
+
+db.sequelize.sync({ force: true }); //추가된 부분
+.
+.
+.
+```
+- force: true 한 경우 기존의 DB데이터 모두 초기화되므로 실서버에서는 사용하지 않음
+- 실 서버에서는 migration 사용해야함
+

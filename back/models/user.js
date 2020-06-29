@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       email: {
         type: DataTypes.STRING(40),
         allowNull: false,
+        unique: true, //중복금지
       },
       nickname: {
         type: DataTypes.STRING(20),
