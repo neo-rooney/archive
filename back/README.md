@@ -8,6 +8,7 @@
 1. [bcrypt](#bcrypt)
 1. [모델 수정](#모델-수정)
 1. [Login 개념](#Login-개념)
+1. [passport](#passport)
 
 ## 벡엔드 코딩 준비하기
 
@@ -609,4 +610,103 @@ app.get("/", (req, res) => {
 .
 .
 .
+```
+
+## passport
+- id(email), password를 사용해서 login 하려는 경우 passport-local이라는 strategy를 사용해야함
+
+1. passport > local.js파일 생성 
+- app.js에서 passport 가 미들웨어로 사용 될 때 passport의 미들웨어 형식으로 passport local이 실행되도록 코드를 작성한것
+```js
+const passport = require("passport");
+const bcrypt = require("bcrypt");
+const { Strategy: LocalStrategy } = require("passport-local");
+const db = require("../models/");
+
+module.exports = () => {
+  passport.use(
+    new LocalStrategy(
+      {
+        usernameField: "email", //req.body.email
+        passwordField: "password", //req.body.password
+      },
+      async (email, password, done) => {
+        try {
+          const exUser = await db.User.findOne({ where: { email } });
+          if (!exUser) {
+            return done(null, false, {
+              reason: "존재하지 않는 사용자입니다.",
+            }); // 에러|성공|실패
+          }
+          const result = await bcrypt.compare(password, exUser.password);
+          if (result) {
+            return done(null, exUser);
+          } else {
+            return done(null, false, { reason: "비밀번호가 틀립니다." });
+          }
+        } catch (err) {
+          console.error(err);
+          return done(err);
+        }
+      }
+    )
+  );
+};
+```
+2. passport > index.js 파일 수정
+- app.js에서 req.login 실행 될 때 serializeUser가 실행됨
+- 유저의 모든 정보를 서버에 저장하는것은 서버에 부담이 되므로 특정 정보만 서버의 세션에 저장하기 위함
+```js
+const passport = require("passport");
+
+module.exports = () => {
+  passport.serializeUser((user, done) => {
+    return done(null, user.id)//사용자의 정보 중 id만 세션에 저장
+  });
+  passport.deserializeUser(() => {});
+};
+```
+
+3. app.js파일 수정
+```js
+const express = require("express");
+const db = require("./models");
+const cors = require("cors");
+const bcrypt = require("bcrypt");
+const passportConfig = require("./passport");
+const passport = require("passport");
+const session = require("express-session");
+const cookie = require("cookie-parser");
+const morgan = require("morgan");
+
+const app = express();
+.
+.
+.
+app.post("/user/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      console.error(err);
+      return next(err);
+    }
+    if (info) {
+      return res.status(401).send(info.reason);
+    }
+    return req.login(user, (err) => { //res.login은 passport.initialize를 미들웨서로 사용했으므로 사용하능한것  
+    //res.login은 백엔드의 세션에 사용자 정보를 저장해주고 프론트로 세션에 저장된 쿠키를 내려보내줌
+    //이 때 serializeUser가 실행됨 
+      if (err) {
+        console.error(err);
+        return next(err);
+      }
+      //프론트에 쿠키를 내려보낼 때 res.body에 사용자 정보도 같이 보냄!(선택)
+      return res.json(user)
+    });
+  })(req, res, next);
+});
+
+app.listen(3085, () => {
+  console.log(`백엔드 서버 ${3085}번 포트에서 작동중...`);
+});
+
 ```

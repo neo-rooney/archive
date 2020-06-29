@@ -36,7 +36,9 @@ app.post("/user", async (req, res, next) => {
   try {
     const hash = await bcrypt.hash(req.body.password, 12);
     const exUser = await db.User.findOne({
-      email: req.body.email,
+      where: {
+        email: req.body.email,
+      },
     });
     if (exUser) {
       //이미 회원가입 되어있는 경우
@@ -57,9 +59,24 @@ app.post("/user", async (req, res, next) => {
   }
 });
 
-app.post("/user/login", (req, res) => {
-  req.body.email;
-  req.body.password;
+app.post("/user/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      console.error(err);
+      return next(err);
+    }
+    if (info) {
+      return res.status(401).send(info.reason);
+    }
+    return req.login(user, (err) => {
+      //세션에 사용자 정보 저장
+      if (err) {
+        console.error(err);
+        return next(err);
+      }
+      return res.json(user)
+    });
+  })(req, res, next);
 });
 
 app.listen(3085, () => {
