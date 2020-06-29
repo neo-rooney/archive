@@ -4,7 +4,8 @@
 1. [시퀄라이즈 도입하기](#시퀄라이즈-도입하기)
 1. [서버로 데이터 보내기](#서버로-데이터-보내기)
 1. [데이터 형식 정의하기](#데이터-형식-정의하기)
-
+1. [CORS](#CORS)
+1. [bcrypt](#bcrypt)
 ## 벡엔드 코딩 준비하기
 
 1. Node 설치
@@ -271,4 +272,97 @@ app.post("/user", async (req, res, next) => {
 app.listen(3085, () => {
   console.log(`백엔드 서버 ${3085}번 포트에서 작동중...`);
 });
+```
+## CORS
+
+1. front 코드 axios url 변경
+```js
+export const state = () => ({
+  me: null,
+  followings: [],
+  followers: [],
+  hasMoreFollowers: true,
+  hasMoreFollowings: true,
+});
+.
+.
+.
+export const actions = {
+  signUp({ commit }, payload) {
+    this.$axios
+      .post("http://localhost:3085/user", { //백엔드 주소로 변경
+        email: payload.email,
+        nickname: payload.nickname,
+        password: payload.password,
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    commit("setMe", payload);
+  },
+.
+.
+.
+```
+
+2. cors 설치
+```bash
+yarn add cors
+```
+
+3. app.js에 cors 추가
+```js
+const express = require("express");
+const db = require("./models");
+const cors = require("cors");
+const bcrypt = require("bcrypt");
+
+const app = express();
+
+db.sequelize.sync();
+
+app.use(cors("http://localhost:3000"));//localhost:3000(프론트 주소)에서 오는 요청은 허용하겠다는 의미
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.get("/", (req, res) => {
+  res.send("안녕 벡엔드");
+});
+.
+.
+.
+```
+## bcrypt
+- 프론트의 req.body, 백앤드의 res에서 비밀번호가 그대로 노출되는 문제가 있음
+- 따라서 비밀번호를 db에 저장하기 전에 암호화하는 과정이 필요, 이 때 사용하는것이 bcrypt
+
+1. bcrypt 설치
+```bash
+yarn add bcrypt
+```
+
+2. app.js에서 비밀번호 암호화
+```js
+const express = require("express");
+const db = require("./models");
+const cors = require("cors");
+const bcrypt = require("bcrypt");
+.
+.
+.
+app.post("/user", async (req, res, next) => {
+  try {
+    const hash = await bcrypt.hash(req.body.password, 12);//비밀번호 암호화, 12는 salt로 높을수록 암호화되는 정도가 강해지지만 서버가 느려질 수 있음
+    const newUser = await db.User.create({
+      email: req.body.email,
+      password: hash,
+      nickname: req.body.nickname,
+    });
+    res.status(201).json(newUser);
+  } catch (error) {
+    console.error(error);
+  }
+});
+.
+.
+.
 ```
