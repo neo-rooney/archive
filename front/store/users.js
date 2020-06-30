@@ -94,16 +94,28 @@ export const actions = {
           withCredentials: true,
         }
       )
-      .then((data) => {
-        console.log("data>>>", data);
-        commit("setMe", payload);
+      .then((res) => {
+        commit("setMe", res.data);
       })
       .catch((err) => {
         console.error(err);
       });
   },
-  logOut({ commit }, payload) {
-    commit("setMe", null);
+  logOut({ commit }) {
+    this.$axios
+      .post(
+        "http://localhost:3085/user/logout",
+        {},
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        commit("setMe", null);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   },
   changeNickname({ commit }, payload) {
     commit("setMe", payload);

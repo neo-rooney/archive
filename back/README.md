@@ -10,6 +10,8 @@
 1. [Login 개념](#Login-개념)
 1. [passport](#passport)
 1. [로그인 연동](#로그인-연동)
+1. [라우터 분리](#라우터-분리)
+1. [로그아웃](#로그아웃)
 
 ## 벡엔드 코딩 준비하기
 
@@ -505,6 +507,7 @@ module.exports = () => {
 ```
 
 3. app.js에 passport 인식
+
 ```js
 const express = require("express");
 const db = require("./models");
@@ -535,6 +538,7 @@ app.get("/", (req, res) => {
 ```
 
 4. 쿠키를 저장 할 세션 middleware 추가
+
 ```js
 const express = require("express");
 const db = require("./models");
@@ -573,6 +577,7 @@ app.get("/", (req, res) => {
 ```
 
 5. 유저 정보를 저장할 쿠키를 미들웨어로 추가
+
 ```js
 const express = require("express");
 const db = require("./models");
@@ -614,10 +619,13 @@ app.get("/", (req, res) => {
 ```
 
 ## passport
+
 - id(email), password를 사용해서 login 하려는 경우 passport-local이라는 strategy를 사용해야함
 
-1. passport > local.js파일 생성 
+1. passport > local.js파일 생성
+
 - app.js에서 passport 가 미들웨어로 사용 될 때 passport의 미들웨어 형식으로 passport local이 실행되도록 코드를 작성한것
+
 ```js
 const passport = require("passport");
 const bcrypt = require("bcrypt");
@@ -654,21 +662,25 @@ module.exports = () => {
   );
 };
 ```
+
 2. passport > index.js 파일 수정
+
 - app.js에서 req.login 실행 될 때 serializeUser가 실행됨
 - 유저의 모든 정보를 서버에 저장하는것은 서버에 부담이 되므로 특정 정보만 서버의 세션에 저장하기 위함
+
 ```js
 const passport = require("passport");
 
 module.exports = () => {
   passport.serializeUser((user, done) => {
-    return done(null, user.id)//사용자의 정보 중 id만 세션에 저장
+    return done(null, user.id); //사용자의 정보 중 id만 세션에 저장
   });
   passport.deserializeUser(() => {});
 };
 ```
 
 3. app.js파일 수정
+
 ```js
 const express = require("express");
 const db = require("./models");
@@ -693,9 +705,9 @@ app.post("/user/login", (req, res, next) => {
     if (info) {
       return res.status(401).send(info.reason);
     }
-    return req.login(user, (err) => { //res.login은 passport.initialize를 미들웨서로 사용했으므로 사용하능한것  
+    return req.login(user, (err) => { //res.login은 passport.initialize를 미들웨서로 사용했으므로 사용하능한것
     //res.login은 백엔드의 세션에 사용자 정보를 저장해주고 프론트로 세션에 저장된 쿠키를 내려보내줌
-    //이 때 serializeUser가 실행됨 
+    //이 때 serializeUser가 실행됨
       if (err) {
         console.error(err);
         return next(err);
@@ -713,7 +725,9 @@ app.listen(3085, () => {
 ```
 
 ## 로그인 연동
+
 1. front의 store/user.js의 login 코드 작성
+
 ```js
 //user.js
 logIn({ commit }, payload) {
@@ -737,10 +751,12 @@ logIn({ commit }, payload) {
       });
   },
 ```
+
 - 서버와 프론트의 주소가 다름으로 인해서 쿠키가 전송되지 않는 문제가 있음
 - 이를 해결하기 위해서 프론트와 백엔드에도 모두 작업이 필요한데 프론트에서는 axios의 3번째 인자로 `withCredentials`를 `true`로 넘겨주어야함
 
 2. back의 app.js 코드 수정
+
 ```js
 .
 .
@@ -842,6 +858,7 @@ app.listen(3085, () => {
 ```
 
 3. passport > index.js 코드 수정
+
 ```js
 const passport = require("passport");
 const local = require("./local");
@@ -851,7 +868,8 @@ module.exports = () => {
   passport.serializeUser((user, done) => {
     return done(null, user.id);
   });
-  passport.deserializeUser(async (id, done) => { //로그인 후 프론트로부터 오는 모든 요청에 대해 실행된다. 
+  passport.deserializeUser(async (id, done) => {
+    //로그인 후 프론트로부터 오는 모든 요청에 대해 실행된다.
     try {
       const user = await db.User.findOne({ where: { id } });
       return done(null, user); // req.user, req.isAuthenticated() === true,
@@ -862,4 +880,182 @@ module.exports = () => {
   });
   local();
 };
+```
+
+## 라우터 분리
+
+1. root > routes 디렉토리 생성 > user.js 파일 생성
+
+2. user.js파일 코드 입력
+
+```js
+//  @/routes/uconst express = require("express");
+const bcrypt = require("bcrypt");
+const passport = require("passport");
+const db = require("../models");
+
+const router = express.Router();
+router.post("/", async (req, res, next) => {
+  try {
+    const hash = await bcrypt.hash(req.body.password, 12);
+    const exUser = await db.User.findOne({
+      where: {
+        email: req.body.email,
+      },
+    });
+    if (exUser) {
+      //이미 회원가입 되어있는 경우
+      return res.status(403).json({
+        errorCode: 1,
+        message: "이미 회원가입되어있습니다.",
+      });
+    }
+    //회원 등록
+    await db.User.create({
+      email: req.body.email,
+      password: hash,
+      nickname: req.body.nickname,
+    });
+    //로그인
+    passport.authenticate("local", (err, user, info) => {
+      if (err) {
+        console.error(err);
+        return next(err);
+      }
+      if (info) {
+        return res.status(401).send(info.reason);
+      }
+      return req.login(user, (err) => {
+        //세션에 사용자 정보 저장
+        if (err) {
+          console.error(err);
+          return next(err);
+        }
+        return res.json(user);
+      });
+    })(req, res, next);
+  } catch (error) {
+    console.error(error);
+    return next(error);
+  }
+});
+router.post("/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      console.error(err);
+      return next(err);
+    }
+    if (info) {
+      return res.status(401).send(info.reason);
+    }
+    return req.login(user, async (err) => {
+      // 세션에다 사용자 정보 저장 (어떻게? serializeUser)
+      if (err) {
+        console.error(err);
+        return next(err);
+      }
+      return res.json(user);
+    });
+  })(req, res, next);
+});
+```
+
+3. app.js에서 불필요한 코드 삭제 및 만든 router 연결
+
+```js
+// @/app.js
+const express = require("express");
+const db = require("./models");
+const cors = require("cors");
+const passportConfig = require("./passport");
+const passport = require("passport");
+const session = require("express-session");
+const cookie = require("cookie-parser");
+const morgan = require("morgan");
+const userRouter = require("./routes/user");
+
+const app = express();
+
+db.sequelize.sync();
+passportConfig();
+
+app.use(morgan("dev"));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookie("cookiesecret"));
+app.use(
+  session({
+    resave: false,
+    saveUninitialized: false,
+    secret: "cookiesecret",
+    cookie: {
+      httpOnly: true,
+      secure: false,
+    },
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get("/", (req, res) => {
+  res.send("안녕 벡엔드");
+});
+
+app.use("/user", userRouter);
+
+app.listen(3085, () => {
+  console.log(`백엔드 서버 ${3085}번 포트에서 작동중...`);
+});
+```
+
+## 로그아웃
+
+1. routes > user.js에 로그아웃 코드 작성
+
+```js
+.
+.
+.
+router.post("/logout", (req, res) => {
+  if (req.isAuthenticated()) { //사용자가 로그인 되어있는 경우
+    req.logOut();
+    return res.status(200).send("로그아웃 되었습니다.");
+  }
+});
+module.exports = router;
+```
+
+2. front의 코드와 연동
+
+```js
+// front/store/user.js
+.
+.
+.
+  logOut({ commit }) {
+    this.$axios
+      .post(
+        "http://localhost:3085/user/logout",
+        {},
+        {
+          withCredentials: true, //프론트와 서버의 주소가 다르므로 항상 넣어줘야함(nuxt.config.js에서 default로 설정가능한데 추후 다룰예정)
+        }
+      )
+      .then((res) => {
+        commit("setMe", null);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  },
+  .
+  .
+  .
+
 ```
