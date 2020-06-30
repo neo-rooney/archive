@@ -12,6 +12,8 @@
 1. [로그인 연동](#로그인-연동)
 1. [라우터 분리](#라우터-분리)
 1. [로그아웃](#로그아웃)
+1. [1대다 관계](#1대다-관계)
+1. [다대다 관계](#다대다-관계)
 
 ## 벡엔드 코딩 준비하기
 
@@ -1059,3 +1061,139 @@ module.exports = router;
   .
 
 ```
+
+## 1대다 관계
+
+- 프로젝트에서 필요한 데이터의 형식을 지정한다.
+- 이 때 데이터 간의 관계를 정의한다.
+- 프로젝트의 post를 예로든다.
+
+1. @/back/models/post.js 생성
+1. 코드 작성
+
+```js
+module.exports = (sequelize, DataTypes) => {
+  const Post = sequelize.define(
+    "Post",
+    {
+      //테이블명 posts
+      content: {
+        type: DataTypes.TEXT, //길이를 특정 할 수 없는 긴 글은 TEXT
+        allowNull: false,
+      },
+    },
+    {
+      charset: "utf8mb4", //한글 & 이모티콘까지 허용
+      collate: "utf8mb4_general_ci",
+    }
+  );
+  Post.associate = (db) => {
+    db.Post.belongsTo(db.User); //UserId
+  };
+  return Post;
+};
+```
+
+- 하나의 Post는 한 명의 유저와 연결된다.
+
+  3.user.js 관계 설정
+
+```js
+//@/back/models/user.js
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define(
+    "User",
+    {
+      email: {
+        type: DataTypes.STRING(40),
+        allowNull: false,
+        unique: true, //중복금지
+      },
+      nickname: {
+        type: DataTypes.STRING(20),
+        allowNull: false,
+      },
+      password: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+      },
+    },
+    {
+      charset: "utf8",
+      collate: "utf8_general_ci",
+    }
+  );
+  User.associate = (db) => {
+    db.User.hasMany(db.Post);
+  };
+  return User;
+};
+```
+
+- 한 명의 유저는 여러개의 Post를 갖을 수 있다.
+
+이러한 관계가 1대다 관계에 해당한다.
+
+## 다대다 관계
+
+- hashtag를 예로 든다.
+
+1. @/back/models/hashtag.js 생성
+1. 코드 작성
+
+```js
+module.exports = (sequelize, DataTypes) => {
+  const Hashtag = sequelize.define(
+    "Hashtag",
+    {
+      name: {
+        type: DataTypes.STRING(20),
+        allowNull: false,
+      },
+    },
+    {
+      charset: "utf8mb4", //한글 & 이모티콘까지 허용
+      collate: "utf8mb4_general_ci",
+    }
+  );
+  Hashtag.associate = (db) => {
+    db.Hashtag.belongsToMany(db.Post, { through: "PostHashtag" }); //UserId
+  };
+  return Hashtag;
+};
+```
+
+- hashtag는 여러개의 게시물에 속 할 수 있다.
+- 게시물 역시 여러개의 hashtag를 갖을 수 있다.
+- 이런 관계를 다대다 관계라고 한다.
+- mysql에서는 하나의 컬럼에 여러개의 외부 참조(다른 컬럼의 ID같은것)를 할 수 없다.
+- 따라서 중간에 새로운 컬럼을 만들어서 다대다 관계의 데이터의 관계를 정의한다.
+- 위 예에서는 중간에 만드는 새로운 컴럼은 PostHashtag에 해당한다.
+
+3. post.js코드 수정
+
+```js
+module.exports = (sequelize, DataTypes) => {
+  const Post = sequelize.define(
+    "Post",
+    {
+      //테이블명 posts
+      content: {
+        type: DataTypes.TEXT, //길이를 특정 할 수 없는 긴 글은 TEXT
+        allowNull: false,
+      },
+    },
+    {
+      charset: "utf8mb4", //한글 & 이모티콘까지 허용
+      collate: "utf8mb4_general_ci",
+    }
+  );
+  Post.associate = (db) => {
+    db.Post.belongsTo(db.User); //UserId
+    db.Post.belongsToMany(db.Hashtag, { through: "PostHashtag" }); //UserId
+  };
+  return Post;
+};
+```
+
+- Hashtag와 동일하게 코드를 작성한다.

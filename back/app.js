@@ -6,8 +6,7 @@ const passport = require("passport");
 const session = require("express-session");
 const cookie = require("cookie-parser");
 const morgan = require("morgan");
-const userRouter = require('./routes/user')
-
+const userRouter = require("./routes/user");
 
 const app = express();
 
@@ -38,15 +37,11 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-
 app.get("/", (req, res) => {
   res.send("안녕 벡엔드");
 });
 
-app.use('/user', userRouter)
-
-
+app.use("/user", userRouter);
 
 app.listen(3085, () => {
   console.log(`백엔드 서버 ${3085}번 포트에서 작동중...`);
