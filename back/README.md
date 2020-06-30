@@ -9,6 +9,7 @@
 1. [모델 수정](#모델-수정)
 1. [Login 개념](#Login-개념)
 1. [passport](#passport)
+1. [로그인 연동](#로그인-연동)
 
 ## 벡엔드 코딩 준비하기
 
@@ -709,4 +710,156 @@ app.listen(3085, () => {
   console.log(`백엔드 서버 ${3085}번 포트에서 작동중...`);
 });
 
+```
+
+## 로그인 연동
+1. front의 store/user.js의 login 코드 작성
+```js
+//user.js
+logIn({ commit }, payload) {
+    this.$axios
+      .post(
+        "http://localhost:3085/user/login",
+        {
+          email: payload.email,
+          password: payload.password,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((data) => {
+        console.log("data>>>", data);
+        commit("setMe", payload);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  },
+```
+- 서버와 프론트의 주소가 다름으로 인해서 쿠키가 전송되지 않는 문제가 있음
+- 이를 해결하기 위해서 프론트와 백엔드에도 모두 작업이 필요한데 프론트에서는 axios의 3번째 인자로 `withCredentials`를 `true`로 넘겨주어야함
+
+2. back의 app.js 코드 수정
+```js
+.
+.
+.
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true, //credentials 옵션 추가
+  })
+);
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookie("cookiesecret"));
+app.use(
+  session({
+    resave: false,
+    saveUninitialized: false,
+    secret: "cookiesecret",
+    cookie: {//cookie 옵션 추가
+      httpOnly: true,
+      secure: false,
+    },
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get("/", (req, res) => {
+  res.send("안녕 벡엔드");
+});
+
+app.post("/user", async (req, res, next) => {
+  try {
+    const hash = await bcrypt.hash(req.body.password, 12);
+    const exUser = await db.User.findOne({
+      where: {
+        email: req.body.email,
+      },
+    });
+    if (exUser) {
+      //이미 회원가입 되어있는 경우
+      return res.status(403).json({
+        errorCode: 1,
+        message: "이미 회원가입되어있습니다.",
+      });
+    }
+    //회원 등록
+    await db.User.create({
+      email: req.body.email,
+      password: hash,
+      nickname: req.body.nickname,
+    });
+    //회원가입 후 바로 로그인 진행
+    passport.authenticate("local", (err, user, info) => {
+      if (err) {
+        console.error(err);
+        return next(err);
+      }
+      if (info) {
+        return res.status(401).send(info.reason);
+      }
+      return req.login(user, (err) => {
+        //세션에 사용자 정보 저장
+        if (err) {
+          console.error(err);
+          return next(err);
+        }
+        return res.json(user);
+      });
+    })(req, res, next);
+  } catch (error) {
+    console.error(error);
+    return next(error);
+  }
+});
+app.post("/user/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      console.error(err);
+      return next(err);
+    }
+    if (info) {
+      return res.status(401).send(info.reason);
+    }
+    return req.login(user, async (err) => {
+      // 세션에다 사용자 정보 저장 (어떻게? serializeUser)
+      if (err) {
+        console.error(err);
+        return next(err);
+      }
+      return res.json(user);
+    });
+  })(req, res, next);
+});
+
+app.listen(3085, () => {
+  console.log(`백엔드 서버 ${3085}번 포트에서 작동중...`);
+});
+```
+
+3. passport > index.js 코드 수정
+```js
+const passport = require("passport");
+const local = require("./local");
+const db = require("../models");
+
+module.exports = () => {
+  passport.serializeUser((user, done) => {
+    return done(null, user.id);
+  });
+  passport.deserializeUser(async (id, done) => { //로그인 후 프론트로부터 오는 모든 요청에 대해 실행된다. 
+    try {
+      const user = await db.User.findOne({ where: { id } });
+      return done(null, user); // req.user, req.isAuthenticated() === true,
+    } catch (err) {
+      console.error(err);
+      return done(err);
+    }
+  });
+  local();
+};
 ```
