@@ -1,24 +1,63 @@
 <template>
   <form class="PostFrom__Container" @submit.prevent.capture="onSubmitContents">
-    <textarea placeholder="어떤 신기한 일이 있었나요?" class="PostFrom__Contents" v-model="content"></textarea>
+    <textarea
+      placeholder="어떤 신기한 일이 있었나요?"
+      class="PostFrom__Contents"
+      v-model="content"
+    ></textarea>
     <div class="PostFrom__ButtonBox">
-      <button type="button" class="PostFrom__Btn Image" @click.stop="UploadPhoto">사진</button>
+      <button
+        type="button"
+        class="PostFrom__Btn Image"
+        @click.stop="UploadPhoto"
+      >
+        사진
+      </button>
+      <input
+        ref="imageInput"
+        type="file"
+        multiple
+        hidden
+        @change="onChangeImages"
+      />
       <input type="submit" class="PostFrom__Btn Post" value="POST" />
+    </div>
+    <div v-if="imagePaths" class="PostFrom__PreviewImageContainenr">
+      <div
+        class="PostFrom__PreviewImageWrapper"
+        v-for="(item, index) in imagePaths"
+        :key="index"
+      >
+        <img
+          class="PostFrom__PreviewImage"
+          :src="`http://localhost:3085/${item}`"
+          alt="이미지"
+        />
+        <button
+          class="PostFrom__Btn Remove"
+          type="button"
+          @click="removeImage(index)"
+        >
+          삭제
+        </button>
+      </div>
     </div>
   </form>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "PostForm",
   computed: {
     user() {
       return this.$store.state.users.me;
-    }
+    },
+    ...mapState("posts", ["imagePaths"]),
   },
   data() {
     return {
-      content: ""
+      content: "",
     };
   },
   methods: {
@@ -29,11 +68,11 @@ export default {
           content: this.content,
           user: {
             email: this.user.email,
-            nickname: this.user.nickname
+            nickname: this.user.nickname,
           },
           Commnets: [],
           image: [],
-          createAt: Date.now()
+          createAt: Date.now(),
         });
       } catch (error) {
         console.log(error);
@@ -42,9 +81,20 @@ export default {
       }
     },
     UploadPhoto() {
-      console.log("사진");
-    }
-  }
+      this.$refs.imageInput.click();
+    },
+    onChangeImages(e) {
+      const imageFormData = new FormData();
+      [].forEach.call(e.target.files, (f) => {
+        imageFormData.append("image", f);
+      });
+      this.$store.dispatch("posts/uploadImages", imageFormData);
+      console.log("imagePaths", this.imagePaths);
+    },
+    removeImage(index) {
+      this.$store.commit("posts/removeImagePath", index);
+    },
+  },
 };
 </script>
 
@@ -98,5 +148,33 @@ export default {
 .PostFrom__Btn:active,
 .PostFrom__Btn:focus {
   outline: none;
+}
+
+.PostFrom__Btn.Remove {
+  margin-top: 5px;
+  width: 30px;
+  height: 20px;
+  font-size: 10px;
+  align-self: center;
+}
+
+.PostFrom__PreviewImageContainenr {
+  display: flex;
+  margin-top: 10px;
+}
+
+.PostFrom__PreviewImageWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.PostFrom__PreviewImage {
+  border: 1px solid #45b416;
+  border-radius: 5px;
+  width: 40px;
+  height: 40px;
 }
 </style>
