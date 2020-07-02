@@ -4,7 +4,7 @@
     <div class="PostCard__ContentLayout">
       <div class="PostCard__AuthorLayout">
         <nuxt-link :to="`/user/${postData.id}`">
-          <div class="PostCard__Author">{{postData.user.nickname}}</div>
+          <div class="PostCard__Author">{{postData.User.nickname}}</div>
         </nuxt-link>
         <button class="PostCard__FollowBtn">팔로우</button>
       </div>

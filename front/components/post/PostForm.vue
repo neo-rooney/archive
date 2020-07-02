@@ -1,45 +1,15 @@
 <template>
   <form class="PostFrom__Container" @submit.prevent.capture="onSubmitContents">
-    <textarea
-      placeholder="어떤 신기한 일이 있었나요?"
-      class="PostFrom__Contents"
-      v-model="content"
-    ></textarea>
+    <textarea placeholder="어떤 신기한 일이 있었나요?" class="PostFrom__Contents" v-model="content"></textarea>
     <div class="PostFrom__ButtonBox">
-      <button
-        type="button"
-        class="PostFrom__Btn Image"
-        @click.stop="UploadPhoto"
-      >
-        사진
-      </button>
-      <input
-        ref="imageInput"
-        type="file"
-        multiple
-        hidden
-        @change="onChangeImages"
-      />
+      <button type="button" class="PostFrom__Btn Image" @click.stop="UploadPhoto">사진</button>
+      <input ref="imageInput" type="file" multiple hidden @change="onChangeImages" />
       <input type="submit" class="PostFrom__Btn Post" value="POST" />
     </div>
     <div v-if="imagePaths" class="PostFrom__PreviewImageContainenr">
-      <div
-        class="PostFrom__PreviewImageWrapper"
-        v-for="(item, index) in imagePaths"
-        :key="index"
-      >
-        <img
-          class="PostFrom__PreviewImage"
-          :src="`http://localhost:3085/${item}`"
-          alt="이미지"
-        />
-        <button
-          class="PostFrom__Btn Remove"
-          type="button"
-          @click="removeImage(index)"
-        >
-          삭제
-        </button>
+      <div class="PostFrom__PreviewImageWrapper" v-for="(item, index) in imagePaths" :key="index">
+        <img class="PostFrom__PreviewImage" :src="`http://localhost:3085/${item}`" alt="이미지" />
+        <button class="PostFrom__Btn Remove" type="button" @click="removeImage(index)">삭제</button>
       </div>
     </div>
   </form>
@@ -53,26 +23,18 @@ export default {
     user() {
       return this.$store.state.users.me;
     },
-    ...mapState("posts", ["imagePaths"]),
+    ...mapState("posts", ["imagePaths"])
   },
   data() {
     return {
-      content: "",
+      content: ""
     };
   },
   methods: {
     async onSubmitContents() {
       try {
         await this.$store.dispatch("posts/postContent", {
-          id: Date.now(),
-          content: this.content,
-          user: {
-            email: this.user.email,
-            nickname: this.user.nickname,
-          },
-          Commnets: [],
-          image: [],
-          createAt: Date.now(),
+          content: this.content
         });
       } catch (error) {
         console.log(error);
@@ -85,7 +47,7 @@ export default {
     },
     onChangeImages(e) {
       const imageFormData = new FormData();
-      [].forEach.call(e.target.files, (f) => {
+      [].forEach.call(e.target.files, f => {
         imageFormData.append("image", f);
       });
       this.$store.dispatch("posts/uploadImages", imageFormData);
@@ -93,8 +55,8 @@ export default {
     },
     removeImage(index) {
       this.$store.commit("posts/removeImagePath", index);
-    },
-  },
+    }
+  }
 };
 </script>
 

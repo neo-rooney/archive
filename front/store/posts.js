@@ -10,6 +10,7 @@ const LIMIT = 10;
 export const mutations = {
   postContent(state, payload) {
     state.contents.unshift(payload);
+    state.imagePaths = [];
   },
   deleteContent(state, payload) {
     const newArr = state.contents.filter((item) => item.id !== payload.id);
@@ -28,7 +29,7 @@ export const mutations = {
       .map((item) => ({
         id: Math.random().toString(),
         content: "Hello infinite scrolling",
-        user: {
+        User: {
           id: 1,
           email: "bch3454@naver.com",
           nickname: "rooney",
@@ -41,16 +42,32 @@ export const mutations = {
     state.hasMoreContents = fakeContents.length === LIMIT;
   },
   concatImagePaths(state, payload) {
-    state.imagePaths = state.imagePaths.concat(payload)
+    state.imagePaths = state.imagePaths.concat(payload);
   },
   removeImagePath(state, payload) {
-    state.imagePaths.splice(payload, 1)
-  }
+    state.imagePaths.splice(payload, 1);
+  },
 };
 
 export const actions = {
-  postContent({ commit }, payload) {
-    commit("postContent", payload);
+  postContent({ state, commit }, payload) {
+    this.$axios
+      .post(
+        "http://localhost:3085/post",
+        {
+          content: payload.content,
+          imagePaths: state.imagePaths,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        commit("postContent", res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
   deleteContent({ commit }, payload) {
     commit("deleteContent", payload);
