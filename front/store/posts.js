@@ -63,6 +63,7 @@ export const actions = {
         }
       )
       .then((res) => {
+        console.log(res.data)
         commit("postContent", res.data);
       })
       .catch((err) => {
