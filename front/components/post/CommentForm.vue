@@ -29,12 +29,8 @@ export default {
       if (this.content.length) {
         try {
           await this.$store.dispatch("posts/postCommnet", {
-            id: Date.now(),
             postId: this.postId,
-            content: this.content,
-            user: {
-              nickname: this.user.nickname
-            }
+            content: this.content
           });
         } catch (error) {
           console.log(error);

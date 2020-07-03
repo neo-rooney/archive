@@ -8,6 +8,11 @@ const TOTAL_CONTENTS = 51;
 const LIMIT = 10;
 
 export const mutations = {
+  //게시물
+  loadContents(state, payload) {
+    state.contents = state.contents.concat(payload);
+    state.hasMoreContents = payload.length === LIMIT;
+  },
   postContent(state, payload) {
     state.contents.unshift(payload);
     state.imagePaths = [];
@@ -16,36 +21,24 @@ export const mutations = {
     const newArr = state.contents.filter((item) => item.id !== payload.id);
     state.contents = newArr;
   },
-  postComment(state, payload) {
-    const index = state.contents.findIndex(
-      (item) => item.id === payload.postId
-    );
-    state.contents[index].Commnets.unshift(payload);
-  },
-  loadContents(state, payload) {
-    let DIFF = TOTAL_CONTENTS - state.contents.length;
-    const fakeContents = Array(DIFF > LIMIT ? LIMIT : DIFF)
-      .fill()
-      .map((item) => ({
-        id: Math.random().toString(),
-        content: "Hello infinite scrolling",
-        User: {
-          id: 1,
-          email: "bch3454@naver.com",
-          nickname: "rooney",
-        },
-        Commnets: [],
-        image: [],
-        createAt: Date.now(),
-      }));
-    state.contents = state.contents.concat(fakeContents);
-    state.hasMoreContents = fakeContents.length === LIMIT;
-  },
   concatImagePaths(state, payload) {
     state.imagePaths = state.imagePaths.concat(payload);
   },
   removeImagePath(state, payload) {
     state.imagePaths.splice(payload, 1);
+  },
+  //댓글
+  loadComments(state, payload) {
+    const index = state.contents.findIndex(
+      (item) => item.id === payload.postId
+    );
+    state.contents[index].Commnets = payload;
+  },
+  postComment(state, payload) {
+    const index = state.contents.findIndex(
+      (item) => item.id === payload.postId
+    );
+    state.contents[index].Commnets.unshift(payload);
   },
 };
 
@@ -63,7 +56,7 @@ export const actions = {
         }
       )
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         commit("postContent", res.data);
       })
       .catch((err) => {
@@ -74,12 +67,41 @@ export const actions = {
     commit("deleteContent", payload);
   },
   postCommnet({ commit }, payload) {
-    commit("postComment", payload);
+    this.$axios
+      .post(
+        `http://localhost:3085/post/${payload.postId}/comment`,
+        {
+          content: payload.content,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        commit("postComment", res.data);
+      })
+      .catch(() => {});
   },
+
   loadContents({ commit, state }, payload) {
     if (state.hasMoreContents) {
-      commit("loadContents");
+      this.$axios
+        .get(
+          `http://localhost:3085/posts?offset=${state.contents.length}&limit=10`
+        )
+        .then((res) => {
+          commit("loadContents", res.data);
+        })
+        .catch(() => {});
     }
+  },
+
+  loadComments({ commit, payload }) {
+    this.$axios
+      .get(`http://localhost:3085/post/${payload.postId}/comments`)
+      .then((res) => {
+        commit("loadComments", res.data);
+      });
   },
   uploadImages({ commit }, payload) {
     this.$axios

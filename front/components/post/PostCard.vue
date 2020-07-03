@@ -37,7 +37,7 @@
             <span>{{item.user.nickname[0]}}</span>
           </div>
           <div class="PostCard__CommentContentLayout">
-            <div class="PostCard__CommentNickname">{{item.user.nickname}}</div>
+            <div class="PostCard__CommentNickname">{{item.User.nickname}}</div>
             <span class="PostCard__CommentContent">{{item.content}}</span>
           </div>
         </li>
@@ -71,6 +71,11 @@ export default {
       this.isMore = !this.isMore;
     },
     onClickCommentBtn() {
+      if (!this.comment) {
+        this.$store.dispatch("posts/loadComments", {
+          postId: this.postData.id
+        });
+      }
       this.comment = !this.comment;
     },
     async deletePost() {
