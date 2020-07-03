@@ -43,74 +43,76 @@ export const mutations = {
 };
 
 export const actions = {
-  postContent({ state, commit }, payload) {
-    this.$axios
-      .post(
-        "http://localhost:3085/post",
-        {
-          content: payload.content,
-          imagePaths: state.imagePaths,
-        },
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-        commit("postContent", res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  },
-  deleteContent({ commit }, payload) {
-    commit("deleteContent", payload);
-  },
-  postCommnet({ commit }, payload) {
-    this.$axios
-      .post(
-        `http://localhost:3085/post/${payload.postId}/comment`,
-        {
-          content: payload.content,
-        },
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        commit("postComment", res.data);
-      })
-      .catch(() => {});
-  },
+         postContent({ state, commit }, payload) {
+           this.$axios
+             .post(
+               "http://localhost:3085/post",
+               {
+                 content: payload.content,
+                 imagePaths: state.imagePaths,
+               },
+               {
+                 withCredentials: true,
+               }
+             )
+             .then((res) => {
+               commit("postContent", res.data);
+             })
+             .catch((err) => {
+               console.error(err);
+             });
+         },
+         deleteContent({ commit }, payload) {
+           commit("deleteContent", payload);
+         },
+         postCommnet({ commit }, payload) {
+           this.$axios
+             .post(
+               `http://localhost:3085/post/${payload.postId}/comment`,
+               {
+                 content: payload.content,
+               },
+               {
+                 withCredentials: true,
+               }
+             )
+             .then((res) => {
+               commit("postComment", res.data);
+             })
+             .catch(() => {});
+         },
 
-  loadContents({ commit, state }, payload) {
-    if (state.hasMoreContents) {
-      this.$axios
-        .get(
-          `http://localhost:3085/posts?offset=${state.contents.length}&limit=10`
-        )
-        .then((res) => {
-          commit("loadContents", res.data);
-        })
-        .catch(() => {});
-    }
-  },
+         loadContents({ commit, state }, payload) {
+           if (state.hasMoreContents) {
+             this.$axios
+               .get(
+                 `http://localhost:3085/posts?offset=${state.contents.length}&limit=10`
+               )
+               .then((res) => {
+                 commit("loadContents", res.data);
+               })
+               .catch((err) => {
+                 console.error(err);
+               });
+           }
+         },
 
-  loadComments({ commit, payload }) {
-    this.$axios
-      .get(`http://localhost:3085/post/${payload.postId}/comments`)
-      .then((res) => {
-        commit("loadComments", res.data);
-      });
-  },
-  uploadImages({ commit }, payload) {
-    this.$axios
-      .post("http://localhost:3085/post/images", payload, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        commit("concatImagePaths", res.data);
-      })
-      .catch(() => {});
-  },
-};
+         loadComments({ commit }, payload) {
+           this.$axios
+             .get(`http://localhost:3085/post/${payload.postId}/comments`)
+             .then((res) => {
+               console.log('res', res)
+               commit("loadComments", res.data);
+             });
+         },
+         uploadImages({ commit }, payload) {
+           this.$axios
+             .post("http://localhost:3085/post/images", payload, {
+               withCredentials: true,
+             })
+             .then((res) => {
+               commit("concatImagePaths", res.data);
+             })
+             .catch(() => {});
+         },
+       };

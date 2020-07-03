@@ -61,6 +61,16 @@ export const mutations = {
 };
 
 export const actions = {
+  async loadUser({ commit }) {
+    try {
+      const { data } = await this.$axios.get("http://localhost:3085/user", {
+        withCredentials: true,
+      });
+      commit("setMe", data);
+    } catch (err) {
+      console.error(err);
+    }
+  },
   signUp({ commit }, payload) {
     this.$axios
       .post(

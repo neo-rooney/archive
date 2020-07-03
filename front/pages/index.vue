@@ -16,9 +16,10 @@ export default {
     PostCard
   },
   fetch({ store }) {
-    store.dispatch("posts/loadContents");
+    return store.dispatch("posts/loadContents");
   },
   mounted() {
+    console.log("contents", this.contents)
     window.addEventListener("scroll", this.infinitiScroll);
   },
   beforeDestory() {

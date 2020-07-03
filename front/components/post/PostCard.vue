@@ -34,7 +34,7 @@
       <ul>
         <li v-for="item in postData.Commnets" :key="item.id" class="PostCard__CommentLayout">
           <div class="PostCard__CommentAvatar">
-            <span>{{item.user.nickname[0]}}</span>
+            <span>{{item.User.nickname[0]}}</span>
           </div>
           <div class="PostCard__CommentContentLayout">
             <div class="PostCard__CommentNickname">{{item.User.nickname}}</div>
@@ -71,6 +71,7 @@ export default {
       this.isMore = !this.isMore;
     },
     onClickCommentBtn() {
+      console.log("postData", this.postData.id)
       if (!this.comment) {
         this.$store.dispatch("posts/loadComments", {
           postId: this.postData.id
