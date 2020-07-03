@@ -32,7 +32,7 @@
     <div class="PostCard__CommentContainer" v-if="comment">
       <CommentForm :postId="postData.id" />
       <ul>
-        <li v-for="item in postData.Commnets" :key="item.id" class="PostCard__CommentLayout">
+        <li v-for="item in postData.Comments" :key="item.id" class="PostCard__CommentLayout">
           <div class="PostCard__CommentAvatar">
             <span>{{item.User.nickname[0]}}</span>
           </div>

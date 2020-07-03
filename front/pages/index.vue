@@ -13,13 +13,12 @@ export default {
   name: "Home",
   components: {
     PostForm,
-    PostCard
+    PostCard,
   },
   fetch({ store }) {
     return store.dispatch("posts/loadContents");
   },
   mounted() {
-    console.log("contents", this.contents)
     window.addEventListener("scroll", this.infinitiScroll);
   },
   beforeDestory() {
@@ -34,7 +33,7 @@ export default {
     },
     hasMoreContents() {
       return this.$store.state.posts.hasMoreContents;
-    }
+    },
   },
   methods: {
     infinitiScroll() {
@@ -46,10 +45,9 @@ export default {
           this.$store.dispatch("posts/loadContents");
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
