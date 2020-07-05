@@ -70,7 +70,7 @@ export const actions = {
   async postCommnet({ commit }, payload) {
     try {
       const { data } = await this.$axios.post(
-        `http://localhost:3085/post/${payload.postId}/comment`,
+        `/post/${payload.postId}/comment`,
         {
           content: payload.content,
         },
@@ -88,7 +88,7 @@ export const actions = {
     if (state.hasMoreContents) {
       try {
         const { data } = await this.$axios.get(
-          `http://localhost:3085/posts?offset=${state.contents.length}&limit=10`
+          `/posts?offset=${state.contents.length}&limit=10`
         );
         commit("loadContents", data);
       } catch (err) {
@@ -100,7 +100,7 @@ export const actions = {
   async loadComments({ commit }, payload) {
     try {
       const { data } = await this.$axios.get(
-        `http://localhost:3085/post/${payload.postId}/comments`
+        `/post/${payload.postId}/comments`
       );
       commit("loadComments", {
         postId: payload.postId,
@@ -112,7 +112,7 @@ export const actions = {
   },
   uploadImages({ commit }, payload) {
     this.$axios
-      .post("http://localhost:3085/post/images", payload, {
+      .post("/post/images", payload, {
         withCredentials: true,
       })
       .then((res) => {

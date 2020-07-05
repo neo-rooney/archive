@@ -12,4 +12,9 @@ module.exports = {
     ],
   },
   css: ["css/global.css"],
+  axios: {
+    browerBaseURL: "http://localhost:3085",
+    baseURL: "http://localhost:3085",
+    https: false,
+  },
 };

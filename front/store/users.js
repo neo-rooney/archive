@@ -63,7 +63,7 @@ export const mutations = {
 export const actions = {
   async loadUser({ commit }) {
     try {
-      const { data } = await this.$axios.get("http://localhost:3085/user", {
+      const { data } = await this.$axios.get("/user", {
         withCredentials: true,
       });
       commit("setMe", data);
@@ -74,7 +74,7 @@ export const actions = {
   signUp({ commit }, payload) {
     this.$axios
       .post(
-        "http://localhost:3085/user",
+        "/user",
         {
           email: payload.email,
           nickname: payload.nickname,
@@ -95,7 +95,7 @@ export const actions = {
   logIn({ commit }, payload) {
     this.$axios
       .post(
-        "http://localhost:3085/user/login",
+        "/user/login",
         {
           email: payload.email,
           password: payload.password,
@@ -114,7 +114,7 @@ export const actions = {
   logOut({ commit }) {
     this.$axios
       .post(
-        "http://localhost:3085/user/logout",
+        "/user/logout",
         {},
         {
           withCredentials: true,
