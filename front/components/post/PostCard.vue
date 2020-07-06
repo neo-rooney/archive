@@ -71,7 +71,7 @@ export default {
       this.isMore = !this.isMore;
     },
     onClickCommentBtn() {
-      console.log("postData", this.postData.id)
+      console.log("postData", this.postData.id);
       if (!this.comment) {
         this.$store.dispatch("posts/loadComments", {
           postId: this.postData.id
@@ -79,12 +79,10 @@ export default {
       }
       this.comment = !this.comment;
     },
-    async deletePost() {
-      try {
-        await this.$store.dispatch("posts/deleteContent", this.postData);
-      } catch (error) {
-        console.log(error);
-      }
+    deletePost() {
+      this.$store.dispatch("posts/deleteContent", {
+        postId: this.postData.id
+      });
     }
   }
 };

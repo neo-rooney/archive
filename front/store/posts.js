@@ -18,7 +18,7 @@ export const mutations = {
     state.imagePaths = [];
   },
   deleteContent(state, payload) {
-    const newArr = state.contents.filter((item) => item.id !== payload.id);
+    const newArr = state.contents.filter((item) => item.id !== payload.postId);
     state.contents = newArr;
   },
   concatImagePaths(state, payload) {
@@ -64,8 +64,13 @@ export const actions = {
         console.error(err);
       });
   },
-  deleteContent({ commit }, payload) {
-    commit("deleteContent", payload);
+  async deleteContent({ commit }, payload) {
+    const { data } = await this.$axios.delete(`/post/${payload.postId}/`, {
+      withCredentials: true,
+    });
+    if (data.success) {
+      commit("deleteContent", payload);
+    }
   },
   async postCommnet({ commit }, payload) {
     try {
