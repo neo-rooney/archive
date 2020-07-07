@@ -51,7 +51,7 @@ export const actions = {
         "http://localhost:3085/post",
         {
           content: payload.content,
-          imagePaths: state.imagePaths,
+          image: state.imagePaths,
         },
         {
           withCredentials: true,

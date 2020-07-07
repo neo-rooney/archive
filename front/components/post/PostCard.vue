@@ -8,6 +8,7 @@
         </nuxt-link>
         <button class="PostCard__FollowBtn">팔로우</button>
       </div>
+      <post-image :images="postData.Images || []" />
       <div class="PostCard__Content">{{postData.content}}</div>
       <div class="PostCard__CreateAt">{{postData.createAt}}</div>
     </div>
@@ -48,11 +49,13 @@
 
 <script>
 import CommentForm from "@/components/post/CommentForm.vue";
+import PostImage from "@/components/post/PostImage.vue";
 
 export default {
   name: "PostCard",
   components: {
-    CommentForm
+    CommentForm,
+    PostImage
   },
   props: {
     postData: {
@@ -146,6 +149,7 @@ a::after {
 }
 
 .PostCard__Content {
+  margin-top: 15px;
   margin-bottom: 15px;
 }
 

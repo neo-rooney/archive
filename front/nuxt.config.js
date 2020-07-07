@@ -17,4 +17,5 @@ module.exports = {
     baseURL: "http://localhost:3085",
     https: false,
   },
+  plugins: [{ src: "@/plugins/vue-slick-carousel.js" }],
 };
