@@ -44,12 +44,29 @@ router.post("/", isLoggedIn, async (req, res, next) => {
       await newPost.addHashtags(result.map((r) => r[0]));
       //다 대 다 관계에서는 add, get을 붙이고 model이름의 복수형 메서드가 자동생성된다.! 시퀄라이즈가 해주는것!
     }
+    if (req.body.image) {
+      if (Array.isArray(req.body.image)) {
+        const images = await Promise.all(
+          req.body.image.map((image) => {
+            return db.Image.create({ src: image, PostId: newPost.id });
+          })
+        );
+      } else {
+        const image = await db.Image.create({
+          src: req.body.image,
+          PostId: newPost.id,
+        });
+      }
+    }
     const fullPost = await db.Post.findOne({
       where: { id: newPost.id },
       include: [
         {
           model: db.User,
           attributes: ["id", "nickname"],
+        },
+        {
+          model: db.Image,
         },
       ],
     });
@@ -129,5 +146,7 @@ router.post("/:id/comment", isLoggedIn, async (req, res, next) => {
     next(err);
   }
 });
+
+router.post("/:id/retweet", async (req, res, next) => {});
 
 module.exports = router;

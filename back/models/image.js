@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     "Image",
     {
       //테이블명 images
-      content: {
+      src: {
         type: DataTypes.STRING(200),
         allowNull: false,
       },
@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   Image.associate = (db) => {
-    db.Image.belongsTo(db.Post) //UserId
+    db.Image.belongsTo(db.Post); //UserId
   };
   return Image;
 };
