@@ -65,11 +65,15 @@ export const actions = {
       });
   },
   async deleteContent({ commit }, payload) {
-    const { data } = await this.$axios.delete(`/post/${payload.postId}/`, {
-      withCredentials: true,
-    });
-    if (data.success) {
-      commit("deleteContent", payload);
+    try {
+      const { data } = await this.$axios.delete(`/post/${payload.postId}/`, {
+        withCredentials: true,
+      });
+      if (data.success) {
+        commit("deleteContent", payload);
+      }
+    } catch (err) {
+      console.error(err);
     }
   },
   async postCommnet({ commit }, payload) {
@@ -123,6 +127,8 @@ export const actions = {
       .then((res) => {
         commit("concatImagePaths", res.data);
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.error(err);
+      });
   },
 };
