@@ -7,6 +7,7 @@
   "author": "Rooney",
   "license": "MIT",
   "dependencies": {
+    "@fortawesome/free-regular-svg-icons": "^5.13.1",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@nuxtjs/axios": "^5.10.1",
     "axios": "^0.19.2",

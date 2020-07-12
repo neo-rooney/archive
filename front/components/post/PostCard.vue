@@ -14,7 +14,7 @@
     </div>
     <div class="PostCard__IconBox">
       <font-awesome-icon icon="retweet" class="PoastCard__Icon Retweet" />
-      <font-awesome-icon icon="heart" class="PoastCard__Icon Heart" />
+      <font-awesome-icon :icon="['far','heart']" class="PoastCard__Icon Heart" />
       <font-awesome-icon icon="heart" class="PoastCard__Icon Heart" />
       <font-awesome-icon
         icon="comment-alt"
