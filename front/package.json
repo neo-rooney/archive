@@ -1,0 +1,11 @@
+{
+  "name": "twitterTutorial__nuxt-express-mysql",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "rooney",
+  "license": "MIT",
+  "dependencies": {
+    "nuxt": "^2.13.3",
+    "vue": "^2.6.11"
+  }
+}
