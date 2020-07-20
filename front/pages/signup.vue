@@ -1,9 +1,19 @@
 <template>
-  <div>회원가입</div>
+  <nav>
+    <main-navigation-bar />
+    <div>프로필</div>
+  </nav>
 </template>
 
 <script>
-export default {};
+import MainNavigationBar from "@/components/navigation/MainNavigationBar.vue";
+
+export default {
+  name: "Signup",
+  components: {
+    MainNavigationBar
+  }
+};
 </script>
 
 <style scoped>

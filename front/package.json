@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "nuxt": "^2.13.3",
+    "nuxt": "^2.12.2",
     "vue": "^2.6.11"
   }
 }

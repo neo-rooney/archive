@@ -1,9 +1,21 @@
 <template>
-  <div>홈</div>
+  <div>
+    <nav>
+      <main-navigation-bar />
+      <div>홈</div>
+    </nav>
+  </div>
 </template>
 
 <script>
-export default {};
+import MainNavigationBar from "@/components/navigation/MainNavigationBar.vue";
+
+export default {
+  name: "Home",
+  components: {
+    MainNavigationBar
+  }
+};
 </script>
 
 <style scoped>
