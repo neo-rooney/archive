@@ -1,18 +1,22 @@
 <template>
-  <div>프로필</div>
+  <div>
+    <nav>
+      <main-navigation-bar />
+      <nuxt />
+    </nav>
+  </div>
 </template>
 
 <script>
 import MainNavigationBar from "@/components/navigation/MainNavigationBar.vue";
 
 export default {
-  name: "Profile",
+  name: "MainLayout",
   components: {
     MainNavigationBar
-  },
-  layout:'profileLayout'
+  }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 </style>

@@ -1,20 +1,12 @@
 <template>
-  <div>
-    <nav>
-      <main-navigation-bar />
-      <div>홈</div>
-    </nav>
-  </div>
+  <div>홈</div>
 </template>
 
 <script>
 import MainNavigationBar from "@/components/navigation/MainNavigationBar.vue";
 
 export default {
-  name: "Home",
-  components: {
-    MainNavigationBar
-  }
+  name: "Home"
 };
 </script>
 

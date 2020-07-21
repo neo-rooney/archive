@@ -1,8 +1,5 @@
 <template>
-  <nav>
-    <main-navigation-bar />
-    <div>프로필</div>
-  </nav>
+  <div>프로필</div>
 </template>
 
 <script>
