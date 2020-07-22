@@ -9,8 +9,7 @@ export default {
   name: "Profile",
   components: {
     MainNavigationBar
-  },
-  layout:'profileLayout'
+  }
 };
 </script>
 

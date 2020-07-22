@@ -1,5 +1,5 @@
 <template>
-  <div>프로필</div>
+  <div>회원가입</div>
 </template>
 
 <script>
