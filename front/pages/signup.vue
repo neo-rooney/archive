@@ -3,13 +3,9 @@
 </template>
 
 <script>
-import MainNavigationBar from "@/components/navigation/MainNavigationBar.vue";
 
 export default {
   name: "Signup",
-  components: {
-    MainNavigationBar
-  }
 };
 </script>
 
