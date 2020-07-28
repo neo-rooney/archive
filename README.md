@@ -1,2 +1,0 @@
-# basicTurorial-vue
-basicTurorial-vue
