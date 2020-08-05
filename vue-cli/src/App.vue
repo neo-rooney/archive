@@ -1,28 +1,30 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <!-- HTML 코드는 여기! -->
+    <my-header :propsdata="num" v-on:emitEvent="plusNum" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import MyHeader from "./components/MyHeader.vue";
 export default {
-  name: 'App',
+  //Javascript 코드는 여기
   components: {
-    HelloWorld
-  }
-}
+    "my-header": MyHeader,
+  },
+  data: function () {
+    return {
+      num: 10,
+    };
+  },
+  methods: {
+    plusNum: function () {
+      this.num = this.num + 1;
+    },
+  },
+};
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style scoped>
+/* CSS코드느 여기 */
 </style>
