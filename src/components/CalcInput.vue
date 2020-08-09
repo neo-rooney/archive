@@ -2,30 +2,30 @@
   <table>
     <tr>
       <td colspan="3" @click="onClickReset">초기화</td>
-      <td @click="onClickItem">/</td>
+      <td @click="onClickItem" class="Operator">/</td>
     </tr>
     <tr>
       <td @click="onClickItem">7</td>
       <td @click="onClickItem">8</td>
       <td @click="onClickItem">9</td>
-      <td @click="onClickItem">x</td>
+      <td @click="onClickItem" class="Operator">x</td>
     </tr>
     <tr>
       <td @click="onClickItem">4</td>
       <td @click="onClickItem">5</td>
       <td @click="onClickItem">6</td>
-      <td @click="onClickItem">-</td>
+      <td @click="onClickItem" class="Operator">-</td>
     </tr>
     <tr>
       <td @click="onClickItem">1</td>
       <td @click="onClickItem">2</td>
       <td @click="onClickItem">3</td>
-      <td @click="onClickItem">+</td>
+      <td @click="onClickItem" class="Operator">+</td>
     </tr>
     <tr>
       <td colspan="2" @click="onClickItem">0</td>
       <td @click="onClickItem">.</td>
-      <td @click="getResutl">=</td>
+      <td @click="getResutl" class="Operator">=</td>
     </tr>
   </table>
 </template>
@@ -35,25 +35,23 @@ export default {
   data() {
     return {
       myInput: "",
-      myResult: "",
     };
   },
   methods: {
     onClickItem: function (e) {
       this.myInput = this.myInput + e.target.innerHTML;
-      console.log(this.myInput);
+      this.$emit("emitInputValue", this.myInput);
     },
     getResutl: function () {
       let input = this.myInput;
       if (input.indexOf("x") !== -1) {
         input = input.replace(/x/g, "*");
       }
-      this.myResult = eval(input);
-      console.log(this.myResult);
+      this.myInput = eval(input);
+      this.$emit("emitInputValue", this.myInput);
     },
     onClickReset: function () {
       this.myInput = "";
-      this.myResult = "";
     },
   },
 };
@@ -64,12 +62,20 @@ table {
   width: 100%;
   border: 1px solid #000000;
   border-collapse: collapse;
+  background-color: #7f8082;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 800;
 }
 
 td {
   width: 25%;
   height: 50px;
-  border: 1px solid #000000;
+  border: 1px solid #5d5e60;
   text-align: center;
+}
+
+.Operator {
+  background-color: #fd9f0b;
 }
 </style>
