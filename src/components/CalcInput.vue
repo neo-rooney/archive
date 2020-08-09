@@ -1,7 +1,7 @@
 <template>
   <table>
     <tr>
-      <td colspan="3" @click="onClickItem">초기화</td>
+      <td colspan="3" @click="onClickReset">초기화</td>
       <td @click="onClickItem">/</td>
     </tr>
     <tr>
@@ -25,16 +25,35 @@
     <tr>
       <td colspan="2" @click="onClickItem">0</td>
       <td @click="onClickItem">.</td>
-      <td @click="onClickItem">=</td>
+      <td @click="getResutl">=</td>
     </tr>
   </table>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      myInput: "",
+      myResult: "",
+    };
+  },
   methods: {
     onClickItem: function (e) {
-      console.log(e.target.innerHTML);
+      this.myInput = this.myInput + e.target.innerHTML;
+      console.log(this.myInput);
+    },
+    getResutl: function () {
+      let input = this.myInput;
+      if (input.indexOf("x") !== -1) {
+        input = input.replace(/x/g, "*");
+      }
+      this.myResult = eval(input);
+      console.log(this.myResult);
+    },
+    onClickReset: function () {
+      this.myInput = "";
+      this.myResult = "";
     },
   },
 };

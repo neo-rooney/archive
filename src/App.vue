@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <CalcResult></CalcResult>
-    <CalcInput></CalcInput>
-    <CalcHistory></CalcHistory>
+  <div class="Home__Container">
+    <calc-result class="Home__Result" />
+    <calc-input class="Home__Input" />
+    <calc-history class="Home__History" />
   </div>
 </template>
 
@@ -21,4 +21,10 @@ export default {
 </script>
 
 <style scoped>
+.Home__Container {
+  padding: 20px;
+}
+.Home__Result {
+  margin-bottom: 10px;
+}
 </style>
