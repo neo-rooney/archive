@@ -28,7 +28,6 @@ export default {
   methods: {
     inputValue: function (value) {
       this.clickValue = value;
-      console.log("clickValue", this.clickValue);
     },
   },
 };

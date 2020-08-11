@@ -47,6 +47,7 @@ export default {
       if (input.indexOf("x") !== -1) {
         input = input.replace(/x/g, "*");
       }
+      localStorage.setItem(this.myInput, this.myInput + "=" + eval(input));
       this.myInput = eval(input);
       this.$emit("emitInputValue", this.myInput);
     },
