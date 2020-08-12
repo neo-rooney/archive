@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div v-for="(item, index) in myHistory" :key="index" class="CalcHistoy__Item">{{item}}</div>
+    <div v-for="(item, index) in myHistory" :key="index" class="CalcHistoy__Item">
+      <span>{{item}}</span>
+      <button class="CalcHistoy__DeleteBtn" @click="onClickDelete(index, item)">삭제</button>
+    </div>
   </div>
 </template>
 
@@ -19,11 +22,18 @@ export default {
       }
     }
   },
+  methods: {
+    onClickDelete: function (index, item) {
+      localStorage.removeItem(item);
+      this.myHistory.splice(index, 1);
+    },
+  },
 };
 </script>
 
 <style scoped>
 .CalcHistoy__Item {
+  position: relative;
   width: 100%;
   height: 30;
   background-color: #7f8082;
@@ -34,5 +44,11 @@ export default {
   box-sizing: border-box;
   letter-spacing: 10px;
   text-align: center;
+}
+
+.CalcHistoy__DeleteBtn {
+  position: absolute;
+  right: 5px;
+  top: 3px;
 }
 </style>

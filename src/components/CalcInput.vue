@@ -25,7 +25,7 @@
     <tr>
       <td colspan="2" @click="onClickItem">0</td>
       <td @click="onClickItem">.</td>
-      <td @click="getResutl" class="Operator">=</td>
+      <td @click="getResult" class="Operator">=</td>
     </tr>
   </table>
 </template>
@@ -42,17 +42,21 @@ export default {
       this.myInput = this.myInput + e.target.innerHTML;
       this.$emit("emitInputValue", this.myInput);
     },
-    getResutl: function () {
+    getResult: function () {
       let input = this.myInput;
       if (input.indexOf("x") !== -1) {
         input = input.replace(/x/g, "*");
       }
-      localStorage.setItem(this.myInput, this.myInput + "=" + eval(input));
+      localStorage.setItem(
+        this.myInput + "=" + eval(input),
+        this.myInput + "=" + eval(input)
+      );
       this.myInput = eval(input);
       this.$emit("emitInputValue", this.myInput);
     },
     onClickReset: function () {
       this.myInput = "";
+      this.$emit("emitInputValue", this.myInput);
     },
   },
 };
