@@ -3,8 +3,8 @@
     <div class="Home__Container">
       <header class="Home__Header">Vue Calculator</header>
       <calc-result class="Home__Result" :propsdata="clickValue" />
-      <calc-input class="Home__Input" @emitInputValue="inputValue" />
-      <calc-history class="Home__History" />
+      <calc-input class="Home__Input" @emitInputValue="inputValue" @emitNewInput="newInput" />
+      <calc-history class="Home__History" :propsHistory="myHistory" />
     </div>
   </div>
 </template>
@@ -20,14 +20,30 @@ export default {
     CalcInput,
     CalcHistory,
   },
+  created: function () {
+    if (localStorage.length > 0) {
+      for (var i = 0; i < localStorage.length; i++) {
+        if (localStorage.key(i) !== "loglevel:webpack-dev-server")
+          this.myHistory.push(localStorage.getItem(localStorage.key(i)));
+      }
+    }
+  },
   data: function () {
     return {
       clickValue: "",
+      myHistory: [],
     };
   },
   methods: {
     inputValue: function (value) {
       this.clickValue = value;
+    },
+    newInput: function (value) {
+      localStorage.setItem(
+        value.input + "=" + value.result,
+        value.input + "=" + value.result
+      );
+      this.myHistory.push(value.input + "=" + value.result);
     },
   },
 };

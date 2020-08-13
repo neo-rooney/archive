@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="(item, index) in myHistory" :key="index" class="CalcHistoy__Item">
+    <div v-for="(item, index) in propsHistory" :key="index" class="CalcHistoy__Item">
       <span>{{item}}</span>
       <button class="CalcHistoy__DeleteBtn" @click="onClickDelete(index, item)">삭제</button>
     </div>
@@ -9,19 +9,7 @@
 
 <script>
 export default {
-  data: function () {
-    return {
-      myHistory: [],
-    };
-  },
-  created: function () {
-    if (localStorage.length > 0) {
-      for (var i = 0; i < localStorage.length; i++) {
-        if (localStorage.key(i) !== "loglevel:webpack-dev-server")
-          this.myHistory.push(localStorage.getItem(localStorage.key(i)));
-      }
-    }
-  },
+  props:['propsHistory'],
   methods: {
     onClickDelete: function (index, item) {
       localStorage.removeItem(item);
