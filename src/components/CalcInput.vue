@@ -35,9 +35,14 @@ export default {
   data() {
     return {
       myInput: "",
+      myResult: "",
     };
   },
   methods: {
+    onClickReset: function () {
+      this.myInput = "";
+      this.$emit("emitInputValue", this.myInput);
+    },
     onClickItem: function (e) {
       this.myInput = this.myInput + e.target.innerHTML;
       this.$emit("emitInputValue", this.myInput);
@@ -47,16 +52,12 @@ export default {
       if (input.indexOf("x") !== -1) {
         input = input.replace(/x/g, "*");
       }
-      this.$emit("emitNewInput", {
-        input: input,
-        result: eval(input),
+      this.myResult = eval(input);
+      this.$emit("emitResult", {
+        input: this.myInput,
+        result: this.myResult,
       });
-      this.myInput = eval(input);
-      this.$emit("emitInputValue", this.myInput);
-    },
-    onClickReset: function () {
-      this.myInput = "";
-      this.$emit("emitInputValue", this.myInput);
+      this.myInput = this.myResult;
     },
   },
 };
