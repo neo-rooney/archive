@@ -9,11 +9,13 @@
 
 <script>
 export default {
-  props:['propsHistory'],
+  props: ["propsHistory"],
   methods: {
     onClickDelete: function (index, item) {
-      localStorage.removeItem(item);
-      this.myHistory.splice(index, 1);
+      this.$emit("emitDelete", {
+        index: index,
+        item: item,
+      });
     },
   },
 };
