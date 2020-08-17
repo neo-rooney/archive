@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <transition-group name="list" tag="div">
     <div v-for="(item, index) in propsHistory" :key="index" class="CalcHistoy__Item">
       <span>{{item}}</span>
       <button class="CalcHistoy__DeleteBtn" @click="onClickDelete(index, item)">삭제</button>
     </div>
-  </div>
+  </transition-group>
 </template>
 
 <script>
@@ -40,5 +40,17 @@ export default {
   position: absolute;
   right: 5px;
   top: 3px;
+}
+
+
+/* List Transitions */
+.list-enter-active,
+.list-leave-active {
+  transition: all 1s;
+}
+.list-enter,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
 }
 </style>

@@ -70,6 +70,7 @@ export default {
       if (input.indexOf("x") !== -1) {
         input = input.replace(/x/g, "*");
       }
+      console.log("input", input);
       if (
         // 계산식의 첫글자가 사칙연산인 경우
         input[0] === "+" ||
@@ -77,14 +78,15 @@ export default {
         input[0] === "*" ||
         input[0] === "/"
       ) {
+        console.log("1");
         this.showModal = true;
         return;
       } else if (
         // 계산식에 사칙연산이 없는 경우
-        input.indexOf("+") === -1 ||
-        input.indexOf("-") ||
-        input.indexOf("*") ||
-        input.indexOf("/")
+        input.indexOf("+") === -1 &&
+        input.indexOf("-") === -1 &&
+        input.indexOf("*") === -1 &&
+        input.indexOf("/") === -1
       ) {
         this.showModal = true;
         return;
@@ -95,6 +97,7 @@ export default {
         input[input.length - 1] === "*" ||
         input[input.length - 1] === "/"
       ) {
+        console.log("3");
         this.showModal = true;
         return;
       }
