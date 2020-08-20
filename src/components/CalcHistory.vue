@@ -42,7 +42,6 @@ export default {
   top: 3px;
 }
 
-
 /* List Transitions */
 .list-enter-active,
 .list-leave-active {

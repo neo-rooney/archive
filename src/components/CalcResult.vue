@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div>{{this.$store.state.message}}</div>
     <input type="text" readonly :value="propsdata" />
   </div>
 </template>

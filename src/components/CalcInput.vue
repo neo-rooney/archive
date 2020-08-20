@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div>{{this.$store.state.message}}</div>
     <table>
       <tr>
         <td colspan="3" @click="onClickReset">초기화</td>
