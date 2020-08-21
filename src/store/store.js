@@ -5,6 +5,11 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
-    message: "Hello vuex",
+    myInput: "",
+  },
+  mutations: {
+    onClickItem: function(state, payload) {
+      state.myInput = state.myInput + payload;
+    },
   },
 });

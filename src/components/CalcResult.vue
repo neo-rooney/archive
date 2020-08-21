@@ -1,13 +1,13 @@
 <template>
   <div>
     <div>{{this.$store.state.message}}</div>
-    <input type="text" readonly :value="propsdata" />
+    <input type="text" readonly :value="this.$store.state.myInput" />
   </div>
 </template>
 
 <script>
 export default {
-  props: ["propsdata"],
+ 
 };
 </script>
 

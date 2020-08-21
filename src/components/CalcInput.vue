@@ -63,8 +63,7 @@ export default {
       this.$emit("emitInputValue", this.myInput);
     },
     onClickItem: function (e) {
-      this.myInput = this.myInput + e.target.innerHTML;
-      this.$emit("emitInputValue", this.myInput);
+      this.$store.commit("onClickItem", e.target.innerHTML);
     },
     getResult: function () {
       let input = this.myInput;
