@@ -2,9 +2,9 @@
   <div class="Home__Layout">
     <div class="Home__Container">
       <header class="Home__Header">Vue Calculator</header>
-      <calc-result class="Home__Result" :propsdata="clickValue" />
-      <calc-input class="Home__Input" @emitInputValue="inputValue" @emitResult="getResult" />
-      <calc-history class="Home__History" :propsHistory="myHistory" @emitDelete="deleteItem" />
+      <calc-result class="Home__Result" />
+      <calc-input class="Home__Input" />
+      <calc-history class="Home__History" @emitDelete="deleteItem" />
     </div>
   </div>
 </template>
@@ -35,17 +35,6 @@ export default {
     };
   },
   methods: {
-    inputValue: function (value) {
-      this.clickValue = value;
-    },
-    getResult: function (value) {
-      localStorage.setItem(
-        value.input + "=" + value.result,
-        value.input + "=" + value.result
-      );
-      this.clickValue = value.result;
-      this.myHistory.push(value.input + "=" + value.result);
-    },
     deleteItem: function (value) {
       localStorage.removeItem(value.item);
       this.myHistory.splice(value.index, 1);

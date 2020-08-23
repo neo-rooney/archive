@@ -1,6 +1,6 @@
 <template>
   <transition-group name="list" tag="div">
-    <div v-for="(item, index) in propsHistory" :key="index" class="CalcHistoy__Item">
+    <div v-for="(item, index) in this.$store.state.myHistory" :key="index" class="CalcHistoy__Item">
       <span>{{item}}</span>
       <button class="CalcHistoy__DeleteBtn" @click="onClickDelete(index, item)">삭제</button>
     </div>
@@ -9,7 +9,6 @@
 
 <script>
 export default {
-  props: ["propsHistory"],
   methods: {
     onClickDelete: function (index, item) {
       this.$emit("emitDelete", {

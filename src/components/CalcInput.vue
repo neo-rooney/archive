@@ -59,54 +59,13 @@ export default {
   },
   methods: {
     onClickReset: function () {
-      this.myInput = "";
-      this.$emit("emitInputValue", this.myInput);
+      this.$store.commit("onClickReset");
     },
     onClickItem: function (e) {
       this.$store.commit("onClickItem", e.target.innerHTML);
     },
     getResult: function () {
-      let input = this.myInput;
-      if (input.indexOf("x") !== -1) {
-        input = input.replace(/x/g, "*");
-      }
-      console.log("input", input);
-      if (
-        // 계산식의 첫글자가 사칙연산인 경우
-        input[0] === "+" ||
-        input[0] === "-" ||
-        input[0] === "*" ||
-        input[0] === "/"
-      ) {
-        console.log("1");
-        this.showModal = true;
-        return;
-      } else if (
-        // 계산식에 사칙연산이 없는 경우
-        input.indexOf("+") === -1 &&
-        input.indexOf("-") === -1 &&
-        input.indexOf("*") === -1 &&
-        input.indexOf("/") === -1
-      ) {
-        this.showModal = true;
-        return;
-      } else if (
-        // 계산식이 사칙연산으로 끝나는 경우
-        input[input.length - 1] === "+" ||
-        input[input.length - 1] === "-" ||
-        input[input.length - 1] === "*" ||
-        input[input.length - 1] === "/"
-      ) {
-        console.log("3");
-        this.showModal = true;
-        return;
-      }
-      this.myResult = eval(input);
-      this.$emit("emitResult", {
-        input: this.myInput,
-        result: this.myResult,
-      });
-      this.myInput = this.myResult;
+      this.$store.commit("getResult");
     },
     onClickConfirm: function () {
       this.showModal = false;
