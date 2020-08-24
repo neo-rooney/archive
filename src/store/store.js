@@ -61,5 +61,8 @@ export const store = new Vuex.Store({
     onClickReset: function(state) {
       state.myInput = "";
     },
+    onClickConfirm: function(state) {
+      state.showModal = false;
+    },
   },
 });

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div>{{this.$store.state.message}}</div>
     <table>
       <tr>
         <td colspan="3" @click="onClickReset">초기화</td>
@@ -30,7 +29,7 @@
         <td @click="getResult" class="Operator">=</td>
       </tr>
     </table>
-    <modal v-if="showModal" @close="showModal = false">
+    <modal v-if="this.$store.state.showModal">
       <!--
       you can use custom content here to overwrite
       default content
@@ -50,13 +49,6 @@ export default {
   components: {
     Modal: Modal,
   },
-  data() {
-    return {
-      myInput: "",
-      myResult: "",
-      showModal: false,
-    };
-  },
   methods: {
     onClickReset: function () {
       this.$store.commit("onClickReset");
@@ -68,7 +60,7 @@ export default {
       this.$store.commit("getResult");
     },
     onClickConfirm: function () {
-      this.showModal = false;
+      this.$store.commit("onClickConfirm");
     },
   },
 };
