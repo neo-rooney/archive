@@ -64,5 +64,10 @@ export const store = new Vuex.Store({
     onClickConfirm: function(state) {
       state.showModal = false;
     },
+    onClickDelete: function(state, payload) {
+      localStorage.removeItem(payload);
+      const itemIndex = state.myHistory.indexOf(payload);
+      state.myHistory.splice(itemIndex, 1);
+    },
   },
 });

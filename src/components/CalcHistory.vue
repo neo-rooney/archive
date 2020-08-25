@@ -2,7 +2,7 @@
   <transition-group name="list" tag="div">
     <div v-for="(item, index) in this.$store.state.myHistory" :key="index" class="CalcHistoy__Item">
       <span>{{item}}</span>
-      <button class="CalcHistoy__DeleteBtn" @click="onClickDelete(index, item)">삭제</button>
+      <button class="CalcHistoy__DeleteBtn" @click="onClickDelete(item)">삭제</button>
     </div>
   </transition-group>
 </template>
@@ -10,11 +10,8 @@
 <script>
 export default {
   methods: {
-    onClickDelete: function (index, item) {
-      this.$emit("emitDelete", {
-        index: index,
-        item: item,
-      });
+    onClickDelete: function (item) {
+      this.$store.commit("onClickDelete", item);
     },
   },
 };
