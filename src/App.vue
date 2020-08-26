@@ -4,7 +4,7 @@
       <header class="Home__Header">Vue Calculator</header>
       <calc-result class="Home__Result" />
       <calc-input class="Home__Input" />
-      <calc-history class="Home__History" @emitDelete="deleteItem" />
+      <calc-history class="Home__History"/>
     </div>
   </div>
 </template>
@@ -21,25 +21,8 @@ export default {
     CalcHistory,
   },
   created: function () {
-    if (localStorage.length > 0) {
-      for (var i = 0; i < localStorage.length; i++) {
-        if (localStorage.key(i) !== "loglevel:webpack-dev-server")
-          this.myHistory.push(localStorage.getItem(localStorage.key(i)));
-      }
-    }
-  },
-  data: function () {
-    return {
-      clickValue: "",
-      myHistory: [],
-    };
-  },
-  methods: {
-    deleteItem: function (value) {
-      localStorage.removeItem(value.item);
-      this.myHistory.splice(value.index, 1);
-    },
-  },
+    this.$store.dispatch("loadHistory");
+  }
 };
 </script>
 
