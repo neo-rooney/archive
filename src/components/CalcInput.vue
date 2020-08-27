@@ -3,29 +3,29 @@
     <table>
       <tr>
         <td colspan="3" @click="onClickReset">초기화</td>
-        <td @click="onClickItem" class="Operator">/</td>
+        <td @click="e => onClickItem(e.target.innerHTML)" class="Operator">/</td>
       </tr>
       <tr>
-        <td @click="onClickItem">7</td>
-        <td @click="onClickItem">8</td>
-        <td @click="onClickItem">9</td>
-        <td @click="onClickItem" class="Operator">x</td>
+        <td @click="e => onClickItem(e.target.innerHTML)">7</td>
+        <td @click="e => onClickItem(e.target.innerHTML)">8</td>
+        <td @click="e => onClickItem(e.target.innerHTML)">9</td>
+        <td @click="e => onClickItem(e.target.innerHTML)" class="Operator">x</td>
       </tr>
       <tr>
-        <td @click="onClickItem">4</td>
-        <td @click="onClickItem">5</td>
-        <td @click="onClickItem">6</td>
-        <td @click="onClickItem" class="Operator">-</td>
+        <td @click="e => onClickItem(e.target.innerHTML)">4</td>
+        <td @click="e => onClickItem(e.target.innerHTML)">5</td>
+        <td @click="e => onClickItem(e.target.innerHTML)">6</td>
+        <td @click="e => onClickItem(e.target.innerHTML)" class="Operator">-</td>
       </tr>
       <tr>
-        <td @click="onClickItem">1</td>
-        <td @click="onClickItem">2</td>
-        <td @click="onClickItem">3</td>
-        <td @click="onClickItem" class="Operator">+</td>
+        <td @click="e => onClickItem(e.target.innerHTML)">1</td>
+        <td @click="e => onClickItem(e.target.innerHTML)">2</td>
+        <td @click="e => onClickItem(e.target.innerHTML)">3</td>
+        <td @click="e => onClickItem(e.target.innerHTML)" class="Operator">+</td>
       </tr>
       <tr>
-        <td colspan="2" @click="onClickItem">0</td>
-        <td @click="onClickItem">.</td>
+        <td colspan="2" @click="e => onClickItem(e.target.innerHTML)">0</td>
+        <td @click="e => onClickItem(e.target.innerHTML)">.</td>
         <td @click="getResult" class="Operator">=</td>
       </tr>
     </table>
@@ -45,23 +45,18 @@
 
 <script>
 import Modal from "./common/Modal.vue";
+import { mapMutations } from "vuex";
 export default {
   components: {
     Modal: Modal,
   },
   methods: {
-    onClickReset: function () {
-      this.$store.commit("onClickReset");
-    },
-    onClickItem: function (e) {
-      this.$store.commit("onClickItem", e.target.innerHTML);
-    },
-    getResult: function () {
-      this.$store.commit("getResult");
-    },
-    onClickConfirm: function () {
-      this.$store.commit("onClickConfirm");
-    },
+    ...mapMutations([
+      "onClickReset",
+      "onClickItem",
+      "getResult",
+      "onClickConfirm",
+    ]),
   },
 };
 </script>

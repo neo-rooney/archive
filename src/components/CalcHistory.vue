@@ -1,6 +1,6 @@
 <template>
   <transition-group name="list" tag="div">
-    <div v-for="(item, index) in this.$store.state.myHistory" :key="index" class="CalcHistoy__Item">
+    <div v-for="(item, index) in newName" :key="index" class="CalcHistoy__Item">
       <span>{{item}}</span>
       <button class="CalcHistoy__DeleteBtn" @click="onClickDelete(item)">삭제</button>
     </div>
@@ -8,7 +8,11 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
+  computed: {
+    ...mapState({ newName: "myHistory" }),
+  },
   methods: {
     onClickDelete: function (item) {
       this.$store.commit("onClickDelete", item);

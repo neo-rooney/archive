@@ -4,7 +4,7 @@
       <header class="Home__Header">Vue Calculator</header>
       <calc-result class="Home__Result" />
       <calc-input class="Home__Input" />
-      <calc-history class="Home__History"/>
+      <calc-history class="Home__History" />
     </div>
   </div>
 </template>
@@ -13,6 +13,7 @@
 import CalcResult from "./components/CalcResult.vue";
 import CalcInput from "./components/CalcInput.vue";
 import CalcHistory from "./components/CalcHistory.vue";
+import { mapActions } from "vuex";
 
 export default {
   components: {
@@ -21,8 +22,11 @@ export default {
     CalcHistory,
   },
   created: function () {
-    this.$store.dispatch("loadHistory");
-  }
+    this.loadHistory()
+  },
+  methods: {
+    ...mapActions(["loadHistory"]),
+  },
 };
 </script>
 
