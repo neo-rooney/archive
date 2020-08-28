@@ -1,14 +1,11 @@
 <template>
   <div>
-    <div>{{this.$store.state.message}}</div>
-    <input type="text" readonly :value="this.$store.state.myInput" />
+    <input type="text" readonly :value="this.$store.state.input.myInput" />
   </div>
 </template>
 
 <script>
-export default {
- 
-};
+export default {};
 </script>
 
 <style scoped>

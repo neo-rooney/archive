@@ -29,7 +29,7 @@
         <td @click="getResult" class="Operator">=</td>
       </tr>
     </table>
-    <modal v-if="this.$store.state.showModal">
+    <modal v-if="this.$store.state.input.showModal">
       <!--
       you can use custom content here to overwrite
       default content
@@ -45,18 +45,14 @@
 
 <script>
 import Modal from "./common/Modal.vue";
-import { mapMutations } from "vuex";
+import { mapMutations, mapActions } from "vuex";
 export default {
   components: {
     Modal: Modal,
   },
   methods: {
-    ...mapMutations([
-      "onClickReset",
-      "onClickItem",
-      "getResult",
-      "onClickConfirm",
-    ]),
+    ...mapMutations(["onClickReset", "onClickItem", "onClickConfirm"]),
+    ...mapActions(["getResult"]),
   },
 };
 </script>
