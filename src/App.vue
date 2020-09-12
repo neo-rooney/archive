@@ -3,6 +3,7 @@
     <header>
       <tool-bar></tool-bar>
     </header>
+    <loading-bar :isShow="showBus" />
     <transition name="fade">
       <router-view></router-view>
     </transition>
@@ -11,9 +12,26 @@
 
 <script>
 import ToolBar from "./components/ToolBar.vue";
+import LoadingBar from "./components/LoadingBar.vue";
+
+import bus from "./utils/bus.js";
 export default {
   components: {
     ToolBar,
+    LoadingBar,
+  },
+  created() {
+    bus.$on("start:spinner", () => (this.showBus = true));
+    bus.$on("end:spinner", () => (this.showBus = false));
+  },
+  beforeDestroy() {
+    bus.$off("start:spinner", () => (this.showBus = true));
+    bus.$off("end:spinner", () => (this.showBus = false));
+  },
+  data() {
+    return {
+      showBus: false,
+    };
   },
 };
 </script>
