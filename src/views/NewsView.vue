@@ -15,16 +15,14 @@ import bus from "../utils/bus.js";
 export default {
   created() {
     bus.$emit("start:spinner");
-    setTimeout(() => {
-      this.$store
-        .dispatch("FETCH_NEWS")
-        .then(() => {
-          bus.$emit("end:spinner");
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }, 3000);
+    this.$store
+      .dispatch("FETCH_NEWS")
+      .then(() => {
+        bus.$emit("end:spinner");
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   },
 };
 </script>
