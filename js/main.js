@@ -16,8 +16,13 @@
         messageB: document.querySelector("#scroll-section-0 .main-message.b"),
         messageC: document.querySelector("#scroll-section-0 .main-message.c"),
         messageD: document.querySelector("#scroll-section-0 .main-message.d"),
+        canvas: document.querySelector("#video-convas-0"),
+        context: document.querySelector("#video-convas-0").getContext("2d"),
+        videoImages: [],
       },
       values: {
+        videoImageCount: 300,
+        imageSequence: [0, 299],
         messageA_opacity_in: [0, 1, { start: 0.1, end: 0.2 }],
         messageB_opacity_in: [0, 1, { start: 0.3, end: 0.4 }],
         messageC_opacity_in: [0, 1, { start: 0.5, end: 0.6 }],
@@ -124,7 +129,10 @@
 
     switch (currentScene) {
       case 0:
-        // console.log('0 play');
+        let sequence = Math.round(
+          calcValues(values.imageSequence, currentYOffset)
+        );
+        objs.context.drawImage(objs.videoImages[sequence], 0, 0);
         if (scrollRatio <= 0.22) {
           // in
           objs.messageA.style.opacity = calcValues(
@@ -334,6 +342,17 @@
     playAnimation();
   }
 
+  function setCanvasImage() {
+    let imgElem;
+    for (let i = 0; i < sceneInfo[0].values.videoImageCount; i++) {
+      imgElem = new Image();
+      imgElem.src = `../001/IMG_${6726 + i}.JPG`;
+      sceneInfo[0].objs.videoImages.push(imgElem);
+    }
+  }
+
+  setCanvasImage();
+
   function setLayout() {
     //각 스크롤 섹션의 높이 세팅
     for (let i = 0; i < sceneInfo.length; i++) {
@@ -356,6 +375,9 @@
       }
     }
     document.body.setAttribute("id", `show-scene-${currentScene}`);
+
+    const heightRatio = window.innerHeight / 1080;
+    sceneInfo[0].objs.canvas.style.transform = `translate3d(-50%, -50%, 0) scale(${heightRatio})`;
   }
 
   window.addEventListener("scroll", () => {

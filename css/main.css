@@ -28,6 +28,7 @@ a {
   width: 100%;
   height: 44px;
   padding: 0 1rem;
+  z-index: 10;
 }
 
 .local-nav {
@@ -38,6 +39,7 @@ a {
   height: 52px;
   border-bottom: 1px solid #ddd;
   padding: 0 1rem;
+  z-index: 10;
 }
 
 .global-nav-links,
@@ -84,7 +86,7 @@ a {
   height: 3em;
   font-size: 2.5rem;
   opacity: 0;
-  top:35vh;
+  top: 35vh;
 }
 
 .main-message p {
@@ -129,12 +131,12 @@ a {
   background: rgb(29, 29, 31);
 }
 
-#scroll-section-2 .b{
+#scroll-section-2 .b {
   top: 10%;
   left: 40%;
 }
 
-#scroll-section-2 .c{
+#scroll-section-2 .c {
   top: 15%;
   left: 45%;
 }
@@ -167,9 +169,9 @@ a {
   color: #fff;
 }
 
-.sticky-elem{
+.sticky-elem {
   display: none;
-  position:fixed;
+  position: fixed;
   left: 0;
   width: 100%;
 }
@@ -177,8 +179,19 @@ a {
 #show-scene-0 #scroll-section-0 .sticky-elem,
 #show-scene-1 #scroll-section-1 .sticky-elem,
 #show-scene-2 #scroll-section-2 .sticky-elem,
-#show-scene-3 #scroll-section-3 .sticky-elem{
+#show-scene-3 #scroll-section-3 .sticky-elem {
   display: block;
+}
+
+.sticky-elem-canvas {
+  top: 0;
+  height: 100%;
+}
+
+.sticky-elem-canvas canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
 }
 
 @media (min-width: 1024px) {
@@ -209,12 +222,12 @@ a {
   .canvas-caption {
     font-size: 2rem;
   }
-  #scroll-section-2 .b{
-  top: 20%;
-  left: 53%;
-}
+  #scroll-section-2 .b {
+    top: 20%;
+    left: 53%;
+  }
 
-#scroll-section-2 .c{
-  left: 55%;
-}
+  #scroll-section-2 .c {
+    left: 55%;
+  }
 }
