@@ -1,0 +1,23 @@
+[
+  {
+    "name": "profile",
+    "path": "/profile",
+    "component": "/Users/rooney/front-study/nuxt/study_twitter-clone_nuxt_express_mysql/front/pages/profile.vue",
+    "chunkName": "pages/profile",
+    "_name": "_5daad4ed"
+  },
+  {
+    "name": "signup",
+    "path": "/signup",
+    "component": "/Users/rooney/front-study/nuxt/study_twitter-clone_nuxt_express_mysql/front/pages/signup.vue",
+    "chunkName": "pages/signup",
+    "_name": "_bbc825f8"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "/Users/rooney/front-study/nuxt/study_twitter-clone_nuxt_express_mysql/front/pages/index.vue",
+    "chunkName": "pages/index",
+    "_name": "_7b2d1296"
+  }
+]
