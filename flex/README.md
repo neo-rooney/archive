@@ -92,7 +92,7 @@ Flex box의 경우 창의 크기가 늘어나거나 줄어들면 알아서 간�
 
 ## Align Self
 
-align Self의 경우에는 flex-container(부모 태그)에 주는 속성이 아닌 flex-box에 직접 주는 속성이다. 앞서 axis에서 설명했는 `align`은 Cross axis를 조정하는 속성이다. 따라서 `flex-direction:row`인 경우에는 `좌우` 방향을 조정하고, `flex-direction:column`인 경우에는 상하 방향을 조정 할 것이다. `flex-direction:row`인 경우에 특정 box에 `alin-self:flex-end`속성을 주는 경우 그 box만 아래 방향으로 이동 하는 것을 볼 수 있다.  
+align Self의 경우에는 flex-container(부모 태그)에 주는 속성이 아닌 flex-box에 직접 주는 속성이다. 앞서 axis에서 설명했는 `align`은 Cross axis를 조정하는 속성이다. 따라서 `flex-direction:row`인 경우에는 `상하` 방향을 조정하고, `flex-direction:column`인 경우에는 `좌우` 방향을 조정 할 것이다. `flex-direction:row`인 경우에 특정 box에 `alin-self:flex-end`속성을 주는 경우 그 box만 아래 방향으로 이동 하는 것을 볼 수 있다.  
 ![box10](/image/box10.JPG)
 
 `flex-direction:column`인 경우에 특정 box에 `alin-self:flex-end`속성을 주는 경우 그 box만 왼쪽 방향으로 이동 하는 것을 볼 수 있다.  
