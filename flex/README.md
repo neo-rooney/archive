@@ -48,7 +48,7 @@ display 속성에는 크게 `block` `inline` `inline-block` 그리고 `flex`가 
 
 ## Basic of Flexbox
 
-위에서 한 동일한 작업을 Flexbox를 이용하여 작업한다. 박스를 생성하는 것까지는 동일하다. 다만 바로 인접한 부모 태그(사진의 경우 <body>)에 display 속성을 주어야 하는것이 차이점이다.  
+위에서 한 동일한 작업을 Flexbox를 이용하여 작업한다. 박스를 생성하는 것까지는 동일하다. 다만 바로 인접한 부모 태그(사진의 경우 body )에 display 속성을 주어야 하는것이 차이점이다.  
 ![box4](/image/box4.JPG)
 
 부모태그에 `display:flex`속성을 주게 되면 마치 `inline-block`속성을 준 것처럼 한 줄에 박스가 늘어서게 된다. 좌우 간격을 동일하게 하기 위해서 사용 할 수 있는 속성은 `justify-content: space-around`이다.  
