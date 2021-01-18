@@ -48,7 +48,7 @@ display 속성에는 크게 `block` `inline` `inline-block` 그리고 `flex`가 
 
 ## Basic of Flexbox
 
-위에서 한 동일한 작업을 Flexbox를 이용하여 작업한다. 박스를 생성하는 것까지는 동일하다. 다만 바로 인접한 부모 태그(사진의 경우 <body>)에 display 속성을 주어야 하는것이 차이점이다.  
+위에서 한 동일한 작업을 Flexbox를 이용하여 작업한다. 박스를 생성하는 것까지는 동일하다. 다만 바로 인접한 부모 태그(사진의 경우 body )에 display 속성을 주어야 하는것이 차이점이다.  
 ![box4](/image/box4.JPG)
 
 부모태그에 `display:flex`속성을 주게 되면 마치 `inline-block`속성을 준 것처럼 한 줄에 박스가 늘어서게 된다. 좌우 간격을 동일하게 하기 위해서 사용 할 수 있는 속성은 `justify-content: space-around`이다.  
@@ -58,21 +58,22 @@ display 속성에는 크게 `block` `inline` `inline-block` 그리고 `flex`가 
 
 ## Main Axis and Cross Axis
 
-앞서 사용한 `justify-content`속성의 경우 `Main Axis`을 조정하는 것이고, `align-items` 속성을 이용하여 `Cross Axis`를 조정할 수 있다. `display:flex`의 경우 정렬방향은 `row(가로)방향`이 default값이다. 즉 `flex-direction:row`의 경우에 `Main Axis`가 좌우 방향이 되고, `justify-content`는 `Main Axis`(좌우방향)정렬을 조정하게 된다. `Cross Axis`는 상하 방향이되고, `align-items` 속성은 `Cross Axis`(상하방향) 정렬을 결정하게 된다. 다만 상하 방향의 정렬의 경우 높이가 존재해야만 조정이가능하므로 부모태그에 높이가 있는 경우에만 적용된다.
+앞서 사용한 `justify-content`속성의 경우 `Main Axis`을 조정하는 것이고, `align-items` 속성을 이용하여 `Cross Axis`를 조정할 수 있다. `display:flex`의 경우 정렬방향은 `row(가로)방향`이 default값이다. 즉 `flex-direction:row`의 경우에 `Main Axis`가 `row(수평)`방향이 되고, `justify-content`는 `Main Axis`(수평 방향)정렬을 조정하게 된다. `Cross Axis`는 `column수직`방향이되고, `align-items` 속성은 `Cross Axis`(수직 방향) 정렬을 결정하게 된다. 다만 상하 방향의 정렬의 경우 높이가 존재해야만 조정이가능하므로 부모태그에 높이가 있는 경우에만 적용된다.
 
-`flex-direction: column`의 경우에는 `Main Axis`가 상하 방향이 된다. 따라서 `justity-content`를 조정하는 경우 상하 방향의 정렬이 조정되게 된다. 위에서와 마찬가지로 상하 방향의 정렬의 경우에는 부모 태그에 높이가 존재해야만 적용이 된다. `Cross Axis`는 좌우 방향이 될것이므로 `align-items`속서을 조정하는 경우에는 상하 방향이 조정 될 것이다.
+`flex-direction: column`의 경우에는 `Main Axis`가 `column(수직)` 방향이 된다. 따라서 `justity-content`를 조정하는 경우 수직 방향의 정렬이 조정되게 된다. 위에서와 마찬가지로 수직 방향의 정렬의 경우에는 부모 태그에 높이가 존재해야만 적용이 된다. `Cross Axis`는 `row(수평)` 방향이 될것이므로 `align-items`속성을 조정하는 경우에는 수직 방향이 조정 될 것이다.
 
 다소 햇갈릴수 있으나 쉽게 정리하면 아래와 같다.
 
 flex-direction:row경우
-
-- 좌우 간격 조정 -> justify-content 사용
-- 상하 간격 조정 -> align-items 사용(부모 태그 높이 필요)
+- `Main Axis` = `row(수평)`
+- justify-content 사용 -> 수평 간격 조정  
+- align-items 사용 -> 수직 간격 조정 (부모 태그 높이 필요)
 
 flex-direction:column경우
+- `Main Axis` = `column(수직)`
+- justify-content 사용 -> 수직 간격 조정 (부모 태그 높이 필요)
+- align-items 사용 -> 수평 간격 조정
 
-- 좌우 간격 조정 -> align-items 사용
-- 상하 간격 조정 -> justify-content 사용(부모 태그 높이 필요)
 
 ## flex-direction
 
@@ -110,7 +111,9 @@ Flex box의 경우 창의 크기가 늘어나거나 줄어들면 알아서 간�
 
 ## align-self
 
-align Self의 경우에는 flex-container(부모 태그)에 주는 속성이 아닌 flex-box에 직접 주는 속성이다. 앞서 axis에서 설명했는 `align`은 Cross axis를 조정하는 속성이다. 따라서 `flex-direction:row`인 경우에는 `상하` 방향을 조정하고, `flex-direction:column`인 경우에는 `좌우` 방향을 조정 할 것이다. `flex-direction:row`인 경우에 특정 box에 `alin-self:flex-end`속성을 주는 경우 그 box만 아래 방향으로 이동 하는 것을 볼 수 있다.  
+align Self의 경우에는 flex-container(부모 태그)에 주는 속성이 아닌 flex-box에 직접 주는 속성이다. 앞서 axis에서 설명했는 `align`은 Cross axis를 조정하는 속성이다. 따라서 `flex-direction:row`인 경우에는 `column(수직)` 방향을 조정하고, `flex-direction:column`인 경우에는 `row(수평)` 방향을 조정 할 것이다. 
+
+`flex-direction:row`인 경우에 특정 box에 `align-self:flex-end`속성을 주는 경우 그 box만 아래 방향으로 이동 하는 것을 볼 수 있다.  
 ![box10](/image/box10.JPG)
 
 `flex-direction:column`인 경우에 특정 box에 `alin-self:flex-end`속성을 주는 경우 그 box만 왼쪽 방향으로 이동 하는 것을 볼 수 있다.  
