@@ -192,6 +192,8 @@ export default {
 <style scoped></style>
 ```
 
+위와 같은 기존 스타일의 코드를 아래와 같이 사용 할 수 있습니다.
+
 ```vue
 <template>
   <div>
@@ -210,6 +212,52 @@ export default class Children extends Vue {
   @Watch("parentMessage")
   update(value: string, oldValue: string) {
     this.alertMessage = "메세지를 업데이트 했습니다.";
+  }
+}
+</script>
+
+<style scoped></style>
+```
+
+### @Emit
+
+자식 컴포넌트에서 부모컴포넌트로 데이터를 전달할 경우 @Emit 데코레이터를 사용합니다.
+
+```vue
+<template>
+  <div>
+    <button @click="counter">자식에서 숫자를 증가시킵니다.</button>
+  </div>
+</template>
+
+<script>
+export default {
+  methods: {
+    counter() {
+      this.$emit("counter");
+    },
+  },
+};
+</script>
+
+<style scoped></style>
+```
+
+```vue
+<template>
+  <div>
+    <button @click="counter">자식에서 숫자를 증가시킵니다.</button>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Vue, Prop, Watch, Emit } from "vue-property-decorator";
+
+@Component
+export default class Children extends Vue {
+  @Emit()
+  counter() {
+    console.log("count");
   }
 }
 </script>

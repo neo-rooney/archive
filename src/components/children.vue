@@ -1,22 +1,17 @@
 <template>
   <div>
-    <p>{{ alertMessage }}</p>
-    {{ parentMessage }}
+    <button @click="counter">자식에서 숫자를 증가시킵니다.</button>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from "vue-property-decorator";
+import { Component, Vue, Prop, Watch, Emit } from "vue-property-decorator";
 
 @Component
 export default class Children extends Vue {
-  @Prop() parentMessage?: string;
-  alertMessage: string = "";
-  @Watch("parentMessage")
-  update(value: string, oldValue: string) {
-    console.log("value", value);
-    console.log("oldValue", oldValue);
-    this.alertMessage = "메세지를 업데이트 했습니다.";
+  @Emit()
+  counter() {
+    console.log("count");
   }
 }
 </script>
