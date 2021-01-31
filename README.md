@@ -124,15 +124,19 @@ data는 클래스의 member로 정의해서 사용 할 수 있습니다. 기존�
 <script>
 export default {
   props: {
-    type: String,
-    default: "",
+    parentMessage: {
+      type: String,
+      default: "",
+    },
   },
 };
 </script>
 
 <style scoped></style>
 ```
+
 위와 같은 기존 vue 코드는 아래와 같이 class 스타일로 작성 할 수 있습니다.
+
 ```vue
 <template>
   <div>
@@ -146,6 +150,67 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 @Component
 export default class Children extends Vue {
   @Prop({ type: String, default: "" }) parentMessage?: string;
+}
+</script>
+
+<style scoped></style>
+```
+
+### @Watch
+
+@Watch 는 Method Decorator로 지정한 속성의 변경을 감지합니다.
+
+```vue
+<template>
+  <div>
+    <p>{{ alertMessage }}</p>
+    {{ parentMessage }}
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    parentMessage: {
+      type: String,
+      default: "",
+    },
+  },
+  data() {
+    return {
+      alertMessage: "",
+    };
+  },
+  watch: {
+    parentMessage: function() {
+      this.alertMessage = "메세지를 업데이트 했습니다.";
+    },
+  },
+};
+</script>
+
+<style scoped></style>
+```
+
+```vue
+<template>
+  <div>
+    <p>{{ alertMessage }}</p>
+    {{ parentMessage }}
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Vue, Prop, Watch } from "vue-property-decorator";
+
+@Component
+export default class Children extends Vue {
+  @Prop() parentMessage?: string;
+  alertMessage: string = "";
+  @Watch("parentMessage")
+  update(value: string, oldValue: string) {
+    this.alertMessage = "메세지를 업데이트 했습니다.";
+  }
 }
 </script>
 
