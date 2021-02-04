@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev":"nuxt"
+    "dev": "nuxt"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@nuxtjs/vuetify": "^1.11.3",
     "nuxt": "^2.14.12",
-    "vue": "^2.6.12"
+    "vue": "^2.6.12",
+    "vuetify": "^2.4.3"
   }
 }
