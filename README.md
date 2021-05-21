@@ -11,8 +11,10 @@
   <img src="https://img.shields.io/badge/-CSS-green"/>&nbsp
   <br>
   <img src="https://img.shields.io/badge/-React-%2361DAFB"/>
-  <img src="https://img.shields.io/badge/-Vuejs-green"/>
+  <img src="https://img.shields.io/badge/-Vuejs-%234FC08D"/>
   <img src="https://img.shields.io/badge/-SCSS-%23FF61F6"/>
+  <br>
+  <img src="https://img.shields.io/badge/-Nodejs-%23339933"/>&nbsp
   <br>
   <img src="https://img.shields.io/badge/-AWS-black"/>&nbsp
   <img src="https://img.shields.io/badge/-Git-black"/>&nbsp
