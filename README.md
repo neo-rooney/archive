@@ -12,7 +12,7 @@
   <br>
   <img src="https://img.shields.io/badge/-React-blue"/>
   <img src="https://img.shields.io/badge/-Vuejs-green"/>
-  <img src="https://img.shields.io/badge/-SCSS-pink"/>
+  <img src="https://img.shields.io/badge/-SCSS-%23FF61F6"/>
   <br>
   <img src="https://img.shields.io/badge/-AWS-black"/>&nbsp
   <img src="https://img.shields.io/badge/-Git-black"/>&nbsp
