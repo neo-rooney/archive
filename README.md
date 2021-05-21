@@ -3,7 +3,7 @@
 
 <h3 align="center"></h3>
 <p align="center">
-  Hi👋 I'm Rooney</br>
+  Hi👋  I'm Rooney</br>
   Front-end Developer
 </p>
 <h3 align="center">🛠 Tech Stack 🛠</h3>
