@@ -14,7 +14,7 @@
   <img src="https://img.shields.io/badge/-Vuejs-%234FC08D"/>
   <img src="https://img.shields.io/badge/-SCSS-%23FF61F6"/>
   <br>
-  <img src="https://img.shields.io/badge/-Nodejs-%23339933"/>&nbsp
+  <img src="https://img.shields.io/badge/-Nodejs-%23339933"/>
   <br>
   <img src="https://img.shields.io/badge/-AWS-black"/>&nbsp
   <img src="https://img.shields.io/badge/-Git-black"/>&nbsp
