@@ -1,4 +1,4 @@
-![header](https://capsule-render.vercel.app/api?type=slice&color=30A9DE&height=170&section=header&text=Rooney&fontColor=090707&fontAlignX=45&fontAlignY=65&fontSize=100)
+![header](https://capsule-render.vercel.app/api?type=Waving&color=auto&height=170&section=header&text=Rooney&fontColor=auto&fontAlignX=45&fontAlignY=65&fontSize=100)
 
 
 <h3 align="center"> 👋 Hi there 👋 </h3>
@@ -31,5 +31,5 @@ I want to be a person who gives you new wisdom. ✨
   
 </p>
 
-![footer](https://capsule-render.vercel.app/api?type=slice&color=EFDC05&height=100&section=footer)
+![footer](https://capsule-render.vercel.app/api?type=Waving&color=auto&height=100&section=footer)
 
