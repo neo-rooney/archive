@@ -10,7 +10,7 @@
   <img src="https://img.shields.io/badge/-JAVASCRIPT-yellow"/>&nbsp
   <img src="https://img.shields.io/badge/-CSS-green"/>&nbsp
   <br>
-  <img src="https://img.shields.io/badge/-React-blue"/>
+  <img src="https://img.shields.io/badge/-React-%2361DAFB"/>
   <img src="https://img.shields.io/badge/-Vuejs-green"/>
   <img src="https://img.shields.io/badge/-SCSS-%23FF61F6"/>
   <br>
