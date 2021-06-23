@@ -30,3 +30,4 @@ ransform-origin: 0% 0%; /* 기준점 변경(x축, y축) */
 ```css
 transition: all 1s linear 2s ; /* property name | duration | easing function | delay */
 ```
+test
