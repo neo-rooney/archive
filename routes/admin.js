@@ -6,7 +6,11 @@ router.get("/", (req, res) => {
 });
 
 router.get("/products", (req, res) => {
-  res.send("products");
+  // res.send("products");
+  res.render("admin/products.html", {
+    message: "hello!!!!!!!",
+    online: "express",
+  });
 });
 
 module.exports = router;
