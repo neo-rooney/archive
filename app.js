@@ -6,7 +6,8 @@ const app = express();
 const port = 3000;
 
 /**
- * 폴더명 
+ * 폴더명
+ * autoescapte : true 하면 <script> 태그를 쓰는 등의 보안이 자동으로 설정된다.
  */
 nunjucks.configure("template", {
   autoescape: true,
