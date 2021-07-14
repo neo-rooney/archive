@@ -1,0 +1,11 @@
+{
+  "name": "project_prismagram",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/CHEOLHUN/project_prismagram.git",
+  "author": "rooney <bch3454@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
