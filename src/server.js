@@ -1,5 +1,6 @@
+require("dotenv").config();
 import { GraphQLServer } from "graphql-yoga";
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 const typeDefs = `
   type Query{
     hello: String!
