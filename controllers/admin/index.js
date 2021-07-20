@@ -12,7 +12,7 @@ router.get("/shops/detail/:id", ctrl.get_shops_detail);
 
 router.post("/shops/detail/:id", ctrl.add_menu);
 
-router.get("/shops/detail/:shop_id/:menu_id", ctrl.remove_menu);
+router.get("/shops/delete/:shop_id/:menu_id", ctrl.remove_menu);
 
 router.get("/shops/edit/:id", ctrl.get_shops_edit);
 

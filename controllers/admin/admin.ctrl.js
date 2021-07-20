@@ -48,7 +48,12 @@ exports.add_menu = async (req, res) => {
 
 exports.remove_menu = async (req, res) => {
   try {
-    
+    await models.ShopsMenu.destroy({
+      where: {
+        id: req.params.menu_id,
+      },
+    });
+    res.redirect("/admin/shops/detail/" + req.params.shop_id);
   } catch (e) {
     console.log(e);
   }
