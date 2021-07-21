@@ -14,7 +14,6 @@ exports.get_shops_write = (_, res) => {
 
 exports.post_shops_write = async (req, res) => {
   try {
-    console.log(req.file);
     req.body.thumbnail = req.file ? req.file.filename : "";
     await models.Shops.create(req.body);
     res.redirect("/admin/shops");
@@ -69,7 +68,19 @@ exports.get_shops_edit = async (req, res) => {
 };
 
 exports.post_shops_edit = async (req, res) => {
+  const fs = require("fs");
+  const path = require("path");
+  const uploadDir = path.join(__dirname, "../../uploads");
+
   try {
+    const shop = await models.Shops.findByPk(req.params.id);
+
+    if (req.file && shop.thumbnail) {
+      fs.unlinkSync(uploadDir + "/" + shop.thumbnail);
+    }
+
+    req.body.thumbnail = req.file ? req.file.filename : shop.thumbnail;
+
     await models.Shops.update(req.body, {
       where: { id: req.params.id },
     });
