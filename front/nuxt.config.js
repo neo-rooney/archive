@@ -18,4 +18,5 @@ export default {
     { src: "~/plugins/vue-splide.js", ssr: false },
     { src: "~/plugins/vue-moment.js", ssr: false },
   ],
+  modules: ["@nuxtjs/axios"],
 };
