@@ -33,7 +33,10 @@
           }}</span>
         </div> -->
         <div class="ExhibitionEventAdmin__VoteController">
-          <div class="ExhibitionEventAdmin__VoteMinus">
+          <div
+            class="ExhibitionEventAdmin__VoteMinus"
+            @click="onClickMinus(item)"
+          >
             <svg style="width:24px;height:24px" viewBox="0 0 24 24">
               <path
                 fill="currentColor"
@@ -42,7 +45,10 @@
             </svg>
           </div>
           <div class="ExhibitionEventAdmin__Votes">2</div>
-          <div class="ExhibitionEventAdmin__VotePlus">
+          <div
+            class="ExhibitionEventAdmin__VotePlus"
+            @click="onClickPlus(item)"
+          >
             <svg style="width:24px;height:24px" viewBox="0 0 24 24">
               <path
                 fill="currentColor"
@@ -99,6 +105,18 @@ export default {
       }
 
       this.time = thisTime;
+    },
+    onClickMinus(item) {
+      this.$store.dispatch("updateVoteNumber", {
+        type: "minus",
+        work_index: item.index,
+      });
+    },
+    onClickPlus(item) {
+      this.$store.dispatch("updateVoteNumber", {
+        type: "plus",
+        work_index: item.index,
+      });
     },
   },
 };
