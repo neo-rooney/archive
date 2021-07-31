@@ -75,17 +75,21 @@ class App {
   }
 
   setSession() {
+    const SequelizeStore = require('connect-session-sequelize')(session.Store);
+
     //session 관련 셋팅
-    this.app.use(
-      session({
-        secret: 'fastcampus',
-        resave: false,
-        saveUninitialized: true,
-        cookie: {
-          maxAge: 2000 * 60 * 60, //지속시간 2시간
-        },
-      })
-    );
+    this.app.sessionMiddleWare = session({
+      secret: 'fastcampus',
+      resave: false,
+      saveUninitialized: true,
+      cookie: {
+        maxAge: 2000 * 60 * 60, //지속시간 2시간
+      },
+      store: new SequelizeStore({
+        db: db.sequelize,
+      }),
+    });
+    this.app.use(this.app.sessionMiddleWare);
 
     //passport 적용
     this.app.use(passport.initialize());
@@ -103,7 +107,8 @@ class App {
   setLocals() {
     // 템플릿 변수
     this.app.use((req, res, next) => {
-      this.app.locals.isLogin = true;
+      this.app.locals.isLogin = req.isAuthenticated();
+      this.app.locals.currentUser = req.user;
       this.app.locals.req_path = req.path;
       next();
     });
