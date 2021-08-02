@@ -87,7 +87,9 @@ exports.post_shops_edit = async (req, res) => {
       where: { id: req.params.id },
     });
     res.redirect('/admin/shops/detail/' + req.params.id);
-  } catch (e) {}
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 exports.get_shops_delete = async (req, res) => {
