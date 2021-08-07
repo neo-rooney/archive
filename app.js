@@ -3,7 +3,11 @@ const nunjucks = require('nunjucks');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+
+//flash  메시지 관련
 const flash = require('connect-flash');
+
+//passport 로그인 관련
 const passport = require('passport');
 const session = require('express-session');
 
@@ -20,8 +24,7 @@ class App {
     // 뷰엔진 셋팅
     this.setViewEngine();
 
-    // 세션 설정
-
+    // 세션 셋팅
     this.setSession();
 
     // 미들웨어 셋팅
@@ -49,7 +52,7 @@ class App {
       .authenticate()
       .then(() => {
         console.log('Connection has been established successfully.');
-        return db.sequelize.sync();
+        // return db.sequelize.sync();
       })
       .then(() => {
         console.log('DB Sync complete.');
@@ -107,8 +110,12 @@ class App {
   setLocals() {
     // 템플릿 변수
     this.app.use((req, res, next) => {
+      // 로그인 상태
       this.app.locals.isLogin = req.isAuthenticated();
+
+      // 현재 접속자 정보
       this.app.locals.currentUser = req.user;
+
       this.app.locals.req_path = req.path;
       next();
     });

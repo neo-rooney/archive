@@ -14,5 +14,4 @@ package-lock.json
 *.log
 .env
 
-# uploads image file
-uploads
+uploads/*

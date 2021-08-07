@@ -425,10 +425,15 @@
 }
 .detail .menu-board .menu-list a {
   display: inline-block;
+  width: 100%;
   padding: 0 1.6rem 0.4rem;
-  padding-left: 1.6rem;
   border-left: 2px solid #ff7a85;
   border-radius: 1px;
+  border: 1px solid transparent;
+}
+.detail .menu-board .menu-list li.select a,
+.detail .menu-board .menu-list li a:hover {
+  border-color: #ff0014;
 }
 .detail .restaurant-info2 i:nth-child(1) {
   margin-right: 4px;
@@ -459,4 +464,70 @@
 }
 .join .terms-check {
   margin-bottom: 2.4rem;
+}
+
+/* cart */
+.btn-cart {
+  position: fixed;
+  right: 32px;
+  bottom: 24px;
+  display: block;
+  width: 64px;
+  height: 64px;
+  color: #fff;
+  background-color: #ff0014;
+  border-radius: 32px;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+.btn-cart.hidden {
+  display: none;
+}
+
+.btn-cart i.fa {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 4px;
+  width: 33.44px;
+  height: 36px;
+  margin: auto;
+  font-size: 36px;
+}
+
+.btn-cart i.cart-item-counter {
+  position: absolute;
+  top: 10px;
+  right: 8px;
+  width: 20px;
+  height: 20px;
+  padding: 2px 5px;
+  text-align: center;
+  font-size: 1rem;
+  color: #ff0014;
+  line-height: 1;
+  background-color: #fff;
+  border-radius: 13px;
+  border: 2px solid #ff0014;
+}
+
+.btn-cart i.cart-item-counter.empty {
+  display: none;
+}
+
+.delivery-check {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 16px 0;
+  background-color: #fff;
+  border-top: 2px solid #ff0014;
+  text-align: center;
+  box-shadow: 0 -4px 8px 0 rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+.delivery-check.hidden {
+  display: none;
 }
