@@ -1,41 +1,150 @@
-{% set title = "상점 등록" %}
-{% extends "layout/base.html" %}
- 
-{% block content -%}
-    <form action="" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-        <table class="table table-bordered">
-            <tr>
-              <th>이름</th>
-              <td><input type="text" name="name" class="form-control" value="{{ shop.name }}"  placeholder="패캠 파스타"/></td>
-            </tr>
-            <tr>
-              <th>섬네일</th>
-              <td>
-                  <input type="file" name="thumbnail" />
-              </td>
-            </tr>
-            <tr>
-              <th>주소</th>
-              <td><input type="text" name="address" class="form-control" value="{{ shop.address }}"/></td>
-            </tr>
-            <tr>
-              <th>상세주소</th>
-              <td><input type="text" name="location" class="form-control" value="{{ shop.location }}" placeholder="101동 101호"/></td>
-            </tr>
-            <tr>
-              <th>전화번호</th>
-              <td><input type="text" name="phone" class="form-control" value="{{ shop.phone }}" placeholder="02-543-2121"/></td>
-            </tr>
-            <tr>
-              <th>운영시간</th>
-              <td><input type="text" name="open_time" class="form-control" value="{{ shop.open_time }}" placeholder="오전10시~오후6시"/></td>
-            </tr>
-            <tr>
-              <th>핸드폰번호</th>
-              <td><input type="text" name="cell_phone" class="form-control" value="{{ shop.cell_phone }}" placeholder="010-3333-3333" /></td>
-            </tr>
-        </table>
-        <button class="btn btn-primary">작성하기</button>
-    </form>
+{% set title = "상점 등록" %} {% extends "layout/base.html" %} {% block content
+-%}
+<form action="" method="post" enctype="multipart/form-data">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+  <table class="table table-bordered">
+    <tr>
+      <th>이름</th>
+      <td>
+        <input
+          type="text"
+          name="name"
+          class="form-control"
+          value="{{ shop.name }}"
+          placeholder="패캠 파스타"
+        />
+      </td>
+    </tr>
+    <tr>
+      <th>섬네일</th>
+      <td>
+        <input type="file" name="thumbnail" />
+      </td>
+    </tr>
+    <tr>
+      <th>주소</th>
+      <td>
+        <div class="form-inline">
+          <input
+            type="hidden"
+            name="geo"
+            value="{{ shop.geo.coordinates[0] }}, {{ shop.geo.coordinates[1] }}"
+          />
+          <input
+            type="text"
+            name="address"
+            class="form-control"
+            value="{{ shop.address }}"
+          />
+          <a
+            class="btn btn-primary btn-sm btn_select"
+            id="map_search"
+            style="display: inline-block"
+          >
+            주소 검색
+          </a>
+        </div>
+        <div
+          id="map_area"
+          style="
+            width: 100%;
+            height: 350px;
+            margin: 10px 0 50px 0;
+            visibility: hidden;
+          "
+        ></div>
+      </td>
+    </tr>
+    <tr>
+      <th>상세주소</th>
+      <td>
+        <input
+          type="text"
+          name="location"
+          class="form-control"
+          value="{{ shop.location }}"
+          placeholder="101동 101호"
+        />
+      </td>
+    </tr>
+    <tr>
+      <th>전화번호</th>
+      <td>
+        <input
+          type="text"
+          name="phone"
+          class="form-control"
+          value="{{ shop.phone }}"
+          placeholder="02-543-2121"
+        />
+      </td>
+    </tr>
+    <tr>
+      <th>운영시간</th>
+      <td>
+        <input
+          type="text"
+          name="open_time"
+          class="form-control"
+          value="{{ shop.open_time }}"
+          placeholder="오전10시~오후6시"
+        />
+      </td>
+    </tr>
+    <tr>
+      <th>핸드폰번호</th>
+      <td>
+        <input
+          type="text"
+          name="cell_phone"
+          class="form-control"
+          value="{{ shop.cell_phone }}"
+          placeholder="010-3333-3333"
+        />
+      </td>
+    </tr>
+  </table>
+  <button class="btn btn-primary">작성하기</button>
+</form>
+
+<script src="/static/js/kakaomap.js"></script>
+<script>
+    var mapContainer = new kakao.maps.Map(
+       document.getElementById("map_area"),
+       {
+           center: new kakao.maps.LatLng(
+               {{ map_api.default.lat }} ,
+               {{ map_api.default.lng }}
+           ), // 지도의 중심좌표
+           level: 3 // 지도의 확대 레벨
+       }
+    );
+
+    $('#map_search').click(function(){
+     var $name = $('input[name=name]');
+     var $address = $('input[name=address]');
+
+     if(!$name.val()){
+         alert("상점명을 입력하세요.");
+         return false;
+     }
+
+     if(!$address.val()){
+         alert("주소를 입력하세요.");
+         return false;
+     }
+
+     $('#map_area').css('height','350px');
+
+     mapSearchByAddess(
+         mapContainer ,
+         '#map_area',
+         'input[name=geo]' ,
+         $name ,
+         $address
+     );
+
+  });
+</script>
+
 {% endblock %}
