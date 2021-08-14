@@ -52,7 +52,7 @@ class App {
       .authenticate()
       .then(() => {
         console.log('Connection has been established successfully.');
-        // return db.sequelize.sync();
+        return db.sequelize.sync();
       })
       .then(() => {
         console.log('DB Sync complete.');
@@ -117,6 +117,11 @@ class App {
       this.app.locals.currentUser = req.user;
 
       this.app.locals.req_path = req.path;
+
+      // get 변수 받기
+      this.app.locals.req_query = req.query;
+      this.app.locals.req_path = req.path;
+      
       this.app.locals.map_api = {
         KAKAO_JAVASCRIPT_KEY: process.env.KAKAO_JAVASCRIPT_KEY,
         default: {

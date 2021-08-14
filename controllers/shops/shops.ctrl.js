@@ -4,8 +4,16 @@ exports.get_shops_detail = async (req, res) => {
   try {
     const shop = await models.Shops.findOne({
       where: { id: req.params.id },
-      include: ['Menu'],
+      include: ['Menu', 'LikeUser'],
     });
+
+    let active = false;
+    if (req.isAuthenticated()) {
+      const user = await models.User.findByPk(req.user.id);
+      active = await shop.hasLikeUser(user);
+    }
+
+    const countLike = await shop.countLikeUser();
 
     let cartList = {}; //장바구니 리스트
     //쿠키가 있는지 확인해서 뷰로 넘겨준다
@@ -23,6 +31,42 @@ exports.get_shops_detail = async (req, res) => {
       }
     }
 
-    res.render('shops/detail.html', { shop, cartLength, sameShops });
+    res.render('shops/detail.html', {
+      shop,
+      cartLength,
+      sameShops,
+      active,
+      countLike,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+exports.post_shops_like = async (req, res) => {
+  try {
+    const shop = await models.Shops.findByPk(req.params.shop_id);
+    const user = await models.User.findByPk(req.user.id);
+
+    const status = await user.addLikes(shop);
+
+    res.json({
+      status,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+exports.delete_shops_like = async (req, res) => {
+  try {
+    const shop = await models.Shops.findByPk(req.params.shop_id);
+    const user = await models.User.findByPk(req.user.id);
+
+    await user.removeLikes(shop);
+
+    res.json({
+      message: 'success',
+    });
   } catch (e) {}
 };

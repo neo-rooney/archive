@@ -13,7 +13,13 @@ exports.get_shops_write = (req, res) => {
 };
 
 exports.post_shops_write = async (req, res) => {
+  // 위도 경도 저장
+
   try {
+    req.body.geo = {
+      type: 'Point',
+      coordinates: [req.body.geo.split(',')[0], req.body.geo.split(',')[1]],
+    };
     req.body.thumbnail = req.file ? req.file.filename : '';
     await models.Shops.create(req.body);
     res.redirect('/admin/shops');
@@ -50,6 +56,12 @@ exports.post_shops_edit = async (req, res) => {
   const fs = require('fs');
   const path = require('path');
   const uploadDir = path.join(__dirname, '../../uploads');
+
+  // 위도 경도 저장
+  req.body.geo = {
+    type: 'Point',
+    coordinates: [req.body.geo.split(',')[0], req.body.geo.split(',')[1]],
+  };
 
   try {
     const shop = await models.Shops.findByPk(req.params.id);
