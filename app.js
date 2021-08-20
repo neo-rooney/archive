@@ -121,7 +121,7 @@ class App {
       // get 변수 받기
       this.app.locals.req_query = req.query;
       this.app.locals.req_path = req.path;
-      
+
       this.app.locals.map_api = {
         KAKAO_JAVASCRIPT_KEY: process.env.KAKAO_JAVASCRIPT_KEY,
         default: {
