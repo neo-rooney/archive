@@ -6,7 +6,7 @@
 
 ## (1) 개요
 
-[JS의 역사](https://www.notion.so/3690095516514033a3456f4e0d487ea5)
+![스크린샷 2021-08-29 오후 2 27 47](https://user-images.githubusercontent.com/52039229/131239764-8c6b6cd2-07fb-4400-8d7e-d050a0f5b4ac.png)
 
 # 2. JS의 성장
 
