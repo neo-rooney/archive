@@ -8,3 +8,7 @@
 
 ### Javascript(모던 자바스크립트 Deep Dive 1회독)
 - JS Variable
+
+### 이력서 작성 방법 스터디
+ - 개발자 이력서 어떻게 작성해야하는가?
+ - 실제 내 이력서 Notion으로 작성
