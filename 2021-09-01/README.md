@@ -11,4 +11,5 @@
 
 ### 이력서 작성 방법 스터디
  - 개발자 이력서 어떻게 작성해야하는가?
- - 실제 내 이력서 Notion으로 작성
+ - 실제 내 이력서 Notion으로 작성 
+ - [이력서 링크](https://glitter-record-9a3.notion.site/Rooney-3f4029b6d69743b6b1c1db42dabcaefe)
