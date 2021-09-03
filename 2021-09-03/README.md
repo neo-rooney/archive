@@ -15,4 +15,11 @@
   11. button
   12. select, option, optgroup
   13. input - list 속성과 datalist
-
+- 전역 속성
+  1. class와 id
+  2. style
+  3. title
+  4. lang
+  5. data
+  6. draggable
+  7. hidden
