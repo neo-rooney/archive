@@ -23,3 +23,14 @@
 ### Algorithm
 1. 연필의 갯수 구하기
 2. 1부터 n까지의 합
+
+### CSS Text style
+1. font-size, font-style, font-weight
+2. font-family
+3. line-height
+4. font 와 단축속성(shorthand)
+5. letter-spacing, word-spacing
+6. text-align
+7. text-indent
+8. text-decoration
+9. word–break
