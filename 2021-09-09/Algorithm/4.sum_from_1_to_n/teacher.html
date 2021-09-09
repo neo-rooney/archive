@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>출력결과</title>
+  </head>
+  <body>
+    <script>
+      function solution(n) {
+        let answer = 0;
+        for (let i = 1; i <= n; i++) {
+          answer = answer + i;
+        }
+
+        return answer;
+      }
+
+      console.log(solution(10));
+    </script>
+  </body>
+</html>
+
+<!-- 
+[필요 사전 지식]
+1부터 n까지 합의 공식
+[문제 풀면서 생각한 것]
+- 1부터 n까지 합의 공식을 사용하면 간단하게 풀릴것이라고 생각
+[강의 정답을 보고 느낀점]
+- 반복문으로도 풀 수 있다고 생각하긴 했으나 내 풀이가 더 빠를것이라 생각
+- 다만, 합의 공식을 사전에 알고있지 못했더라면 나도 반복문으로 풀었을것
+-->

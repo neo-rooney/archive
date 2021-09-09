@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>세 수 중 최솟값</title>
+  </head>
+  <body>
+    <script>
+      function solution(a, b, c) {
+        let min;
+        if (a < b) min = a;
+        else min = b;
+        if (c < min) min = c;
+        return min;
+      }
+
+      console.log(solution(1, 100, 9));
+    </script>
+  </body>
+</html>
