@@ -12,3 +12,16 @@
 8. position - sticky
 9. overflow
 10. z-index
+
+### CSS color
+1. 색상 - HEX(16진수), rgb, rgba
+2. opacity
+3. background-color, background-image
+4. background-repeat
+5. background-position
+6. background-origin
+7. background-size
+8. background (shorthand)
+
+### CSS Selector
+1. 조건 선택자 내용 추가

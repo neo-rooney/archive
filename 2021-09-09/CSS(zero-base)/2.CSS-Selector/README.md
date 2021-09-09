@@ -57,6 +57,20 @@ a[href$=".org"] {
 a[class~="logo"] {
   padding: 2px;
 }
+
+/* 여러개의 조건 input type이 checkbox 이면서 class가 check인 요소*/
+/* 띄어쓰기가 없으면 And 조건*/
+input[type='checkbox'].check {
+  width: 100px;
+  height: 100px;
+}
+
+/* 여러개의 조건 input type이 checkbox 이거나 class가 check인 요소*/
+/* , 있으면 OR 조건*/
+input[type='checkbox'], .check {
+  width: 100px;
+  height: 100px;
+}
 ```
 
 - 속성 성택자 사용 방법 링크
@@ -495,3 +509,24 @@ div, span{
 3. 코드의 위치
 
     ![css.png](CSS%20Selector%207ac64b1bb575478d80a0bb3f5b4b81be/css.png)
+
+# 조건 선택자
+
+## And
+
+- 선택자 사이에 공백이 제거되는 경우 여러 선택자를 동시에 만족하는 태그에 스타일을 적용
+
+```css
+태그이름#아이디 { 속성1:속성값; 속성2:속성값; }
+태그이름.클래스명 { 속성1:속성값; 속성2:속성값; }
+.클래스명#아이디 { 속성1:속성값; 속성2:속성값; }
+```
+
+## OR
+
+- 쉼표 (,)를 통해 두 선택자 중 하나라도 만족시 적용되는 조건
+
+```css
+#아이디, .클래스명{ 속성1:속성값; 속성2:속성값; }
+태그이름, .클래스명{ 속성1:속성값; 속성2:속성값; }
+```
