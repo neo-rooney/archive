@@ -20,4 +20,4 @@
 2. 배열에서 요소 추출 하기 - Array.splice() & Array.slice()
 
 ### JS Deep Dive
-1. Javascript의 Data Type 
+1. Javascript의 Data Type
