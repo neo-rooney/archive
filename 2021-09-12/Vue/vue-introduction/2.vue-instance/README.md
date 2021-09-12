@@ -108,6 +108,6 @@ vue 인스턴스에 `methods 프로퍼티`를 추가했습니다! `methods 프�
 
 잘되는지 한번 확인해 볼까요?
 
-![https://blog.kakaocdn.net/dn/dj7TTE/btqF4UG9Ej6/yLeDesF9HcdOteMW45Q3W1/img.gif](https://blog.kakaocdn.net/dn/dj7TTE/btqF4UG9Ej6/yLeDesF9HcdOteMW45Q3W1/img.gif)
+![vue-instance.gif](2%20vue%20instance%20aa03bf0950f749ad836ef14a62fd8a68/vue-instance.gif)
 
 버튼을 클릭하면서 changeStr 함수가 실행되었습니다. 이것이 가능한 이유는 vue의 DOM Listener 능력 덕분입니다.😊 changeStr 함수가 실행되면서 data프로퍼티의 값인 '할당 객체'의 str 속성의 값이 'Hello world'에서 'GoodBye'로 변경되었죠? '할당 객체'는 vue 반응형 시스템에 추가되어 있기 때문에 변경된 값에 맞게 화면을 vue가 자동으로 바꿔주게 됩니다. 위 사진처럼요
