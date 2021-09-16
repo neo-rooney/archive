@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>출력결과</title>
+  </head>
+  <body>
+    <script>
+      function solution(day, arr) {
+        let answer = 0;
+        for (let x of arr) {
+          if (x % 10 == day) answer++;
+        }
+
+        return answer;
+      }
+
+      arr = [25, 23, 11, 47, 53, 17, 33];
+      console.log(solution(3, arr));
+    </script>
+  </body>
+</html>
+
+<!-- 
+[문제 풀면서 생각한 것]
+- Array의 내장 메서드를 사용해서 풀어보고자 했음(for문 사용하려고 했으나 이번엔 다르게 해보고싶었음)
+[강의 정답을 보고 느낀점]
+- 강의 답은 조건이 만족하면 answer의 값을 1씩 증가시키는 방식을 사용했고 나는 배열을 직접 구해 배열의 길이를 구하는 방식으로 구했음
+-->
