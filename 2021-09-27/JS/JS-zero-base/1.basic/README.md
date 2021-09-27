@@ -130,10 +130,176 @@ console.log(typeof console.log); //function
 - 숫자 , infinity, -infinity , NaN
 - 2^53 - 1 보다 큰 값을 사용할 수 없으며, 더 큰 정수를 다루고 싶다면 bigint 자료형 사용 필요
 
+### 1) 지수표기법
+
+- 아주 큰 숫자나 아주 작은 숫자를 표기하기 위해 지수 표기법(e)으로 0의 개수를 대체 표기 가능
+
+```jsx
+let billion_1 = 1000000000;
+let billion_2 = 1e9;
+
+console.log(billion_1 === billion_2);//true
+```
+
+### 2) 진법 표시
+
+```jsx
+console.log(0x0f); //16진수 , 15
+console.log(0o17); // 8진수 , 15
+console.log(0b1111); // 2진수 15
+```
+
+### 3) 상수 값
+
+- 지수로 표기되는 양수 최대/최소값 : `Number.MAX_VALUE` / `Number.MIN_VALUE`
+- 안전하게 표기되는 최대(양수) / 최소 (음수) 값 : `Number.MAX_SAFE_INTEGER`, `Number.MIN_SAFE_INTEGER`
+- 무한대 양수 / 음수 값 : `Number.POSITIVE_INFINITY`, `Number.NEFATIVE_INFINIEY`
+- 부동 소수점 산술에서 정의되지 않거나 표현할 수 없는 값으로 해석될 수 있는 숫자 데이터 유형 : `Number.NaN`
+
+### 4) 형 변환(number → string)
+
+```jsx
+let num = 10;
+console.log(num.toString()); // '10'
+console.log(String(num)); //'10'
+console.log(num + ''); // '10'
+```
+
+### 5) 자리 수 표현
+
+- 소수의 자리 수 길이를 제한 : `Number.toFixed(pos)`
+- 정수와 소수의 자리 수를 합한 길이로 제한 : `Number.toPrecision(pos)`
+
+```jsx
+let num_1 = 125.0;
+let num_2 = 123.456;
+
+console.log(num_1 - num_2); //1.543999999999997
+console.log((num_1 - num_2).toFixed(3)); //1.544
+console.log((num_1 - num_2).toPrecision(3)); //1.54
+```
+
+### 6) number 자료형 확인
+
+- 부동 소수점 산술에서 정의되지 않거나 표현할 수 없는 값(NaN)인지 확인 : `Number.isNaN()`
+- 정상적인 유한수인지 확인 : `Number.isFinite()`
+
+```jsx
+console.log(Number.isNaN(0.123)); //false
+console.log(Number.isNaN(0.123 - 'hello')); // true
+
+console.log(Number.isFinite(-123)); // true
+console.log(Number.isFinite(Infinity)); //false
+console.log(Number.isFinite('hello')); //false
+```
+
 ## (6) string
 
 - 문자, 문자열을 표현하는 자료형
 - `''`,`""`,```` 으로 string 표현
+
+### 1) 문자 정의 / 표기
+
+```jsx
+console.log('line\nfeed'); //line
+													 //feed
+console.log('line\rfeed');//line
+													//feed
+console.log('line\\feed'); // line\feed
+console.log('line\tfeed'); // line	feed
+console.log('line\u{1f60d}eed'); // line😍eed
+```
+
+### 2) 문자열 길이
+
+- `string.length`
+
+### 3) 문자 접급
+
+- `String.charAt(index)`
+- `String.charCode(index)`
+- `String[index]`
+
+```jsx
+let str = 'hello';
+
+console.log(str.charAt(0)); //h
+console.log(str.charCodeAt(0)); //101
+console.log(str[0]); //h
+```
+
+### 4) 문자열 검색
+
+- `String.indexOf(substr, pos)` : 찾을 문자, 찾기 시작할 위치(옵션)
+- `String.lastIndexOf(substr, pos)` : 찾을 문자, 찾기 시작할 위치(옵션) , 뒤에서 부터 찾음
+- `String.includes(substr, pos)` :  찾을 문자, 찾기 시작할 위치(옵션), 대소문자 구별함
+- `String.startsWith(substr, pos)`: 찾을 문자, 찾기 시작할 위치(옵션), 문자열해 찾을 문자로 시작하는지 여부를 반환
+- `String.endsWith(substr,pos)`:찾을 문자, 찾기 시작할 위치(옵션), 문자열해 찾을 문자로 끝나는지 여부를 반환
+
+```jsx
+console.log(str.indexOf('l')); // 2
+console.log(str.indexOf('l', 3)); // 3
+console.log(str.indexOf('l', 4)); // 10
+console.log(str.lastIndexOf('l')); // 10
+console.log(str.includes('hello')); // true
+console.log(str.includes('HeLlo')); // false
+console.log(str.startsWith('ello')); // false
+console.log(str.startsWith('hello')); // true
+console.log(str.endsWith('!!!')); // true
+console.log(str.endsWith('world')); // false
+```
+
+### 5) 대소문자 변환
+
+- `String.toUpperCase()` : 대문자로 변환
+- `String.toLowerCase()` : 소문자로 변환
+
+### 6) 문자열 치환
+
+- `String.replace(바뀔 대상 문자, 바꿀문자)` : 처음 만나는 요소 문자열 치환(치환된 문자열 반환)
+- `/치환문자열/g(전체)i(대소문자 구분x)` : 치환 문자열에 정규 표현식 기입
+
+```jsx
+let str = 'hello, world!!!';
+let changed_text = '';
+
+changed_text = str.replace('l', '*');
+console.log(changed_text); //he*lo, world!!!
+
+changed_text = str.replace(/l/g, '*');
+console.log(changed_text); //he**o, wor*d!!!
+```
+
+### 7) 문자열 추출
+
+- 위치 기반 문자열 추출 : `String.slice(start, end)`, `String.substring(start,end)`
+- 길이 기반 문자열 추출 : `String.substr(start, length)`
+
+```jsx
+let str_2 = '123456789';
+
+console.log(str_2.slice(0, 4)); //1234
+console.log(str_2.substr(0, 3)); //123
+console.log(str_2.substr(0, 6)); //123456
+```
+
+### 8) 문자열 분할
+
+배열로 문자열 분할 : `String.split(Separator, limit)`
+
+```jsx
+let str_2 = '123456789';
+console.log(str_2.split('5')); //[ '1234', '6789' ]
+console.log(str_2.split('')); 
+/*
+[ 
+'1', '2', '3',
+'4', '5', '6',
+'7', '8', '9'
+]
+*/
+console.log(str_2.split('', 3)); //[ '1', '2', '3' ]
+```
 
 ## (7) object
 
