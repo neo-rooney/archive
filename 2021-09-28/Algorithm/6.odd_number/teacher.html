@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>출력결과</title>
+  </head>
+  <body>
+    <script>
+      function solution(arr) {
+        let answer = [];
+        let sum = 0,
+          min = 1000;
+        for (let x of arr) {
+          if (x % 2 === 1) {
+            sum += x;
+            if (x < min) min = x;
+          }
+        }
+        answer.push(sum);
+        answer.push(min);
+        return answer;
+      }
+
+      arr = [12, 77, 38, 41, 53, 92, 85];
+      console.log(solution(arr));
+    </script>
+  </body>
+</html>
+
+
+<!-- 
+[문제 풀면서 생각한 것]
+- Array의 내장 메서드를 사용해서 풀어보고자 했음(for문 사용하려고 했으나 이번엔 다르게 해보고싶었음)
+[강의 정답을 보고 느낀점]
+- 내가 짠 코드는 반복문이 2번도는데 강의 답은 한번만 돌림 (개선의 여지 있음)
+-->
