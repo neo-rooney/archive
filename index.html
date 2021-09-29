@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Table Accessbility</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <table>
+      <h1>요금안내</h1>
+      <table>
+        <caption>
+          시행일자 : 2021년 08월 02일(월)부터 ~ 종료시까지
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col" colspan="2">시간</th>
+            <th scope="col">평일</th>
+            <th scope="col">토,공휴일</th>
+            <th scope="col">일</th>
+            <th scope="col">비고</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="rowgroup" rowspan="2">1부</th>
+            <th scope="row">06:30 이전</th>
+            <td>65,000</td>
+            <td colspan="2">90,000</td>
+            <td rowspan="4">
+              18홀 기준<br />
+              카트요금 8만원/팀 별도
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">06:36∼08:00</th>
+            <td>70,000</td>
+            <td colspan="2">100,000</td>
+          </tr>
+          <tr>
+            <th scope="row">2부</th>
+            <th scope="row">08:06∼14:54</th>
+            <td>80,000</td>
+            <td colspan="2">115,000</td>
+          </tr>
+          <tr>
+            <th scope="row">3부</th>
+            <th scope="row">15:00이후</th>
+            <td>70,000</td>
+            <td>100,000</td>
+            <td>90,000</td>
+          </tr>
+        </tbody>
+      </table>
+    </table>
+  </body>
+</html>
