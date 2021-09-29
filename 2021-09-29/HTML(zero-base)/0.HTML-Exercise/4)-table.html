@@ -1,0 +1,63 @@
+<!-- 
+[문제 설명]
+HTML Table 을 사용하여 복잡한 표를 만들어보는 문제입니다. <th> <td> <tr> 등의
+Table 셀을 나타내는 요소와 <thead> <tbody> 등의 접근성 태그에 대해 이해하고 있
+는지, colspan, rowspan을 사용하여 복잡한 테이블을 표현할 수 있는지 확인해보는 문
+제입니다.
+[제한 사항]
+HTML 요소, 속성만 사용가능 합니다. (단 style, script 관련 태그, 속성 사용금지)
+[가이드라인]
+1. <table> 요소와 그 하위 셀 요소를 활용해보세요.
+2. <tbody> <thead>와 같은 태그를 활용해 웹접근성을 높여보세요
+3. colspan, rowspan 속성 을 사용하여 복잡한 표를 표현해보세요.
+4. https://user-images.githubusercontent.com/52039229/132083627-aa8a1f0d-0e99-4a41-baf6-b1c3c72a41cf.png 링크의 이미지 처럼 표 만들기
+[문제] 
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>table</title>
+</head>
+<body>
+  <table border="1">
+    <caption><h2>주식회사 HTML 매출</h2></caption>
+    <thead>
+      <tr>
+        <th rowspan="2">/</th>
+        <th colspan="2" scope="row">반기</th>
+        <th rowspan="2" scope="row">합계</th>
+        <th rowspan="2" scope="row">비고</th>
+      </tr>
+      <tr>
+        <th scope="row">전반기</th>
+        <th scope="row">후반기</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">2019</th>
+        <td>10억</td>
+        <td>20억</td>
+        <td>30억</td>
+        <td></td>
+      </tr>
+      <tr>
+        <th scope="row">2020</th>
+        <td>22억</td>
+        <td>33억</td>
+        <td>55억</td>
+        <td rowspan="2">1)</td>
+      </tr>
+      <tr>
+        <th scope="row">2021</th>
+        <td colspan="2">집계중</td>
+        <td>집계중</td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>
