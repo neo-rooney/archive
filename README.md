@@ -1,6 +1,15 @@
 # 2021/10/02/SAT TIL 
 ## Altorithum
-- [알고리즘 틀린 문제 복습](https://github.com/CHEOLHUN/study_TIL/blob/master/Algorithm/README.md)
+### 1. 알고리즘 틀린 문제 복습
+- [틀린문제 정리](https://github.com/CHEOLHUN/study_TIL/blob/master/Algorithm/README.md)
+### 2. 선형 자료구조 강의
+8. 배열 문제 풀이 - Two Sum
+9. 배열 문제 풀이 - OX 퀴즈
+10. 배열 문제 풀이 - 벽돌 옮기기
+11. 배열 문제 풀이 - 숫자 빈도수 구하기
+12. 배열 문제 풀이 - 달팽이 만들기
+13. 프로토타입
+
 # 2021/10/01/FIR TIL 
 ## Altorithum
 1. 자료구조 Overview
