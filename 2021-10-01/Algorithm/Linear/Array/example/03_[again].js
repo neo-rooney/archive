@@ -6,8 +6,8 @@ function answer(nums) {
 
   // 코드 구현 시작 영역
 
-  // …
-
+  nums.sort((a, b) => a - b);
+  result = [nums[nums.length - 1], nums[nums.length - 2]];
   // 코드 구현 종료 영역
 
   return result;
