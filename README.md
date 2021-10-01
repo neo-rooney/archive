@@ -1,6 +1,6 @@
 # 2021/10/02/SAT TIL 
 ## Altorithum
-- [알고리즘 틀린 문제 복습](https://github.com/CHEOLHUN/study_TIL/tree/master/2021-10-02/Algorithm)
+- [알고리즘 틀린 문제 복습](https://github.com/CHEOLHUN/study_TIL/blob/master/Algorithm/README.md)
 # 2021/10/01/FIR TIL 
 ## Altorithum
 1. 자료구조 Overview
