@@ -1,13 +1,14 @@
 # 2021/10/04/MON TIL 
-## Altorithum
-### CSS Animation 
+## Interactive
+### 1.CSS Animation 
 - 좋아요 버튼 애니메이션 구현 연습
 
-
+## 과제 
+- 셀프 10분 영상 녹화 및 업로드
 # 2021/10/03/SUN TIL 
-## Altorithum
-### 1.과제
+## 과제
 - 셀프 영상 대본 구성
+## Algorithum
 ### 2. 선형 자료구조 강의
 14. 연결 리스트
 15. 연결 리스트 구현하기(1)
