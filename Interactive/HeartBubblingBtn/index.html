@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Clash</title>
+    <!-- the star of the show - the Vue library! -->
+    <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+    <style>
+      .LikeButton__Wrapper {
+        width: 48px;
+        height: 48px;
+      }
+
+      .LikeButton__LikeButtonIcon {
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+      }
+
+      .LikeButton__LikeButtonIconWrapper {
+        position: relative;
+      }
+
+      .LikeButton__LikeFillIcon {
+        width: 28px;
+        height: 28px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-left: -15.5px;
+        margin-top: -18px;
+        animation: 0.5s cubic-bezier(0.5, 0, 0.75, 0) forwards fillHeart;
+      }
+
+      @keyframes fillHeart {
+        0% {
+          transform: scale(0);
+        }
+
+        60% {
+          transform: scale(1.2);
+        }
+
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .LikeButton__LikeButtonWrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+
+      .LikeButton__HeartEffectIcon {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-8px, -8px) scale(0);
+        z-index: 10;
+      }
+
+      .LikeButton__HeartEffectIcon.order0 {
+        animation: 1s 0.5s ease forwards heart-move-1st;
+      }
+
+      @keyframes heart-move-1st {
+        0% {
+          opacity: 1 scale(0);
+        }
+
+        33% {
+          transform: translate(-20px, 20px) scale(0.5);
+        }
+
+        67% {
+          transform: translate(-25px, 10px) scale(1);
+        }
+
+        100% {
+          transform: translate(-30px, -10px) scale(0);
+          opacity: 0;
+        }
+      }
+
+      .LikeButton__HeartEffectIcon.order1 {
+        animation: 1s 0.5s ease forwards heart-move-2nd;
+      }
+
+      @keyframes heart-move-2nd {
+        0% {
+          opacity: 1 scale(0);
+        }
+
+        33% {
+          transform: translate(-40px, -10px);
+        }
+
+        67% {
+          transform: translate(-40px, -20px) scale(1);
+        }
+
+        100% {
+          transform: translate(-40px, -30px) scale(0);
+          opacity: 0;
+        }
+      }
+
+      .LikeButton__HeartEffectIcon.order2 {
+        animation: 1s 0.5s ease forwards heart-move-3rd;
+      }
+
+      @keyframes heart-move-3rd {
+        0% {
+          opacity: 1 scale(0);
+        }
+
+        33% {
+          transform: translate(-30px, -30px);
+        }
+
+        67% {
+          transform: translate(-30px, -35px) scale(1);
+        }
+
+        100% {
+          transform: translate(-30px, -40px) scale(0);
+          opacity: 0;
+        }
+      }
+
+      .LikeButton__HeartEffectIcon.order3 {
+        animation: 1s 0.5s ease forwards heart-move-4th;
+      }
+
+      @keyframes heart-move-4th {
+        0% {
+          opacity: 1 scale(0);
+        }
+
+        33% {
+          transform: translate(10px, -30px);
+        }
+
+        67% {
+          transform: translate(10px, -35px) scale(1);
+        }
+
+        100% {
+          transform: translate(10px, -40px) scale(0);
+          opacity: 0;
+        }
+      }
+
+      .LikeButton__HeartEffectIcon.order4 {
+        animation: 1s 0.5s ease forwards heart-move-5th;
+      }
+
+      @keyframes heart-move-5th {
+        0% {
+          opacity: 1 scale(0);
+        }
+
+        33% {
+          transform: translate(20px, -10px);
+        }
+
+        67% {
+          transform: translate(20px, -15px) scale(1);
+        }
+
+        100% {
+          transform: translate(20px, -20px) scale(0);
+          opacity: 0;
+        }
+      }
+
+      .LikeButton__HeartEffectIcon.order5 {
+        animation: 1s 0.5s ease forwards heart-move-6th;
+      }
+
+      @keyframes heart-move-6th {
+        0% {
+          opacity: 1 scale(0);
+        }
+
+        33% {
+          transform: translate(10px, 20px) scale(0.5);
+        }
+
+        67% {
+          transform: translate(15px, 10px) scale(1);
+        }
+
+        100% {
+          transform: translate(20px, 0px) scale(0);
+          opacity: 0;
+        }
+      }
+
+      @media screen and (max-width: 1024px) {
+        .LikeButton__Wrapper {
+          width: 9.3vw;
+          height: 9.3vw;
+        }
+        .LikeButton__LikeButtonIcon {
+          width: 100%;
+          height: 100%;
+        }
+        .LikeButton__LikeFillIcon {
+          width: 5.2vw;
+          height: 5.2vw;
+          margin-left: -2vw;
+          margin-top: -3vw;
+        }
+      }
+    </style>
+    <script>
+      // some data we'll use
+      var action = ['Go', 'Stay'];
+      var result = ['It will be double', 'There will be trouble'];
+      // when life is settled, load up the fun stuff
+      document.addEventListener('DOMContentLoaded', function () {
+        new Vue({
+          el: '#app',
+          // define data - initial display text and set the text on the button
+          name: 'LikeButton',
+          props: {
+            margin: {
+              type: Array,
+              default: () => [],
+            },
+          },
+          data: {
+            isLiked: false,
+          },
+          methods: {
+            onClickLike() {
+              this.isLiked = true;
+              // TODO:like api 연동
+            },
+            onClickUnLike() {
+              this.isLiked = false;
+            },
+          },
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div id="app">
+      <div
+        class="LikeButton__Wrapper"
+        :style="`margin:${margin[0]}px ${margin[1]}px ${margin[2]}px ${margin[3]}px;`"
+      >
+        <img
+          v-if="!isLiked"
+          class="LikeButton__LikeButtonIcon"
+          @click="onClickLike"
+          src="./assets/icon/like-off-ic.png"
+          srcset="
+            ./assets/icon/like-off-ic@2x.png,
+            ./assets/icon/like-off-ic@3x.png
+          "
+          alt=""
+        />
+        <div v-else class="LikeButton__LikeButtonWrapper">
+          <img
+            v-for="(item, i) in 6"
+            :key="i"
+            src="./assets/icon/card-like-heart-on-ic.png"
+            srcset="
+              ./assets/icon/card-like-heart-on-ic@2x.png,
+              ./assets/icon/card-like-heart-on-ic@3x.png
+            "
+            :class="
+            isLiked
+              ? `LikeButton__HeartEffectIcon active order${i}`
+              : `LikeButton__HeartEffectIcon order${i}`
+          "
+            alt=""
+          />
+          <div class="LikeButton__LikeButtonIconWrapper">
+            <img
+              class="LikeButton__LikeButtonIcon active"
+              @click="onClickUnLike"
+              src="@/assets/icon/like-off-ic.png"
+              srcset="
+                ./assets/icon/like-off-ic@2x.png,
+                ./assets/icon/like-off-ic@3x.png
+              "
+              alt=""
+            />
+            <img
+              @click="onClickUnLike"
+              src="@/assets/icon/card-like-heart-on-ic.png"
+              srcset="
+                ./assets/icon/card-like-heart-on-ic@2x.png,
+                ./assets/icon/card-like-heart-on-ic@3x.png
+              "
+              class="LikeButton__LikeFillIcon"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
