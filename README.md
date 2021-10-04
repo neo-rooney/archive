@@ -1,4 +1,4 @@
-# 2021/10/03/SUN TIL 
+# 2021/10/04/MON TIL 
 ## Altorithum
 ### CSS Animation 
 - 좋아요 버튼 애니메이션 구현 연습
