@@ -118,7 +118,7 @@ LinkedList.prototype.removeAt = function (position = 0) {
   this.length--;
   return current.data;
 };
-//removeAt() : value 값을 갖는 node의 position 반환
+//indexOf() : value 값을 갖는 node의 position 반환
 LinkedList.prototype.indexOf = function (value) {
   let current = this.head;
   let index = 0;
