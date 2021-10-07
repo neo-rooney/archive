@@ -23,7 +23,7 @@ Queue.prototype.dequeue = function () {
   return this.array.unshift();
 };
 
-// front() :  가장 끝 데이터 반환
+// front() :  가장 첫 데이터 반환
 Queue.prototype.front = function () {
   return this.array[0] ? undefined : this.array[0];
 };
@@ -33,7 +33,7 @@ Queue.prototype.clear = function () {
   this.array = [];
 };
 
-// size() : 스텍 내 데이터 개수 확인
+// size() : 큐 내 데이터 개수 확인
 Queue.prototype.size = function () {
   return this.array.length;
 };
