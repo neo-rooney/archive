@@ -13,7 +13,7 @@ function BinaryTree() {
 //_insertNode() : 재귀로 트리를 순회하며 노드 추가(내부 사용)
 BinaryTree.prototype._insertNode = function (node, value) {
   //현재값과 비교
-  //작으면 왼족, 크면 오른쪽
+  //작으면 왼쪽, 크면 오른쪽
   //왼쪽, 오른쪽에 left, right pointer 비었다면 추가할 노드를 연결
   //비어있지 않다면 하위 노드에서 다시 비교하도록 넘겨준다.
 
