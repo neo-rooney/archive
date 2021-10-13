@@ -20,7 +20,7 @@ let margeSort = function (arr, compare) {
   }
   while (i < left.length) arr[k++] = left[i++];
   while (j < right.length) arr[k++] = right[j++];
-  console.log(arr);
+
   return arr;
 };
 
