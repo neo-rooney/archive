@@ -13,6 +13,7 @@ let swap = function (arr, idx_1, idx_2) {
 };
 
 let quickSort = function (arr, compare, s = 0, e = arr.length - 1) {
+  if (s >= e) return;
   let start = s;
   let pivot = arr[e];
 
@@ -24,12 +25,10 @@ let quickSort = function (arr, compare, s = 0, e = arr.length - 1) {
   }
 
   swap(arr, start, e);
-  if (start - 1 > s) {
-    quickSort(arr, compare, s, start - 1);
-  }
-  if (start + 1 < e) {
-    quickSort(arr, compare, start + 1, e);
-  }
+
+  quickSort(arr, compare, s, start - 1);
+
+  quickSort(arr, compare, start + 1, e);
 };
 
 let init_arr = [6, 5, 1, 3, 2, 4];
