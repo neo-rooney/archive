@@ -11,11 +11,10 @@
 - 정기 테스트 (5문제 중 2문제 품)
 - 정기 테스트 못푼 문제 다시 풀기
 ## Javascript
-### Javascript-Deep-Dive
+### 1. Javascript-Deep-Dive
 1. 1p ~ 30p 읽기
-
 ## ETC
-### Refectoring 읽기
+### 2. Refectoring 읽기
 1. 1p ~ 20p 읽기
 # 2021/10/13/WEN TIL
 ## Algorithm\
