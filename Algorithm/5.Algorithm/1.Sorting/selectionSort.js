@@ -22,7 +22,16 @@ let selectionSort = function (arr, compare) {
   }
 };
 
-let init_arr = [6, 5, 1, 4, 3];
-let arr = [...init_arr];
-selectionSort(arr, accending);
-console.log(arr);
+function benchmark(arr, callback, order) {
+  let start = Date.now();
+  callback(arr, order);
+  return Date.now() - start;
+}
+let init_arr = [];
+let max = 10000;
+for (let i = 0; i < max; i++) {
+  init_arr.push(Math.round(Math.random() * max));
+}
+console.log(benchmark(init_arr, selectionSort, accending));
+// let init_arr = [6, 5, 1, 4, 3];
+// let arr = [...init_arr];

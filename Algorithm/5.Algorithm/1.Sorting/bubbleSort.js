@@ -56,7 +56,25 @@ let bubbleSort_4 = function (arr, compare) {
   }
 };
 
-let init_arr = [6, 5, 1, 4, 3];
-let arr = [...init_arr];
-bubbleSort_4(arr, decending);
-console.log(arr);
+function benchmark(arr, callback) {
+  let start = Date.now();
+  callback(arr);
+  return Date.now() - start;
+}
+
+let init_arr = [];
+let max = 10000;
+for (let i = 0; i < max; i++) {
+  init_arr.push(Math.round(Math.random() * max));
+}
+let array = [...init_arr];
+console.log('bubbleSort_1 : ' + benchmark(array, bubbleSort_1) + 'ms');
+array = [...init_arr];
+console.log('bubbleSort_2 : ' + benchmark(array, bubbleSort_2) + 'ms');
+array = [...init_arr];
+console.log('bubbleSort_3 : ' + benchmark(array, bubbleSort_3) + 'ms');
+
+// let init_arr = [6, 5, 1, 4, 3];
+// let arr = [...init_arr];
+// bubbleSort_4(arr, decending);
+// console.log(arr);
