@@ -1,4 +1,23 @@
-# 2021/10/14/WEN TIL 
+# 2021/10/15/FRI TIL
+## Algorithm
+### 1. 비정기 테스트
+- 테스트 및 문제 복습
+## Javascript
+### 1. Javascript-Deep-Dive
+1. 33p ~ 59p 읽기
+## ETC
+### 1.Refectoring 읽기
+1. 23p ~ 80p
+### 2.기술 면접 대비
+1. 컴파일러 , 인터프리터란
+2. 크로스 브라우징이란
+3. CBD 방법론
+4. SPA란
+5. 자바스크립트의 특징
+6. 인터프리터 언어와 컴파일러 언어의 차이
+7. NPM이란
+8. 변수란
+# 2021/10/14/THU TIL 
 ## Algorithm
 ### 1. 알고리즘 강의
 8. 성능측정
@@ -12,7 +31,7 @@
 - 정기 테스트 못푼 문제 다시 풀기
 ## Javascript
 ### 1. Javascript-Deep-Dive
-1. 1p ~ 30p 읽기
+1. 1p ~ 32p 읽기
 ## ETC
 ### 2. Refectoring 읽기
 1. 1p ~ 20p 읽기
