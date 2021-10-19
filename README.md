@@ -1,3 +1,10 @@
+# 2021/10/19/TUE TIL
+## Javascript
+### 1. Javascript Deep Dive
+- 자바스크립트의 데이터 타입(60 - 92p) 정리
+## ETC
+### 1. Refectoring 2판
+- 81 - 112p 읽기
 # 2021/10/18/MON TIL
 ## Algorithm
 ### 1. 알고리즘 문제 풀이 연습(못푼 문제 다시 풀기)
