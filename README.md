@@ -1,3 +1,10 @@
+# 2021/10/20/WEN TIL
+## Javascript
+### 1. Javascript Deep Dive
+- 자바스크립트의 구문 및 형변환(93p - 123p) 정리
+## ETC
+### 1. Refectoring 2판
+- 113 - 156p 읽기
 # 2021/10/19/TUE TIL
 ## Javascript
 ### 1. Javascript Deep Dive
