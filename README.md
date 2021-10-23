@@ -1,3 +1,8 @@
+# 2021/10/22/FRI TIL
+## ETC
+### 1. Refectoring 2판
+- 한달 한권 강의 2장 파트
+- 한달 한권 강의 2장 파트 복습 중
 # 2021/10/21/THU TIL
 
 ## Javascript
