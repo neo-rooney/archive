@@ -1,3 +1,9 @@
+# 2021/10/24/SUN TIL
+## ETC
+- 면접 준비 
+# 2021/10/23/SAT TIL
+## Algorithm
+- 알고리즘 문제풀이
 # 2021/10/22/FRI TIL
 ## ETC
 ### 1. Refectoring 2판
