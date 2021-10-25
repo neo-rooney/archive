@@ -1,4 +1,4 @@
-# 2021/10/24/SUN TIL
+# 2021/10/25/MON TIL
 ## Javascript 
 ### Javascript Deep Dive
 1. 10장 객체 리터럴(p124 - p136)
