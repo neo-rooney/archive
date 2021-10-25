@@ -1,4 +1,11 @@
 # 2021/10/24/SUN TIL
+## Javascript 
+### Javascript Deep Dive
+1. 10장 객체 리터럴(p124 - p136)
+## ETC
+### Refectoring 2판
+1.  3장, 4장 읽기 (p114-p152)
+# 2021/10/24/SUN TIL
 ## ETC
 - 면접 준비 
 # 2021/10/23/SAT TIL
