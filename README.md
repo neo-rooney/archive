@@ -1,3 +1,11 @@
+# 2021/10/26/TUE TIL
+## Javascript 
+### Javascript Deep Dive
+1. 11장 원시타입과 객체타입의 차이(137p ~ 153p)
+## ETC
+### Refectoring 2판
+1. 6장 강의
+2. 158p - 178p읽기
 # 2021/10/25/MON TIL
 ## Javascript 
 ### Javascript Deep Dive
