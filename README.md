@@ -1,3 +1,7 @@
+# 2021/10/29/FRI TIL
+## Project 
+### 시간표 어플리케이션 
+1. 기능 구성 정리
 # 2021/10/28/THU TIL
 ## ETC 
 ### Refectoring 2판
