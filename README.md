@@ -1,3 +1,14 @@
+# 2021/11/03 WEN TIL
+## Javascript
+### Javascript Deep Dive
+- 11장 마인드맵 정리 중
+## ETC
+### The RED : 프론트엔드 Back to the Basics : 지속 가능한 코드작성과 성능 향상법 by 김태곤
+- 좋은 코드란 무엇인가
+# 2021/11/02/TUE TIL
+- 백신 휴유증으로 쉼
+# 2021/11/01/MON TIL
+- 백신 휴유증으로 쉼
 # 2021/10/31/SUN TIL
 ## ETC 
 ### 10월 회고 및  11월 학습 계획 수립 
