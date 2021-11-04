@@ -1,3 +1,8 @@
+# 2021/11/04 THU TIL
+## ETC
+### The RED : 프론트엔드 Back to the Basics : 지속 가능한 코드작성과 성능 향상법 by 김태곤
+- 테스트와 TDD, BDD
+- 리팩토링
 # 2021/11/03 WEN TIL
 ## Javascript
 ### Javascript Deep Dive
