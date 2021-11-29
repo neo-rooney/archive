@@ -1,5 +1,5 @@
 <template>
-  <div>signupasdf</div>
+  <div>signup</div>
 </template>
 
 <script>
