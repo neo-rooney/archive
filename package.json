@@ -1,0 +1,27 @@
+{
+  "name": "nuxt_boilerplate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nuxt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://rooney92@bitbucket.org/cloudwallet/nuxt_boilerplate.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/cloudwallet/nuxt_boilerplate#readme",
+  "dependencies": {
+    "@nuxtjs/axios": "^5.13.1",
+    "nuxt": "^2.15.4",
+    "vue": "^2.6.12",
+    "vuex": "^3.6.2"
+  },
+  "devDependencies": {
+    "@nuxtjs/style-resources": "^1.0.0",
+    "node-sass": "^5.0.0",
+    "sass-loader": "^10.1.1"
+  }
+}
