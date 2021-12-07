@@ -1,33 +1,26 @@
-let input = require('fs')
-  .readFileSync('./example.txt')
-  .toString()
-  .trim()
-  .split('\n');
+let input = require('fs').readFileSync('./example.txt').toString().trim();
 
-let T = input[0];
+let N = Number(input);
 
-for (let i = 1; i <= T; i++) {
-  let temp = input[i].split(' ');
-
-  let H = Number(temp[0]);
-  let W = Number(temp[1]);
-  let N = Number(temp[2]);
-
-  let x = 1;
-  let y = 1;
-  let count = 1;
-
-  while (count < N) {
-    y++;
-    if (y > H) {
-      y = y === 2 ? y - 1 : y % H;
-      x++;
-    }
-    count++;
+/**
+1 | 1      | 1
+2 | 234567 | 1 + 6 
+3 | 8 ~ 19 | 1 + 6 + 12
+4 | 20 ~ 37| 1 + 6 + 12 + 18
+5 | 38 ~ 61| 1 + 6 + 12 + 18 + 24
+ */
+let i = 0;
+while (1) {
+  let lastNum = 1;
+  for (let j = 1; j <= i; j++) {
+    lastNum += 6 * j;
   }
-
-  x = String(x).length < 2 ? `0${x}` : x;
-
-  let answer = Number(`${y}${x}`);
-  console.log(answer);
+  console.log(` i : ${i} last: ${lastNum}`);
+  if (lastNum >= N) {
+    break;
+  } else {
+    i++;
+  }
 }
+
+console.log(i + 1);
