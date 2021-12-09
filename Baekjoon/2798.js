@@ -1,5 +1,5 @@
 const fs = require('fs');
-const input = fs.readFileSync('./example.txt').toString().trim().split('\n');
+const input = fs.readFileSync('/dev/stdin').toString().trim().split('\n');
 let [N, M] = input[0].split(' ').map((item) => Number(item));
 let cards = input[1].split(' ').map((item) => Number(item));
 
