@@ -1,5 +1,5 @@
 const fs = require('fs');
-const input = fs.readFileSync('./example.txt').toString().trim().split('\n');
+const input = fs.readFileSync('/dev/stdin').toString().trim().split('\n');
 input.map((item) => {
   if (item === '0') {
     return;
@@ -8,7 +8,7 @@ input.map((item) => {
 
   for (let i = 0; i < item.length / 2; i++) {
     if (item[i] != item[item.length - 1 - i]) {
-      isSame = 'No';
+      isSame = 'no';
     }
   }
 
