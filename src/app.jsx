@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./app.css";
+import VideoList from "./components/video_list/video_list";
 
 function App() {
-  const [vidoes, setVidoes] = useState([]);
+  const [videos, setVideo] = useState([]);
   useEffect(() => {
     const requestOptions = {
       method: "GET",
@@ -14,10 +15,10 @@ function App() {
       requestOptions
     )
       .then((response) => response.json())
-      .then((result) => setVidoes(result.items))
+      .then((result) => setVideo(result.items))
       .catch((error) => console.log("error", error));
   }, []);
-  return <div className="App">test</div>;
+  return <VideoList videos={videos} />;
 }
 
 export default App;
