@@ -23,7 +23,7 @@ function fetchTodoItems(): Todo[] {
 }
 
 // crud methods
-function fetchTodos(): object[] {
+function fetchTodos(): {}[] {
   const todos = fetchTodoItems();
   return todos;
 }
