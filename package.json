@@ -1,0 +1,23 @@
+{
+  "name": "study_covid-19",
+  "version": "1.0.0",
+  "description": "최종 프로젝트 폴더입니다",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rooney-dev/study_COVID-19.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rooney-dev/study_COVID-19/issues"
+  },
+  "homepage": "https://github.com/rooney-dev/study_COVID-19#readme",
+  "dependencies": {
+    "typescript": "^4.5.5"
+  }
+}
