@@ -19,6 +19,9 @@
          `tsconfig.json`
    - [x] 자바스크립트 파일을 타입스크립트로 확장자 변경하기
          `js -> ts`
+   - [x] tsc 명령어로 타입스크립트 컴파일 하기
+2. 명시적인 `any` 선언하기
+   - `tsconfig.json`파일에 `noImplicitAny` 값을 `true`로 추가
 
 ## 참고 자료
 
