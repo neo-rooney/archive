@@ -15,11 +15,12 @@ for (let i = 0; i < n; i++) {
   }
   answer = Math.max(answer, sum1, sum2);
 }
-sum1 = sum2 = 0;
-for (let i = 0; i < n; i++) {
-  sum1 += arr[i][i];
-  sum2 += arr[i][n - i - 1];
-}
-answer = Math.max(answer, sum1, sum2);
+console.log(answer);
+// sum1 = sum2 = 0;
+// for (let i = 0; i < n; i++) {
+//   sum1 += arr[i][i];
+//   sum2 += arr[i][n - i - 1];
+// }
+// answer = Math.max(answer, sum1, sum2);
 
-console.log(max);
+// console.log(max);
