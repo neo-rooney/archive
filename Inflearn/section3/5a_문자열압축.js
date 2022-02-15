@@ -1,0 +1,18 @@
+const fs = require("fs");
+const input = fs.readFileSync("./example.txt").toString().trim();
+
+const solution = (str) => {
+  let answer = "";
+  let cnt = 1;
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === str[i + 1]) {
+      cnt++;
+    } else {
+      answer += `${str[i]}${cnt !== 1 ? cnt : ""}`;
+      cnt = 1;
+    }
+  }
+  return answer;
+};
+
+console.log(solution(input));
