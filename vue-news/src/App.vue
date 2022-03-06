@@ -13,6 +13,8 @@ import Vue from "vue";
 import ToolBar from "./components/ToolBar.vue";
 import Spinner from "./components/Spinner.vue";
 import bus from "./utils/bus";
+import { MutationTypes } from "./store/mutations";
+import { ActionTypes } from "./store/actions";
 
 export default Vue.extend({
   components: {
@@ -32,7 +34,11 @@ export default Vue.extend({
       this.loading = false;
     },
   },
-  created() {
+  async created() {
+    this.$store.state;
+    this.$store.getters.
+    this.$store.commit(MutationTypes.SET_NEWS, 10);
+    const response = await this.$store.dispatch(ActionTypes.FETCH_NEWS)
     bus.$on("on:progress", this.onProgress);
     bus.$on("off:progress", this.offProgress);
   },
