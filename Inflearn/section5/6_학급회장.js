@@ -1,6 +1,10 @@
 const fs = require("fs");
 
-const input = fs.readFileSync("./example.txt").toString().trim().split("\n");
+const input = fs
+  .readFileSync("./inflearn/section5/example/6.txt")
+  .toString()
+  .trim()
+  .split("\n");
 const N = Number(input[0]);
 const str = input[1];
 
@@ -14,6 +18,8 @@ for (let i = 0; i < N; i++) {
     myMap.set(str[i], 1);
   }
 }
+
+console.log(myMap)
 
 const max = [...myMap].reduce((a, e) => (e[1] > a[1] ? e : a))[0];
 
