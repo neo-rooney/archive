@@ -15,7 +15,10 @@ function startApp() {
     .then(function (response) {
       console.log(response);
       user = response.data;
-      // TODO: 이름, 이메일, 주소 표시하기
+      console.log(user)
+      username.innerText = user.name
+      email.innerText = user.email
+      address.innerText = user.address
     })
     .catch(function (error) {
       console.log(error);
