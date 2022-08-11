@@ -9,7 +9,7 @@ export default function Home() {
 				<meta name="description" content="Rooney의 포트폴리오입니다." />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<h1>홈</h1>
+			<h1 className="text-3xl font-bold underline">홈입니다.</h1>
 		</Layout>
 	);
 }
