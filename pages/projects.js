@@ -3,8 +3,6 @@ import Layout from '@/components/layout';
 import ProjectItem from '@/components/projects/project-item';
 
 export default function Projects({ projects }) {
-	// console.log(projects.results.length);
-
 	return (
 		<Layout>
 			<div className="flex flex-col items-center justify-center min-h-screen px-3 mb-10">
@@ -62,7 +60,6 @@ export async function getStaticProps() {
 
 	const projects = await res.json();
 
-	console.log('projects', projects);
 	return {
 		props: { projects },
 	};
