@@ -23,7 +23,7 @@ export default function Footer() {
 							</a>
 						</p>
 						<span className="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
-							<a className="text-gray-500">
+							{/* <a className="text-gray-500">
 								<svg
 									fill="currentColor"
 									strokeLinecap="round"
@@ -77,7 +77,7 @@ export default function Footer() {
 									></path>
 									<circle cx="4" cy="4" r="2" stroke="none"></circle>
 								</svg>
-							</a>
+							</a> */}
 						</span>
 					</div>
 				</div>
