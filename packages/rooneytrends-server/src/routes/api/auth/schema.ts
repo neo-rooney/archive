@@ -1,40 +1,46 @@
 import { FastifySchema } from 'fastify';
 
-export const registerSchema: FastifySchema = {
-	body: {
-		type: 'object',
-		properties: {
-			username: {
-				type: 'string',
-			},
-			password: {
-				type: 'string',
-			},
-		},
-	},
-	response: {
-		200: {
+const authResultSchema = {
+	properties: {
+		tokens: {
 			type: 'object',
 			properties: {
-				token: { type: 'string' },
+				accessToken: { type: 'string' },
+				refreshToken: { type: 'string' },
 			},
-			example: {
-				token: 'helloworld',
+		},
+		user: {
+			type: 'object',
+			properties: {
+				id: { type: 'string' },
+				username: { type: 'string' },
 			},
 		},
 	},
 };
 
-export const loginSchema: FastifySchema = {
-	body: {
-		type: 'object',
-		properties: {
-			username: {
-				type: 'string',
-			},
-			password: {
-				type: 'string',
-			},
+const authBodySchema = {
+	type: 'object',
+	properties: {
+		username: {
+			type: 'string',
 		},
+		password: {
+			type: 'string',
+		},
+	},
+};
+
+export const registerSchema: FastifySchema = {
+	body: authBodySchema,
+	response: {
+		200: authResultSchema,
+	},
+};
+
+export const loginSchema: FastifySchema = {
+	body: authBodySchema,
+	response: {
+		200: authResultSchema,
 	},
 };
