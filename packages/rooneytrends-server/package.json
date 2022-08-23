@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/node": "^18.7.11",
     "eslint-config-prettier": "^8.5.0",
     "nodemon": "^2.0.19",
     "pino-pretty": "^9.0.1",
