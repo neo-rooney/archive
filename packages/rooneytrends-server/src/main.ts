@@ -3,6 +3,7 @@ import routes from './routes/index.js';
 import fastifySwagger from '@fastify/swagger';
 import { swaggerConfig } from './config/swagger.js';
 import AppError from './lib/AppError.js';
+import 'dotenv/config';
 
 const server = Fastify({
 	logger: true,
