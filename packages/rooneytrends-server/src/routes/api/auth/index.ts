@@ -5,9 +5,13 @@ import { AuthBody } from './types.js';
 
 const authRoute: FastifyPluginAsync = async fastify => {
 	const userServie = UserService.getInstance();
-	fastify.post('/login', { schema: loginSchema }, async () => {
-		return userServie.login();
-	});
+	fastify.post<{ Body: AuthBody }>(
+		'/login',
+		{ schema: loginSchema },
+		async request => {
+			return userServie.login(request.body);
+		},
+	);
 
 	fastify.post<{ Body: AuthBody }>(
 		'/register',
@@ -15,8 +19,7 @@ const authRoute: FastifyPluginAsync = async fastify => {
 			schema: registerSchema,
 		},
 		async request => {
-			const authResult = await userServie.register(request.body);
-			return authResult;
+			return userServie.register(request.body);
 		},
 	);
 };
