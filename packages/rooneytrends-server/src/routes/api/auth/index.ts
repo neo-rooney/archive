@@ -1,6 +1,7 @@
-import { FastifyPluginAsync } from 'fastify';
+import { FastifyPluginAsync, FastifyReply } from 'fastify';
+import AppError from '../../../lib/AppError.js';
 import UserService from '../../../services/UserService.js';
-import { loginSchema, registerSchema } from './schema.js';
+import { loginSchema, refreshTokenSchema, registerSchema } from './schema.js';
 import { AuthBody } from './types.js';
 
 const authRoute: FastifyPluginAsync = async fastify => {
@@ -10,16 +11,7 @@ const authRoute: FastifyPluginAsync = async fastify => {
 		{ schema: loginSchema },
 		async (request, reply) => {
 			const authResult = await userServie.login(request.body);
-			reply.setCookie('access_token', authResult.tokens.accessToken, {
-				httpOnly: true,
-				expires: new Date(Date.now() + 1000 * 60 * 60),
-				path: '/',
-			});
-			reply.setCookie('refresh_token', authResult.tokens.accessToken, {
-				httpOnly: true,
-				expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-				path: '/',
-			});
+			setTokenCookie(reply, authResult.tokens);
 			return authResult;
 		},
 	);
@@ -33,6 +25,35 @@ const authRoute: FastifyPluginAsync = async fastify => {
 			return userServie.register(request.body);
 		},
 	);
+
+	fastify.post<{ Body: { refreshToken?: string } }>(
+		'/refresh',
+		{ schema: refreshTokenSchema },
+		async (request, reply) => {
+			const refreshToken =
+				request.cookies.refresh_token ?? request.body.refreshToken ?? '';
+			if (!refreshToken) {
+				throw new AppError('BadRequestError');
+			}
+			const tokens = await userServie.refreshToken(refreshToken);
+			setTokenCookie(reply, tokens);
+			return tokens;
+		},
+	);
 };
+
+function setTokenCookie(
+	reply: FastifyReply,
+	tokens: { accessToken: string; refreshToken: string },
+) {
+	reply.setCookie('accessToken', tokens.accessToken, {
+		httpOnly: true,
+		secure: process.env.NODE_ENV === 'production',
+	});
+	reply.setCookie('refreshToken', tokens.refreshToken, {
+		httpOnly: true,
+		secure: process.env.NODE_ENV === 'production',
+	});
+}
 
 export default authRoute;
