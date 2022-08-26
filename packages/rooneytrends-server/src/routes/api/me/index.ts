@@ -9,8 +9,15 @@ export const meRoute: FastifyPluginAsync = async fastify => {
 			schema: getMeSchema,
 		},
 		async request => {
+			if (request.isExpiredToken) {
+				throw new AppError('UnauthenticatedError', {
+					isExpiredToken: true,
+				});
+			}
 			if (!request.user) {
-				throw new AppError('UnauthenticatedError');
+				throw new AppError('UnauthenticatedError', {
+					isExpiredToken: false,
+				});
 			}
 			return request.user;
 		},
