@@ -5,6 +5,7 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
+    "@fastify/cookie": "^8.0.0",
     "@fastify/swagger": "^7.4.1",
     "@prisma/client": "4.2.1",
     "@types/jsonwebtoken": "^8.5.8",

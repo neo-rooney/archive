@@ -8,8 +8,19 @@ const authRoute: FastifyPluginAsync = async fastify => {
 	fastify.post<{ Body: AuthBody }>(
 		'/login',
 		{ schema: loginSchema },
-		async request => {
-			return userServie.login(request.body);
+		async (request, reply) => {
+			const authResult = await userServie.login(request.body);
+			reply.setCookie('access_token', authResult.tokens.accessToken, {
+				httpOnly: true,
+				expires: new Date(Date.now() + 1000 * 60 * 60),
+				path: '/',
+			});
+			reply.setCookie('refresh_token', authResult.tokens.accessToken, {
+				httpOnly: true,
+				expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+				path: '/',
+			});
+			return authResult;
 		},
 	);
 
