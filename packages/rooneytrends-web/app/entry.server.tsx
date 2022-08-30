@@ -1,48 +1,27 @@
-import { PassThrough } from "stream";
-import type { EntryContext } from "@remix-run/node";
-import { Response } from "@remix-run/node";
-import { RemixServer } from "@remix-run/react";
-import { renderToPipeableStream } from "react-dom/server";
-
-const ABORT_DELAY = 5000;
+import type { EntryContext, HandleDataRequestFunction } from '@remix-run/node'
+import { RemixServer } from '@remix-run/react'
+import { renderToString } from 'react-dom/server'
+import { ServerStyleSheet } from 'styled-components'
 
 export default function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext
+  remixContext: EntryContext,
 ) {
-  return new Promise((resolve, reject) => {
-    let didError = false;
+  const sheet = new ServerStyleSheet()
 
-    const { pipe, abort } = renderToPipeableStream(
-      <RemixServer context={remixContext} url={request.url} />,
-      {
-        onShellReady: () => {
-          const body = new PassThrough();
+  let markup = renderToString(
+    sheet.collectStyles(<RemixServer context={remixContext} url={request.url} />),
+  )
 
-          responseHeaders.set("Content-Type", "text/html");
+  const styles = sheet.getStyleTags()
+  markup = markup.replace('__STYLES__', styles)
 
-          resolve(
-            new Response(body, {
-              headers: responseHeaders,
-              status: didError ? 500 : responseStatusCode,
-            })
-          );
+  responseHeaders.set('Content-Type', 'text/html')
 
-          pipe(body);
-        },
-        onShellError: (err) => {
-          reject(err);
-        },
-        onError: (error) => {
-          didError = true;
-
-          console.error(error);
-        },
-      }
-    );
-
-    setTimeout(abort, ABORT_DELAY);
-  });
+  return new Response('<!DOCTYPE html>' + markup, {
+    status: responseStatusCode,
+    headers: responseHeaders,
+  })
 }
