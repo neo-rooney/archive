@@ -3,12 +3,12 @@ import Header from '~/components/Header';
 import HeaderBackButton from '~/components/HeaderBackButton';
 import { useGoBack } from '~/hooks/useGoBack';
 
-export default function Register() {
+export default function Login() {
 	const goBack = useGoBack();
 	return (
 		<Page>
 			<Header
-				title="회원가입"
+				title="로그인"
 				headerLeft={<HeaderBackButton onClick={goBack} />}
 			/>
 		</Page>
