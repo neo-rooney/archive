@@ -16,8 +16,11 @@ const StyledInput = styled.input`
 	padding-left: 16px;
 	padding-right: 16px;
 	color: ${colors.gray5};
-	:focus {
+	&:focus {
 		border-color: ${colors.primary};
+	}
+	&::placeholder {
+		color: ${colors.gray2};
 	}
 `;
 
