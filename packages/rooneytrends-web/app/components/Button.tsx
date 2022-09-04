@@ -5,7 +5,9 @@ interface ButtonProps {
 	layoutMode?: 'inline' | 'fullWidth';
 }
 
-interface Props extends React.HTMLAttributes<HTMLButtonElement>, ButtonProps {}
+interface Props
+	extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+		ButtonProps {}
 
 function Button({ layoutMode = 'inline', ...rest }: Props) {
 	return <StyledButton layoutMode={layoutMode} {...rest} />;
@@ -22,7 +24,11 @@ const StyledButton = styled.button<ButtonProps>`
 	padding-left: 16px;
 	padding-right: 16px;
 	font-weight: 600;
-  border-radius:4px;
+	border-radius: 4px;
+	transition: filter 0.25s ease-in-out;
+	&:disabled {
+		filter: grayscale(0.6);
+	}
 	${props =>
 		props.layoutMode === 'fullWidth' &&
 		css`

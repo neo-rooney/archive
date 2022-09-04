@@ -1,7 +1,13 @@
+import { Form, useActionData, useTransition } from '@remix-run/react';
 import styled from 'styled-components';
+import { useFormLoading } from '~/hooks/useFormLoading';
 import Button from './Button';
 import LableInput from './LabelInput';
 import QuestionLink from './QuestionLin';
+
+interface ActionData {
+	text: 'hello world';
+}
 
 interface Props {
 	mode: 'login' | 'register';
@@ -27,6 +33,9 @@ const authDescription = {
 } as const;
 
 function AuthForm({ mode }: Props) {
+	const action = useActionData<ActionData | undefined>();
+	const isLoading = useFormLoading();
+
 	const {
 		usernamePlaceHolder,
 		passwordPlaceHolder,
@@ -36,20 +45,32 @@ function AuthForm({ mode }: Props) {
 		auctionLink,
 	} = authDescription[mode];
 	return (
-		<Block>
+		<Block method="post">
 			<InputGroup>
-				<LableInput label="아이디" placeholder={usernamePlaceHolder} />
-				<LableInput label="비밀번호" placeholder={passwordPlaceHolder} />
+				<LableInput
+					label="아이디"
+					name="username"
+					placeholder={usernamePlaceHolder}
+					disabled={isLoading}
+				/>
+				<LableInput
+					label="비밀번호"
+					name="password"
+					placeholder={passwordPlaceHolder}
+					disabled={isLoading}
+				/>
 			</InputGroup>
 			<ActionsBox>
-				<Button layoutMode="fullWidth">{buttonText}</Button>
+				<Button layoutMode="fullWidth" type="submit" disabled={isLoading}>
+					{buttonText}
+				</Button>
 				<QuestionLink name={actionText} question={question} to={auctionLink} />
 			</ActionsBox>
 		</Block>
 	);
 }
 
-const Block = styled.div`
+const Block = styled(Form)`
 	display: flex;
 	flex-direction: column;
 	padding: 16px;
