@@ -5,15 +5,17 @@ import FullHeightPage from '~/components/FullHeightPage';
 import Header from '~/components/Header';
 import HeaderBackButton from '~/components/HeaderBackButton';
 import { useGoBack } from '~/hooks/useGoBack';
+import { register } from '~/lib/api/auth';
 
 export const action: ActionFunction = async ({ request }) => {
 	const form = await request.formData();
 	const username = form.get('username');
 	const password = form.get('password');
-	await new Promise(resolve => setTimeout(resolve, 1000));
-	console.log({ username, password });
-	return json({
-		text: 'hello world',
+	if (typeof username !== 'string' || typeof password !== 'string') return;
+	const { headers, result } = await register({ username, password });
+
+	return json(result, {
+		headers,
 	});
 };
 

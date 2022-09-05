@@ -11,7 +11,9 @@
 		"@remix-run/node": "^1.7.0",
 		"@remix-run/react": "^1.7.0",
 		"@remix-run/serve": "^1.7.0",
+		"@types/axios": "^0.14.0",
 		"@types/styled-components": "^5.1.26",
+		"axios": "^0.27.2",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"styled-components": "^5.3.5"
