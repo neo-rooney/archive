@@ -1,5 +1,8 @@
 /**
- * actions that server sends
+ * 서버가 보내는 메세지
+ * ConnectedAction : 연결이 된 경우 아이디와 토큰을 보내줌
+ * GetIdSuccessAction : 연결이 잘 된 경우 아이디를 보내줌
+ * ReuseIdSuccessAction : 재접속이 잘 된 경우
  */
 
 type ConnectedAction = {
@@ -17,7 +20,15 @@ type ReuseIdSuccessAction = {
   type: 'reuseIdSuccess'
 }
 
-export type SendAction = ConnectedAction | ReuseIdSuccessAction
+type SubscriptionMessageAction = {
+  type: 'subscriptionMessage'
+  message: any
+}
+
+export type SendAction =
+  | ConnectedAction
+  | ReuseIdSuccessAction
+  | SubscriptionMessageAction
 
 const actionCreators = {
   connected: (id: string, token: string): ConnectedAction => ({
@@ -31,6 +42,10 @@ const actionCreators = {
   }),
   resueIdSuccess: (): ReuseIdSuccessAction => ({
     type: 'reuseIdSuccess',
+  }),
+  subscriptionMessage: (message: any): SubscriptionMessageAction => ({
+    type: 'subscriptionMessage',
+    message,
   }),
 }
 
