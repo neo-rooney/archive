@@ -1,24 +1,14 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
+import List from '../src/components/List';
 function App() {
+  const tasks = [
+    { id: 1, title: '집가고 싶다.' },
+    { id: 2, title: '8시 알람' },
+  ];
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h3>To-do</h3>
+      <List tasks={tasks} />
     </div>
   );
 }
