@@ -1,8 +1,9 @@
 import React from 'react';
+import TestComponent from './lib/TestComponent';
 function App() {
   return (
     <div>
-      <h3>react-component</h3>
+      <TestComponent />
     </div>
   );
 }

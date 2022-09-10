@@ -21,3 +21,10 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# npm 배포용 
+src
+demo
+.babelrc
+webpack.config.js
+public
