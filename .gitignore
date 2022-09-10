@@ -25,9 +25,6 @@ yarn-error.log*
 # dotenv environment variables file
 .env
 
-# npm 배포용 
-src
-demo
-.babelrc
-webpack.config.js
-public
+# npm
+dist
+
