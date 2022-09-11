@@ -4,7 +4,13 @@
   // **/ 모든 하위 디렉토리까지 포함
   "include": ["src"],
   // 컴파일 제외
-  "exclude": ["node_modules", "build", "**/*.(spec|test).ts"],
+  "exclude": [
+    "node_modules",
+    "build",
+    "**/*.(spec|test).ts",
+    "**/*.(stories).tsx",
+    "**/*.(stories).mdx"
+  ],
   "compilerOptions": {
     // 컴파일 결과물이 담길 폴더 주소
     "outDir": "./dist",
