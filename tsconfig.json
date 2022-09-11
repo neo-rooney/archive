@@ -8,8 +8,7 @@
     "node_modules",
     "build",
     "**/*.(spec|test).ts",
-    "**/*.(stories).ts",
-    "**/*.(stories).mdx"
+    "**/*.stories.tsx"
   ],
   "compilerOptions": {
     // 컴파일 결과물이 담길 폴더 주소
