@@ -8,7 +8,7 @@
     "node_modules",
     "build",
     "**/*.(spec|test).ts",
-    "**/*.(stories).tsx",
+    "**/*.(stories).ts",
     "**/*.(stories).mdx"
   ],
   "compilerOptions": {
