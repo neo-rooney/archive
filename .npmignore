@@ -4,6 +4,7 @@ node_modules/
 # dev
 src
 .gitignore
+.storybook
 tsconfig.json
 
 # GIT

@@ -8,25 +8,21 @@ interface ButtonProps {
    */
   primary?: boolean;
   /**
-   * What background color to use
-   */
-  backgroundColor?: string;
-  /**
    * How large should the button be?
    */
   size?: 'small' | 'medium' | 'large';
   /**
    * Button contents
    */
-  label: string;
+  title: string;
   /**
    * Optional click handler
    */
   onClick?: () => void;
 }
 
-const Button = () => {
-  return <Styled.Button>안녕하세요</Styled.Button>;
+const Button: React.FC<ButtonProps> = ({ primary, size, title }) => {
+  return <Styled.Button>{title}</Styled.Button>;
 };
 
 export default Button;
