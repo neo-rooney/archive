@@ -1,16 +1,17 @@
 // src/lib/TestComponent
 import React from 'react';
+import { ThemeProvider } from 'styled-components';
 import * as Styled from './Button.styles';
-
-interface ButtonProps {
-  /**
-   * Is this the principal call to action on the page?
-   */
-  primary?: boolean;
+import theme from '../theme';
+interface ButtonProps extends Styled.ButtonType {
   /**
    * How large should the button be?
    */
-  size?: 'small' | 'medium' | 'large';
+  size: 'small' | 'medium' | 'large';
+  /**
+   * Button text color?
+   */
+  color: 'black' | 'white';
   /**
    * Button contents
    */
@@ -21,8 +22,24 @@ interface ButtonProps {
   onClick?: () => void;
 }
 
-const Button: React.FC<ButtonProps> = ({ primary, size, title }) => {
-  return <Styled.Button>{title}</Styled.Button>;
+const Button: React.FC<ButtonProps> = ({
+  size = 'small',
+  color = 'white',
+  title,
+  disabled = false,
+  onClick,
+}) => {
+  return (
+    <ThemeProvider theme={theme}>
+      <Styled.Button
+        className={`size--${size} text--${color}`}
+        disabled={disabled}
+        onClick={onClick}
+      >
+        {title}
+      </Styled.Button>
+    </ThemeProvider>
+  );
 };
 
 export default Button;

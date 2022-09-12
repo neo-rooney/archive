@@ -1,20 +1,57 @@
 import styled, { css } from 'styled-components';
 
-export interface ButtonColorType {
-  primary?: boolean;
+export interface ButtonType {
+  /**
+   * Make buttons look inactive by adding the disabled prop to.
+   */
+  disabled?: boolean;
 }
-export const Button = styled.button`
-  background: transparent;
-  border-radius: 3px;
-  border: 2px solid palevioletred;
-  color: palevioletred;
-  margin: 0.5em 1em;
-  padding: 0.25em 1em;
 
-  ${({ primary }: ButtonColorType) =>
-    primary &&
-    css`
-      background: palevioletred;
-      color: white;
-    `}
+export const Button = styled.button`
+  display: inline-flex;
+  background: transparent;
+  border-radius: 4px;
+  &.size--small {
+    font-size: 12px;
+    padding: 10px 16px;
+  }
+  &.size--medium {
+    font-size: 14px;
+    padding: 11px 20px;
+  }
+  &.size--large {
+    font-size: 16px;
+    padding: 12px 24px;
+  }
+
+  ${({ disabled }: ButtonType) =>
+    disabled
+      ? css`
+          background-color: inherit;
+          border: ${(props) => css`2px solid ${props.theme.colors.grey}`};
+          color: ${(props) => props.theme.colors.grey};
+          point-events: none;
+        `
+      : css`
+          &.text--black {
+            background-color: inherit;
+            border: ${(props) => css`2px solid ${props.theme.colors.black}`};
+            color: ${(props) => props.theme.colors.black};
+            &:hover,
+            &:focus {
+              cursor: pointer;
+              background-color: ${(props) => props.theme.colors.grey};
+            }
+          }
+          &.text--white {
+            background-color: ${(props) => props.theme.colors.black};
+            border: ${(props) => css`2px solid ${props.theme.colors.black}`};
+            color: ${(props) => props.theme.colors.white};
+            &:hover,
+            &:focus {
+              cursor: pointer;
+              background-color: ${(props) => props.theme.colors.grey};
+            }
+          }
+        `}
 `;
