@@ -9,6 +9,8 @@ export interface ButtonType {
 
 export const Button = styled.button`
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: transparent;
   border-radius: 4px;
   &.size--small {
