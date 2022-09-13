@@ -5,19 +5,19 @@ import * as Styled from './Button.styles';
 import theme from '../theme';
 interface ButtonProps extends Styled.ButtonType {
   /**
-   * How large should the button be?
+   * 버튼 사이즈 조절
    */
   size: 'small' | 'medium' | 'large';
   /**
-   * Button text color?
+   * 버튼 색 조절
    */
   color: 'black' | 'white';
   /**
-   * Optional click handler
+   * 클릭 함수
    */
   onClick?: () => void;
   /**
-   * Button contents
+   * 버튼 내용
    */
   children: JSX.Element;
 }

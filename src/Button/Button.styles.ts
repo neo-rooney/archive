@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 
 export interface ButtonType {
   /**
-   * Make buttons look inactive by adding the disabled prop to.
+   * 버튼 비활성화
    */
   disabled?: boolean;
 }
