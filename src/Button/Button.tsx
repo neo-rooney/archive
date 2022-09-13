@@ -13,21 +13,21 @@ interface ButtonProps extends Styled.ButtonType {
    */
   color: 'black' | 'white';
   /**
-   * Button contents
-   */
-  title: string;
-  /**
    * Optional click handler
    */
   onClick?: () => void;
+  /**
+   * Button contents
+   */
+  children: JSX.Element;
 }
 
 const Button: React.FC<ButtonProps> = ({
   size = 'small',
   color = 'white',
-  title,
   disabled = false,
   onClick,
+  children,
 }) => {
   return (
     <ThemeProvider theme={theme}>
@@ -36,7 +36,7 @@ const Button: React.FC<ButtonProps> = ({
         disabled={disabled}
         onClick={onClick}
       >
-        {title}
+        {children}
       </Styled.Button>
     </ThemeProvider>
   );

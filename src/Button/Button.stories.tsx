@@ -9,7 +9,7 @@ export default {
   component: Button,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
-    title: {
+    children: {
       options: ['Normal', 'Bold', 'Italic'],
       mapping: {
         Bold: <b>Bold</b>,
@@ -26,17 +26,17 @@ const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 export const Small = Template.bind({});
 Small.args = {
   size: 'small',
-  title: 'Button',
+  children: 'Bold',
 };
 
 export const Medium = Template.bind({});
 Medium.args = {
   size: 'medium',
-  title: 'Button',
+  children: 'Bold',
 };
 
 export const Large = Template.bind({});
 Large.args = {
   size: 'large',
-  title: 'Button',
+  children: 'Bold',
 };
