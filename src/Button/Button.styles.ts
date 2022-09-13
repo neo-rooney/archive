@@ -27,10 +27,19 @@ export const Button = styled.button`
   ${({ disabled }: ButtonType) =>
     disabled
       ? css`
-          background-color: inherit;
-          border: ${(props) => css`2px solid ${props.theme.colors.grey}`};
-          color: ${(props) => props.theme.colors.grey};
-          point-events: none;
+          &.text--black {
+            background-color: inherit;
+            color: ${(props) => props.theme.colors.black};
+            border: ${(props) => css`2px solid ${props.theme.colors.grey}`};
+            color: ${(props) => props.theme.colors.grey};
+            point-events: none;
+          }
+          &.text--white {
+            background-color: ${(props) => props.theme.colors.grey};
+            border: ${(props) => css`2px solid ${props.theme.colors.grey}`};
+            color: ${(props) => props.theme.colors.white};
+            point-events: none;
+          }
         `
       : css`
           &.text--black {
