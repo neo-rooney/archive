@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useFormLoading } from '~/hooks/useFormLoading';
 import Button from './Button';
 import LableInput from './LabelInput';
-import QuestionLink from './QuestionLin';
+import QuestionLink from './QuestionLink';
 
 interface ActionData {
 	text: 'hello world';

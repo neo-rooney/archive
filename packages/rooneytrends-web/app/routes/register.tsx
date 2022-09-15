@@ -13,7 +13,6 @@ export const action: ActionFunction = async ({ request }) => {
 	const password = form.get('password');
 	if (typeof username !== 'string' || typeof password !== 'string') return;
 	const { headers, result } = await register({ username, password });
-
 	return json(result, {
 		headers,
 	});
