@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { client } from '../client';
 
 export async function register(params: AuthParams) {
 	const response = await axios.post<AuthResult>(
@@ -22,10 +23,14 @@ export async function login(params: AuthParams) {
 
 	const result = response.data;
 	const cookieHeader = response.headers['set-cookie'];
-
 	const headers = createCookieHeaders(cookieHeader);
 
 	return { result, headers };
+}
+
+export async function getMyAccount() {
+	const response = await client.get<AuthResult>('http://localhost:4000/api/me');
+	return response.data;
 }
 
 function createCookieHeaders(setCookieHeader: string[] | undefined) {
