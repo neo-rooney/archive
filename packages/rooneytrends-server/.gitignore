@@ -130,4 +130,5 @@ dist
 .pnp.*
 
 # SQLite
-dev.db
+# 학습 할 때만 넣어두고 실제 개발시에는 주석 풀기
+# dev.db
