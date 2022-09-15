@@ -50,11 +50,13 @@ function setTokenCookie(
 ) {
 	reply.setCookie('accessToken', tokens.accessToken, {
 		httpOnly: true,
-		secure: process.env.NODE_ENV === 'production',
+		expires: new Date(Date.now() + 1000 * 60 * 60),
+		path: '/',
 	});
 	reply.setCookie('refreshToken', tokens.refreshToken, {
 		httpOnly: true,
-		secure: process.env.NODE_ENV === 'production',
+		expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+		path: '/',
 	});
 }
 
