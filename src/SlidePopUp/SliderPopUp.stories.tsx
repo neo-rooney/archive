@@ -19,14 +19,17 @@ export const BasicSliderPopUp = Template.bind({});
 BasicSliderPopUp.args = {
   popUpContents: [
     {
+      id: '232412423423',
       imgSrc: require(`../images/image1.png`),
       contents: '블록 형태의 기능을<br/>쉽게 넣고 뺄 수 있습니다.1',
     },
     {
+      id: '232412422gsd23',
       imgSrc: require(`../images/image2.png`),
       contents: '블록 형태의 기능을<br/>쉽게 넣고 뺄 수 있습니다.2',
     },
     {
+      id: '215412423123',
       imgSrc: require(`../images/image3.png`),
       contents: '블록 형태의 기능을<br/>쉽게 넣고 뺄 수 있습니다.3',
     },

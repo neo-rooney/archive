@@ -4,22 +4,30 @@ interface popUpStyle {
   isActive?: boolean;
 }
 
+export const Block = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 export const MainContainer = styled.div`
   display: flex;
   justify-content: center;
+  overflow-x: hidden;
+  width: 300px;
   padding-bottom: 30px;
 `;
 
 export const MainWrapper = styled.div`
-  flex-shrink: 0;
   display: flex;
   justify-content: flex-start;
+  position: relative;
   width: 300px;
   height: 373px;
-  overflow-x: hidden;
+  transition: all 0.4s ease-out;
 `;
 
 export const ContentsWrapper = styled.div`
+  position: relative;
   flex-shrink: 0;
   width: 100%;
   height: 100%;
@@ -61,6 +69,9 @@ export const PaginationList = styled.li`
   background-color: red;
   background-color: #d9d9d9;
   border-radius: 38.5px;
+  transition-property: all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-out;
   &:hover {
     cursor: pointer;
   }
