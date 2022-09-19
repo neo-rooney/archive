@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components';
-
+import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 export interface ButtonType {
   /**
    * 버튼 비활성화
@@ -31,37 +31,41 @@ export const Button = styled.button`
       ? css`
           &.text--black {
             background-color: inherit;
-            color: ${(props) => props.theme.colors.black};
-            border: ${(props) => css`2px solid ${props.theme.colors.grey}`};
-            color: ${(props) => props.theme.colors.grey};
+            color: ${(props: any) => props.theme.colors.black};
+            border: ${(props: any) =>
+              css`2px solid ${props.theme.colors.grey}`};
+            color: ${(props: any) => props.theme.colors.grey};
             point-events: none;
           }
           &.text--white {
-            background-color: ${(props) => props.theme.colors.grey};
-            border: ${(props) => css`2px solid ${props.theme.colors.grey}`};
-            color: ${(props) => props.theme.colors.white};
+            background-color: ${(props: any) => props.theme.colors.grey};
+            border: ${(props: any) =>
+              css`2px solid ${props.theme.colors.grey}`};
+            color: ${(props: any) => props.theme.colors.white};
             point-events: none;
           }
         `
       : css`
           &.text--black {
             background-color: inherit;
-            border: ${(props) => css`2px solid ${props.theme.colors.black}`};
-            color: ${(props) => props.theme.colors.black};
+            border: ${(props: any) =>
+              css`2px solid ${props.theme.colors.black}`};
+            color: ${(props: any) => props.theme.colors.black};
             &:hover,
             &:focus {
               cursor: pointer;
-              background-color: ${(props) => props.theme.colors.grey};
+              background-color: ${(props: any) => props.theme.colors.grey};
             }
           }
           &.text--white {
-            background-color: ${(props) => props.theme.colors.black};
-            border: ${(props) => css`2px solid ${props.theme.colors.black}`};
-            color: ${(props) => props.theme.colors.white};
+            background-color: ${(props: any) => props.theme.colors.black};
+            border: ${(props: any) =>
+              css`2px solid ${props.theme.colors.black}`};
+            color: ${(props: any) => props.theme.colors.white};
             &:hover,
             &:focus {
               cursor: pointer;
-              background-color: ${(props) => props.theme.colors.grey};
+              background-color: ${(props: any) => props.theme.colors.grey};
             }
           }
         `}

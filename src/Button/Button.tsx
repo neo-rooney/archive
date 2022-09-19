@@ -1,6 +1,6 @@
 // src/lib/TestComponent
 import React from 'react';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from '@emotion/react';
 import * as Styled from './Button.styles';
 import theme from '../theme';
 interface ButtonProps extends Styled.ButtonType {

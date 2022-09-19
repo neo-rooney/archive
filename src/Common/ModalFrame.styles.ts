@@ -1,4 +1,5 @@
-import styled, { css } from 'styled-components';
+import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 
 export interface ContainerStyle {
   pt?: number;
@@ -28,7 +29,5 @@ export const Container = styled.div`
   border-radius: 10px;
   padding: ${({ pt, pl, pb, pr }: ContainerStyle) =>
     `${pt || 0}px ${pr || 0}px ${pb || 0}px ${pl || 0}px`};
-  background-color: ${(props) => props.theme.colors.white};
+  background-color: ${(props: any) => props.theme.colors.white};
 `;
-
-

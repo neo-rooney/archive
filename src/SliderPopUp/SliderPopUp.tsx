@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from '@emotion/react';
 import * as Styled from './SliderPopUp.styles';
 import * as CommonStyled from '../Common/ModalFrame.styles';
 import theme from '../theme';
