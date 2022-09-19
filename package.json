@@ -1,6 +1,6 @@
 {
   "name": "@ssoon/cds",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "cccv design-system",
   "module": "dist/index.js",
   "main": "dist/index.js",
