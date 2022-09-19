@@ -18,7 +18,7 @@
     // 빌드의 결과물 , 해당 버전으로 트랜스파일링
     "target": "es5",
     // 빌드시 모듈 방식
-    "module": "esnext",
+    "module": "CommonJS",
     // 컴파일에 포함될 라이브러리 파일 목록
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
