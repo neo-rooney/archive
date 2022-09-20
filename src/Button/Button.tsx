@@ -1,4 +1,4 @@
-/** @jsxImportSource @emotion/react */
+/** @jsx jsx */
 import { css } from "@emotion/react";
 import { colors } from "../Colors/colors";
 
@@ -25,7 +25,7 @@ interface ButtonProps {
  * - `fullWidth` 값을 `true`로 설정하면 **100%로** 나타납니다.
  * - `onClick`을 props로 설정하여 버튼이 클릭했을 때 호출 할 함수를 지정 할 수 있습니다.
  */
-export const Button = ({
+const Button = ({
   theme,
   layoutMode = "inline",
   label,
@@ -99,3 +99,5 @@ const layoutModes = {
     width: 100%;
   `,
 };
+
+export default Button;

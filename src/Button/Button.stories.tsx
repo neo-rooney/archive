@@ -1,7 +1,7 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 
-import { Button } from "./Button";
+import Button from "./Button";
 
 export default {
   title: "Components/Button", // 스토리북에서 보여질 그룹과 경로를 명시
