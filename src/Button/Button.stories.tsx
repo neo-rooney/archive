@@ -6,37 +6,27 @@ import { Button } from "./Button";
 export default {
   title: "Components/Button", // 스토리북에서 보여질 그룹과 경로를 명시
   component: Button, // 어떤 컴포넌트를 문서화 할지 명시
-  argTypes: {
-    backgroundColor: { control: "color" },
-  },
   parameters: {
-    componentSubtitle: '버튼 컴포넌트',
+    componentSubtitle: "버튼 컴포넌트",
   },
 } as ComponentMeta<typeof Button>;
 
-// More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 
 export const Primary = Template.bind({});
-// More on args: https://storybook.js.org/docs/react/writing-stories/args
 Primary.args = {
-  primary: true,
-  label: "Button",
+  theme: "primary",
+  label: "primary",
 };
 
 export const Secondary = Template.bind({});
 Secondary.args = {
-  label: "Button",
+  theme: "secondary",
+  label: "secondary",
 };
 
-export const Large = Template.bind({});
-Large.args = {
-  size: "large",
-  label: "Button",
-};
-
-export const Small = Template.bind({});
-Small.args = {
-  size: "small",
-  label: "Button",
+export const Tertiary = Template.bind({});
+Tertiary.args = {
+  theme: "tertiary",
+  label: "tertiary",
 };
