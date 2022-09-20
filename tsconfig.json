@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
+    // "allowJs": true, //자바스크립트와 혼용을 하고 있다면 declaration 파일을 못만든다. 이 옵션을 제거
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -12,10 +12,13 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
+    // "isolatedModules": true, //아무 값도 내보내지 않는 파일을 방지하는 옵션 , declaration만들기 위해 제거
+    // "noEmit": true, //결과물을 만들지 않는다는 옵션, declaration만들기 위해 제거
     "jsx": "react-jsx",
-    "types": ["@emotion/react/types/css-prop"]
+    "types": ["@emotion/react/types/css-prop"],
+    "declaration": true,
+    "declarationDir": "dist/types"
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["**/*.stories.tsx"]
 }

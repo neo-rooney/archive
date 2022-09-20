@@ -2,6 +2,7 @@
   "name": "uikit-rooney",
   "version": "0.0.1",
   "module": "dist/index.js",
+  "types": "dist/types/index.d.ts",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.4",
@@ -21,12 +22,13 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
-    "transform:svg": "yarn svgr --typescript --out-dir src/Icon/set src/assets/icon/svg"
+    "transform:svg": "yarn svgr --typescript --out-dir src/Icon/set src/assets/icon/svg",
+    "build": "rollup -c",
+    "build:types": "tsc --emitDeclarationOnly"
   },
   "eslintConfig": {
     "env": {
