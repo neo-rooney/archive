@@ -1,5 +1,28 @@
-import * as React from 'react';
-import { useLayoutEffect, forwardRef, useContext, createElement, Fragment as Fragment$1, createContext, useRef } from 'react';
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+var React = require('react');
+
+function _interopNamespace(e) {
+  if (e && e.__esModule) return e;
+  var n = Object.create(null);
+  if (e) {
+    Object.keys(e).forEach(function (k) {
+      if (k !== 'default') {
+        var d = Object.getOwnPropertyDescriptor(e, k);
+        Object.defineProperty(n, k, d.get ? d : {
+          enumerable: true,
+          get: function () { return e[k]; }
+        });
+      }
+    });
+  }
+  n["default"] = e;
+  return Object.freeze(n);
+}
+
+var React__namespace = /*#__PURE__*/_interopNamespace(React);
 
 function _taggedTemplateLiteral(strings, raw) {
   if (!raw) {
@@ -1410,14 +1433,14 @@ var syncFallback = function syncFallback(create) {
   return create();
 };
 
-var useInsertionEffect = React['useInsertion' + 'Effect'] ? React['useInsertion' + 'Effect'] : false;
+var useInsertionEffect = React__namespace['useInsertion' + 'Effect'] ? React__namespace['useInsertion' + 'Effect'] : false;
 var useInsertionEffectAlwaysWithSyncFallback = !isBrowser$2 ? syncFallback : useInsertionEffect || syncFallback;
-var useInsertionEffectWithLayoutFallback = useInsertionEffect || useLayoutEffect;
+var useInsertionEffectWithLayoutFallback = useInsertionEffect || React.useLayoutEffect;
 
 var isBrowser$1 = typeof document !== 'undefined';
 var hasOwnProperty = {}.hasOwnProperty;
 
-var EmotionCacheContext = /* #__PURE__ */createContext( // we're doing this to avoid preconstruct's dead code elimination in this one case
+var EmotionCacheContext = /* #__PURE__ */React.createContext( // we're doing this to avoid preconstruct's dead code elimination in this one case
 // because this module is primarily intended for the browser and node
 // but it's also required in react native and similar environments sometimes
 // and we could have a special build just for that
@@ -1435,9 +1458,9 @@ EmotionCacheContext.Provider;
 
 var withEmotionCache = function withEmotionCache(func) {
   // $FlowFixMe
-  return /*#__PURE__*/forwardRef(function (props, ref) {
+  return /*#__PURE__*/React.forwardRef(function (props, ref) {
     // the cache will never be null in the browser
-    var cache = useContext(EmotionCacheContext);
+    var cache = React.useContext(EmotionCacheContext);
     return func(props, cache, ref);
   });
 };
@@ -1445,7 +1468,7 @@ var withEmotionCache = function withEmotionCache(func) {
 if (!isBrowser$1) {
   withEmotionCache = function withEmotionCache(func) {
     return function (props) {
-      var cache = useContext(EmotionCacheContext);
+      var cache = React.useContext(EmotionCacheContext);
 
       if (cache === null) {
         // yes, we're potentially creating this on every render
@@ -1456,7 +1479,7 @@ if (!isBrowser$1) {
         cache = createCache({
           key: 'css'
         });
-        return /*#__PURE__*/createElement(EmotionCacheContext.Provider, {
+        return /*#__PURE__*/React.createElement(EmotionCacheContext.Provider, {
           value: cache
         }, func(props, cache));
       } else {
@@ -1466,7 +1489,7 @@ if (!isBrowser$1) {
   };
 }
 
-var ThemeContext = /* #__PURE__ */createContext({});
+var ThemeContext = /* #__PURE__ */React.createContext({});
 
 if (process.env.NODE_ENV !== 'production') {
   ThemeContext.displayName = 'EmotionThemeContext';
@@ -1562,7 +1585,7 @@ var Insertion$1 = function Insertion(_ref) {
       next = next.next;
     }
 
-    return /*#__PURE__*/createElement("style", (_ref2 = {}, _ref2["data-emotion"] = cache.key + " " + serializedNames, _ref2.dangerouslySetInnerHTML = {
+    return /*#__PURE__*/React.createElement("style", (_ref2 = {}, _ref2["data-emotion"] = cache.key + " " + serializedNames, _ref2.dangerouslySetInnerHTML = {
       __html: rules
     }, _ref2.nonce = cache.sheet.nonce, _ref2));
   }
@@ -1589,7 +1612,7 @@ var Emotion = /* #__PURE__ */withEmotionCache(function (props, cache, ref) {
     className = props.className + " ";
   }
 
-  var serialized = serializeStyles(registeredStyles, undefined, useContext(ThemeContext));
+  var serialized = serializeStyles(registeredStyles, undefined, React.useContext(ThemeContext));
 
   if (process.env.NODE_ENV !== 'production' && serialized.name.indexOf('-') === -1) {
     var labelFromStack = props[labelPropName];
@@ -1610,11 +1633,11 @@ var Emotion = /* #__PURE__ */withEmotionCache(function (props, cache, ref) {
 
   newProps.ref = ref;
   newProps.className = className;
-  return /*#__PURE__*/createElement(Fragment$1, null, /*#__PURE__*/createElement(Insertion$1, {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Insertion$1, {
     cache: cache,
     serialized: serialized,
     isStringTag: typeof WrappedComponent === 'string'
-  }), /*#__PURE__*/createElement(WrappedComponent, newProps));
+  }), /*#__PURE__*/React.createElement(WrappedComponent, newProps));
 });
 
 if (process.env.NODE_ENV !== 'production') {
@@ -1772,7 +1795,7 @@ var jsx = function jsx(type, props) {
 
   if (props == null || !hasOwnProperty.call(props, 'css')) {
     // $FlowFixMe
-    return createElement.apply(undefined, args);
+    return React.createElement.apply(undefined, args);
   }
 
   var argsLength = args.length;
@@ -1785,7 +1808,7 @@ var jsx = function jsx(type, props) {
   } // $FlowFixMe
 
 
-  return createElement.apply(null, createElementArgArray);
+  return React.createElement.apply(null, createElementArgArray);
 };
 
 var warnedAboutCssPropForGlobal = false; // maintain place over rerenders.
@@ -1803,7 +1826,7 @@ var Global = /* #__PURE__ */withEmotionCache(function (props, cache) {
   }
 
   var styles = props.styles;
-  var serialized = serializeStyles([styles], undefined, useContext(ThemeContext));
+  var serialized = serializeStyles([styles], undefined, React.useContext(ThemeContext));
 
   if (!isBrowser$1) {
     var _ref;
@@ -1828,7 +1851,7 @@ var Global = /* #__PURE__ */withEmotionCache(function (props, cache) {
       return null;
     }
 
-    return /*#__PURE__*/createElement("style", (_ref = {}, _ref["data-emotion"] = cache.key + "-global " + serializedNames, _ref.dangerouslySetInnerHTML = {
+    return /*#__PURE__*/React.createElement("style", (_ref = {}, _ref["data-emotion"] = cache.key + "-global " + serializedNames, _ref.dangerouslySetInnerHTML = {
       __html: rules
     }, _ref.nonce = cache.sheet.nonce, _ref));
   } // yes, i know these hooks are used conditionally
@@ -1837,7 +1860,7 @@ var Global = /* #__PURE__ */withEmotionCache(function (props, cache) {
   // so it's not actually breaking anything
 
 
-  var sheetRef = useRef();
+  var sheetRef = React.useRef();
   useInsertionEffectWithLayoutFallback(function () {
     var key = cache.key + "-global"; // use case of https://github.com/emotion-js/emotion/issues/2675
 
@@ -1990,7 +2013,7 @@ var Insertion = function Insertion(_ref) {
   if (!isBrowser$1 && rules.length !== 0) {
     var _ref2;
 
-    return /*#__PURE__*/createElement("style", (_ref2 = {}, _ref2["data-emotion"] = cache.key + " " + serializedArr.map(function (serialized) {
+    return /*#__PURE__*/React.createElement("style", (_ref2 = {}, _ref2["data-emotion"] = cache.key + " " + serializedArr.map(function (serialized) {
       return serialized.name;
     }).join(' '), _ref2.dangerouslySetInnerHTML = {
       __html: rules
@@ -2035,11 +2058,11 @@ var ClassNames = /* #__PURE__ */withEmotionCache(function (props, cache) {
   var content = {
     css: css,
     cx: cx,
-    theme: useContext(ThemeContext)
+    theme: React.useContext(ThemeContext)
   };
   var ele = props.children(content);
   hasRendered = true;
-  return /*#__PURE__*/createElement(Fragment$1, null, /*#__PURE__*/createElement(Insertion, {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Insertion, {
     cache: cache,
     serializedArr: serializedArr
   }), ele);
@@ -2119,28 +2142,28 @@ var layoutModes = {
 };
 
 var SvgExit = function SvgExit(props) {
-  return /*#__PURE__*/React.createElement("svg", Object.assign({
+  return /*#__PURE__*/React__namespace.createElement("svg", Object.assign({
     xmlns: "http://www.w3.org/2000/svg",
     viewBox: "0 0 24 24"
-  }, props), /*#__PURE__*/React.createElement("path", {
+  }, props), /*#__PURE__*/React__namespace.createElement("path", {
     d: "m24 20.188-8.315-8.209 8.2-8.282L20.188 0l-8.212 8.318L3.666.115 0 3.781l8.321 8.24-8.206 8.313L3.781 24l8.237-8.318 8.285 8.203z"
   }));
 };
 
 var SvgHeart = function SvgHeart(props) {
-  return /*#__PURE__*/React.createElement("svg", Object.assign({
+  return /*#__PURE__*/React__namespace.createElement("svg", Object.assign({
     xmlns: "http://www.w3.org/2000/svg",
     viewBox: "0 0 24 24"
-  }, props), /*#__PURE__*/React.createElement("path", {
+  }, props), /*#__PURE__*/React__namespace.createElement("path", {
     d: "m18 1-6 4-6-4-6 5v7l12 10 12-10V6z"
   }));
 };
 
 var SvgPencil = function SvgPencil(props) {
-  return /*#__PURE__*/React.createElement("svg", Object.assign({
+  return /*#__PURE__*/React__namespace.createElement("svg", Object.assign({
     xmlns: "http://www.w3.org/2000/svg",
     viewBox: "0 0 24 24"
-  }, props), /*#__PURE__*/React.createElement("path", {
+  }, props), /*#__PURE__*/React__namespace.createElement("path", {
     d: "M7.127 22.564.001 24l1.438-7.125 5.688 5.689zM2.853 15.46l5.688 5.689 15.46-15.46L18.312 0 2.853 15.46z"
   }));
 };
@@ -2178,4 +2201,6 @@ var Icon = function Icon(_ref) {
   });
 };
 
-export { Button, Icon };
+exports.Button = Button;
+exports.Icon = Icon;
+//# sourceMappingURL=index.js.map
