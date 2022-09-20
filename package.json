@@ -1,9 +1,11 @@
 {
-  "name": "uikit-rooney",
+  "name": "@rooney/uikit",
   "version": "0.0.1",
   "module": "dist/index.js",
   "types": "dist/types/index.d.ts",
-  "private": true,
+  "files": [
+    "/dist"
+  ],
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@svgr/cli": "^6.3.1",
