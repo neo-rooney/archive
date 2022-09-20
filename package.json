@@ -1,6 +1,7 @@
 {
-  "name": "uikit-test",
-  "version": "0.1.0",
+  "name": "uikit-rooney",
+  "version": "0.0.1",
+  "module": "dist/index.js",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.4",
@@ -28,6 +29,9 @@
     "transform:svg": "yarn svgr --typescript --out-dir src/Icon/set src/assets/icon/svg"
   },
   "eslintConfig": {
+    "env": {
+      "NODE_ENV": "development"
+    },
     "extends": [
       "react-app",
       "react-app/jest"
@@ -66,8 +70,19 @@
     "@storybook/preset-create-react-app": "^4.1.2",
     "@storybook/react": "^6.5.12",
     "@storybook/testing-library": "^0.0.13",
+    "@svgr/rollup": "^6.3.1",
     "babel-plugin-named-exports-order": "^0.0.2",
     "prop-types": "^15.8.1",
+    "rollup": "^2.79.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-url": "^3.0.1",
     "webpack": "^5.74.0"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }

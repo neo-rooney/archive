@@ -1,5 +1,6 @@
-/** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import { css, jsx } from "@emotion/react";
 import * as icons from "./set";
 
 type IconType = keyof typeof icons;

@@ -1,5 +1,6 @@
-/** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import { css, jsx } from "@emotion/react";
 import Icon, { iconTypes } from "./Icon";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 
