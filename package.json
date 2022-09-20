@@ -1,6 +1,6 @@
 {
-  "name": "@rooney/uikit",
-  "version": "0.0.1",
+  "name": "@rooneydev/uikit",
+  "version": "0.0.2",
   "module": "dist/index.js",
   "types": "dist/types/index.d.ts",
   "files": [
