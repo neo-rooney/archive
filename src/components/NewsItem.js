@@ -25,9 +25,9 @@ const NewsItemBlock = styled.div`
       margin-top: 0.5rem;
       word-spacing: normal;
     }
-    & + & {
-      margin-top: 3rem;
-    }
+  }
+  & + & {
+    margin-top: 3rem;
   }
 `;
 
