@@ -60,13 +60,13 @@ export default function example() {
   const clock = new THREE.Clock();
 
   function draw() {
-    console.log(clock.getElapsedTime());
-    const time = clock.getElapsedTime();
+    // const time = clock.getElapsedTime();
+    const delta = clock.getDelta();
     // 각도는 Radian을 기본으로 사용
     // mesh.rotation.y += 0.1;
     // mesh.rotation.y += THREE.MathUtils.degToRad(time);
-    mesh.rotation.y = time * 10;
-    mesh.position.y = time;
+    mesh.rotation.y += delta * 10;
+    mesh.position.y += delta;
     if (mesh.position.y > 3) {
       mesh.position.y = 0;
     }
