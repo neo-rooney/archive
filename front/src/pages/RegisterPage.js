@@ -1,7 +1,13 @@
 import React from 'react';
+import AuthTemplate from '../components/auth/AuthTemplate';
+import RigsterForm from '../containers/auth/RigsterForm';
 
 const RegisterPage = () => {
-  return <div>회원가입</div>;
+  return (
+    <AuthTemplate>
+      <RigsterForm />
+    </AuthTemplate>
+  );
 };
 
 export default RegisterPage;
