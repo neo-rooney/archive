@@ -5,6 +5,7 @@ import bodyParser from 'koa-bodyparser';
 import mongoose from 'mongoose';
 import api from './api/index.js';
 import dotenv from 'dotenv';
+import createFakeData from './createFakeData.js';
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ mongoose
   .connect(MONGO_URL, {})
   .then(() => {
     console.log('Connected to MongoDB');
+    // createFakeData();
   })
   .catch((e) => {
     console.error(e);

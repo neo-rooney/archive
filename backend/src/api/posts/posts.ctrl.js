@@ -1,118 +1,150 @@
-let postId = 1;
+import mongoose from 'mongoose';
+import Post from '../../models/posts.js';
+import Joi from 'joi';
 
-const posts = [
+const { ObjectId } = mongoose.Types;
+
+export const checkObjectId = (ctx, next) => {
+  const { id } = ctx.params;
+  if (!ObjectId.isValid(id)) {
+    ctx.status = 400;
+    return;
+  }
+  return next();
+};
+
+/** 
+  POST /api/posts
   {
-    id: 1,
-    title: '제목',
-    body: '내용',
-  },
-];
+    title: ‘제목’,
+    body: ‘내용’,
+    tags: [‘태그1’, ‘태그2’]
+  }
+*/
+export const write = async (ctx) => {
+  // 객체가 다음 필드를 가지고 있음을 검증
+  const schema = Joi.object({
+    title: Joi.string().required(), // required()가 있으면 필수 항목
+    body: Joi.string().required(),
+    tags: Joi.array().items(Joi.string()).required(), // 문자열로 이루어진 배열
+  });
 
-/**
- * 포스트 작성
- * POST /api/posts
- * {title, body}
- */
-export const write = (ctx) => {
-  // REST API의 req body는 ctx.request.body에서 조회 가능
-  const { title, body } = ctx.request.body;
-  postId += 1;
-  const post = {
-    id: postId,
+  // 검증하고 나서 검증 실패인 경우 에러 처리
+  const result = schema.validate(ctx.request.body);
+  if (result.error) {
+    ctx.status = 400; // Bad Request
+    ctx.body = result.error;
+    return;
+  }
+  const { title, body, tags } = ctx.request.body;
+  const post = new Post({
     title,
     body,
-  };
-  posts.push(post);
-  ctx.body = post;
+    tags,
+  });
+  try {
+    await post.save();
+    ctx.body = post;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
 };
-
-/**
- * 포스트 목록 조회
- * GET /api/posts
- */
-
-export const list = (ctx) => {
-  ctx.body = posts;
+/** 
+  GET /api/posts
+*/
+export const list = async (ctx) => {
+  // query는 문자열이기 때문에 숫자로 변환해 주어야 합니다.
+  // 값이 주어지지 않았다면 1을 기본으로 사용합니다.
+  const page = parseInt(ctx.query.page || '1', 10);
+  if (page < 1) {
+    ctx.status = 400;
+    return;
+  }
+  try {
+    const posts = await Post.find()
+      .sort({
+        _id: -1,
+      })
+      .limit(10)
+      .skip((page - 1) * 10)
+      .lean()
+      .exec();
+    const postCount = await Post.countDocuments().exec();
+    ctx.set('Last-Page', Math.ceil(postCount / 10));
+    ctx.body = posts.map((post) => ({
+      ...post,
+      body:
+        post.body.length < 100 ? post.body : `${post.body.slice(0, 100)}...`,
+    }));
+  } catch (e) {
+    ctx.throw(500, e);
+  }
 };
-
 /**
- * 특정 포스트 조회
  * GET /api/posts/:id
  */
-export const read = (ctx) => {
+export const read = async (ctx) => {
   const { id } = ctx.params;
-  const post = post.find((p) => p.id.toString() === id);
-  if (!post) {
-    ctx.status = 404;
-    ctx.body = {
-      message: '포스트가 존재하지 않습니다.',
-    };
-    return;
+  try {
+    const post = await Post.findById(id).exec();
+    if (!post) {
+      ctx.status = 404; // Not Found
+      return;
+    }
+    ctx.body = post;
+  } catch (e) {
+    ctx.throw(500, e);
   }
-  ctx.body = post;
 };
-
 /**
- * 특정 포스트 제거
  * DELETE /api/posts/:id
  */
-
-export const remove = (ctx) => {
+export const remove = async (ctx) => {
   const { id } = ctx.params;
-  const index = posts.findIndex((p) => p.id.toString() === id);
-  if (index === -1) {
-    ctx.status = 404;
-    ctx.body = {
-      message: '포스트가 존재하지 않습니다.',
-    };
-    return;
+  try {
+    await Post.findByIdAndRemove(id).exec();
+    ctx.status = 204; // No Content (성공하기는 했지만 응답할 데이터는 없음)
+  } catch (e) {
+    ctx.throw(500, e);
   }
-  posts.splice(index, 1);
-  ctx.status = 204;
 };
 
 /**
- * 포스트 수정(교체)
- * PUT /api/posts/:id
- * {title, body}
+ *  PATCH /api/posts/:id
+  {
+    title: ‘수정’,
+    body: ‘수정 내용’,
+    tags: [‘수정’, ‘태그’]
+  }
  */
-export const replace = (ctx) => {
+export const update = async (ctx) => {
   const { id } = ctx.params;
-  const index = posts.findIndex((p) => p.id.toString() === id);
-  if (index === -1) {
-    ctx.status = 404;
-    ctx.body = {
-      message: '포스트가 존재하지 않습니다.',
-    };
+
+  // 객체가 다음 필드를 가지고 있음을 검증
+  const schema = Joi.object({
+    title: Joi.string(), // required()가 있으면 필수 항목
+    body: Joi.string(),
+    tags: Joi.array().items(Joi.string()), // 문자열로 이루어진 배열
+  });
+
+  // 검증하고 나서 검증 실패인 경우 에러 처리
+  const result = schema.validate(ctx.request.body);
+  if (result.error) {
+    ctx.status = 400; // Bad Request
+    ctx.body = result.error;
     return;
   }
-
-  posts.index = {
-    id,
-    ...ctx.request.body,
-  };
-  ctx.body = posts[index];
-};
-
-/**
- * 포스트 수정(특정 필드 변경)
- * PATCH /api/posts/:id
- * {title, body}
- */
-export const update = (ctx) => {
-  const { id } = ctx.params;
-  const index = posts.findIndex((p) => p.id.toString() === id);
-  if (index === -1) {
-    ctx.status = 404;
-    ctx.body = {
-      message: '포스트가 존재하지 않습니다.',
-    };
-    return;
+  try {
+    const post = await Post.findByIdAndUpdate(id, ctx.request.body, {
+      new: true, // 이 값을 설정하면 업데이트된 데이터를 반환합니다.
+      // false일 때는 업데이트되기 전의 데이터를 반환합니다.
+    }).exec();
+    if (!post) {
+      ctx.status = 404;
+      return;
+    }
+    ctx.body = post;
+  } catch (e) {
+    ctx.throw(500, e);
   }
-
-  posts[index] = {
-    ...posts[index],
-    ...ctx.request.body,
-  };
-  ctx.body = posts[index];
 };
