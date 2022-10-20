@@ -4,7 +4,11 @@ interface CustomButtonProps {}
 interface Props extends ButtonBaseProps, CustomButtonProps {}
 
 const ButtonContainer = (props: Props) => {
-  return <Button variant="contained">Hello world</Button>;
+  return (
+    <Button variant="contained" color="primary">
+      Hello world
+    </Button>
+  );
 };
 
 export default ButtonContainer;
