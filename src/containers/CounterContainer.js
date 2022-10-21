@@ -1,23 +1,16 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Counter from "../components/Counter";
 import { decrease, increase } from "../modules/counter";
-import { bindActionCreators } from "redux";
 
-const CounterContainer = ({ number, increase, decrease }) => {
+const CounterContainer = () => {
+  const number = useSelector((state) => state.counter.number);
+  const dispatch = useDispatch();
+  const onIncrease = useCallback(() => dispatch(increase()), [dispatch]);
+  const onDecrease = useCallback(() => dispatch(decrease()), [dispatch]);
   return (
-    <Counter number={number} onIncrease={increase} onDecrease={decrease} />
+    <Counter number={number} onIncrease={onIncrease} onDecrease={onDecrease} />
   );
 };
 
-// dipatch를 전달하는 부분에 객체 형태로 넣어주면
-// connect 함수 내부적으로 bindActionCreators 동작이 수행된다.
-export default connect(
-  (state) => ({
-    number: state.counter.number,
-  }),
-  {
-    increase,
-    decrease,
-  }
-)(CounterContainer);
+export default CounterContainer;
