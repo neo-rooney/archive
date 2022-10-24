@@ -1,6 +1,10 @@
 import { createAction, handleActions } from 'redux-actions';
 import produce from 'immer';
-import { createRequestActionTypes } from '../lib/createRequestSage';
+import createRequestSaga, {
+  createRequestActionTypes,
+} from '../lib/createRequestSage';
+import * as authAPI from '../lib/api/auth';
+import { takeLatest } from 'redux-saga/effects';
 
 const CHANGE_FIELD = 'auth/CHANGE_FIELD';
 const INITIALIZE_FORM = 'auth/INITIALIZE_FORM';
@@ -21,6 +25,23 @@ export const changeField = createAction(
 );
 export const initializeForm = createAction(INITIALIZE_FORM, (form) => form);
 
+export const register = createAction(REGISER, ({ username, password }) => ({
+  username,
+  password,
+}));
+
+export const login = createAction(LOGIN, ({ username, password }) => ({
+  username,
+  password,
+}));
+
+const registerSaga = createRequestSaga(REGISER, authAPI.register);
+const loginSaga = createRequestSaga(LOGIN, authAPI.login);
+export function* authSaga() {
+  yield takeLatest(REGISER, registerSaga);
+  yield takeLatest(LOGIN, loginSaga);
+}
+
 const initialState = {
   register: {
     username: '',
@@ -31,6 +52,8 @@ const initialState = {
     username: '',
     password: '',
   },
+  auth: null,
+  authError: null,
 };
 
 const auth = handleActions(
@@ -42,6 +65,24 @@ const auth = handleActions(
     [INITIALIZE_FORM]: (state, { payload: form }) => ({
       ...state,
       [form]: initialState[form],
+    }),
+    [REGISTER_SUCCESS]: (state, { payload: auth }) => ({
+      ...state,
+      authError: null,
+      auth,
+    }),
+    [REGISTER_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      authError: error,
+    }),
+    [LOGIN_SUCCESS]: (state, { payload: auth }) => ({
+      ...state,
+      authError: null,
+      auth,
+    }),
+    [LOGIN_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      authError: error,
     }),
   },
   initialState,
