@@ -1,8 +1,32 @@
 import mongoose from 'mongoose';
 import Post from '../../models/posts.js';
 import Joi from 'joi';
-
+import sanitizeHTML from 'sanitize-html';
 const { ObjectId } = mongoose.Types;
+
+const sanitizeOption = {
+  allowedTags: [
+    'h1',
+    'h2',
+    'b',
+    'i',
+    'u',
+    's',
+    'p',
+    'ui',
+    'ol',
+    'li',
+    'blockquote',
+    'a',
+    'img',
+  ],
+  allowedAttributes: {
+    a: ['href', 'name', 'target'],
+    limg: ['src'],
+    li: ['class'],
+  },
+  allowedSchemes: ['data', 'http'],
+};
 
 export const getPostById = async (ctx, next) => {
   const { id } = ctx.params;
@@ -50,7 +74,7 @@ export const write = async (ctx) => {
   const { title, body, tags } = ctx.request.body;
   const post = new Post({
     title,
-    body,
+    body: sanitizeHTML(body, sanitizeOption),
     tags,
     user: ctx.state.user,
   });
@@ -64,6 +88,12 @@ export const write = async (ctx) => {
 /** 
   GET /api/posts
 */
+
+const removeHtmlAndShorten = (body) => {
+  const filterd = sanitizeHTML(body, { allowedTags: [] });
+  return filterd.length < 200 ? filterd : `${filterd.slice(0, 200)}...`;
+};
+
 export const list = async (ctx) => {
   // query는 문자열이기 때문에 숫자로 변환해 주어야 합니다.
   // 값이 주어지지 않았다면 1을 기본으로 사용합니다.
@@ -78,7 +108,6 @@ export const list = async (ctx) => {
     ...(username ? { 'user.username': username } : {}),
     ...(tag ? { tags: tag } : {}),
   };
-  console.log(query);
 
   try {
     const posts = await Post.find(query)
@@ -93,8 +122,7 @@ export const list = async (ctx) => {
     ctx.set('Last-Page', Math.ceil(postCount / 10));
     ctx.body = posts.map((post) => ({
       ...post,
-      body:
-        post.body.length < 100 ? post.body : `${post.body.slice(0, 100)}...`,
+      body: removeHtmlAndShorten(post.body),
     }));
   } catch (e) {
     ctx.throw(500, e);
@@ -148,8 +176,12 @@ export const update = async (ctx) => {
     ctx.body = result.error;
     return;
   }
+  const nextData = { ...ctx.request.body };
+  if (nextData.body) {
+    nextData.body = sanitizeHTML(nextData.body, sanitizeOption);
+  }
   try {
-    const post = await Post.findByIdAndUpdate(id, ctx.request.body, {
+    const post = await Post.findByIdAndUpdate(id, nextData, {
       new: true, // 이 값을 설정하면 업데이트된 데이터를 반환합니다.
       // false일 때는 업데이트되기 전의 데이터를 반환합니다.
     }).exec();
