@@ -7,6 +7,7 @@ import PostActionButtons from '../../components/post/PostActionButtons';
 import { setOriginalPost } from '../../modules/write';
 import { useNavigate } from 'react-router-dom';
 import user from '../../modules/user';
+import { removePost } from '../../lib/api/posts';
 
 const PostViewerContainer = () => {
   const { postId } = useParams();
@@ -34,12 +35,23 @@ const PostViewerContainer = () => {
 
   const ownPost = (user && user._id) === (post && post.user._id);
 
+  const onRemove = async () => {
+    try {
+      await removePost(postId);
+      navigate('/');
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <PostViewer
       post={post}
       loading={loading}
       error={error}
-      actionButtons={ownPost && <PostActionButtons onEdit={onEdit} />}
+      actionButtons={
+        ownPost && <PostActionButtons onEdit={onEdit} onRemove={onRemove} />
+      }
     />
   );
 };
