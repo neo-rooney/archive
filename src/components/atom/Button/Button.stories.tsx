@@ -2,7 +2,7 @@ import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import Stack from "@mui/material/Stack";
 
-import { Button } from "./Button";
+import Button from "./Button";
 
 export default {
   title: "Atom/Button",
