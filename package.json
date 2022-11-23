@@ -1,7 +1,11 @@
 {
-  "name": "mui-storybook",
+  "name": "@rooney/react-ui-kit",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.es.js",
+  "browser": "./dist/index.umd.js",
+  "types": "./dist/index.d.ts",
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
@@ -23,11 +27,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "rollup -c",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
   },
   "eslintConfig": {
     "extends": [
@@ -77,6 +81,10 @@
     "rollup": "^3.4.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "webpack": "^5.75.0"
+  },
+  "peerDependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
   },
   "resolutions": {
     "enhanced-resolve": "5.10.0"
