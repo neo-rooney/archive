@@ -13,16 +13,20 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
     "jsx": "react-jsx",
-
-    //Custom Added by Rooney
-    "javascript": "react",
+    // 추가
     "declaration": true,
-    "declarationDir": "types",
-    "sourceMap": true,
-    "outDir": "dist",
-    "emitDeclarationOnly": true
+    "declarationDir": "./dist",
+    "sourceMap": false,
+    "outDir": "./dist",
+    "emitDeclarationOnly": true,
+    "removeComments": true
   },
-  "include": ["src"]
+  "include": ["./src"],
+  "exclude": [
+    "./dist",
+    "./node_modules",
+    "./src/**/*.test.tsx",
+    "./src/**/*.stories.tsx"
+  ]
 }
