@@ -1,13 +1,27 @@
 {
   "name": "mui-uikit",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "0.1.4",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "files": [
+    "dist"
+  ],
+  "types": "dist/index.d.ts",
   "repository": "git@github.com:rooney-dev/project_mui-uikit.git",
   "author": "rooney <bch3454@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "rollup": "rollup -c"
+  },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^23.0.2",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-typescript": "^9.0.2",
     "@types/react": "^18.0.25",
     "react": "^18.2.0",
+    "rollup": "^3.4.0",
+    "rollup-plugin-dts": "^5.0.0",
+    "tslib": "^2.4.1",
     "typescript": "^4.9.3"
   }
 }
