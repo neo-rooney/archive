@@ -1,0 +1,12 @@
+{
+  "name": "mui-uikit",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:rooney-dev/project_mui-uikit.git",
+  "author": "rooney <bch3454@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^18.0.25",
+    "react": "^18.2.0"
+  }
+}
