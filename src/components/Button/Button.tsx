@@ -1,11 +1,17 @@
 import React from "react";
+import {
+  Button as MuiButton,
+  ButtonProps as MuiButtonProps,
+} from "@mui/material";
 
-export interface ButtonProps {
+type ButtonBaseProps = Pick<MuiButtonProps, "variant" | "size" | "color">;
+
+export interface ButtonProps extends ButtonBaseProps {
   label: string;
 }
 
-const Button = (props: ButtonProps) => {
-  return <button>{props.label}</button>;
-};
+const Button = ({ label, ...rest }: ButtonProps) => (
+  <MuiButton {...rest}>{label}</MuiButton>
+);
 
 export default Button;
