@@ -1,1 +1,0 @@
-{"version":3,"file":"bundle.js","sources":["../src/Hello.tsx"],"sourcesContent":["import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\nexport const Hello = () => {\n  return <div>Hello Typescript</div>;\n};\n"],"names":["Hello","React"],"mappings":";;AAGaA,IAAAA,KAAK,GAAG,SAARA,KAAK,GAAQ;EACxB,oBAAOC,oDAA2B,CAAA;AACpC;;;;"}
