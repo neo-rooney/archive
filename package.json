@@ -2,7 +2,7 @@
   "name": "mui-ui-components",
   "version": "0.1.0",
   "main": "./dist/bundle.js",
-  "types": "dist/types/index.d.ts",
+  "types": "./dist/types/index.d.ts",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.20.2",
