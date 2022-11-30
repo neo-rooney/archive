@@ -1,13 +1,24 @@
 import babel from "@rollup/plugin-babel";
 import typescript from "@rollup/plugin-typescript";
 
+import { createRequire } from "node:module";
+const require = createRequire(import.meta.url);
+const pkg = require("./package.json");
+
 export default {
   input: "./src/index.ts",
-  output: {
-    file: "./dist/bundle.js",
-    format: "es",
-    sourcemap: true,
-  },
+  output: [
+    {
+      file: pkg.module,
+      format: "es",
+      sourcemap: true,
+    },
+    {
+      file: pkg.main,
+      format: "cjs",
+      sourcemap: true,
+    },
+  ],
   plugins: [
     // 바벨 트랜스파일러 설정
     babel({
