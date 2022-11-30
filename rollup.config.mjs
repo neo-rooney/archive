@@ -22,19 +22,25 @@ const plugins = [
   typescript({ tsconfig: "./tsconfig.json" }),
 ];
 
-export default {
-  input: "./src/index.ts",
-  output: [
-    {
-      file: pkg.module,
-      format: "es",
-      sourcemap: true,
-    },
-    {
-      file: pkg.main,
-      format: "cjs",
-      sourcemap: true,
-    },
-  ],
-  plugins,
-};
+const config = [
+  {
+    input: "./src/index.ts",
+    output: [
+      {
+        file: pkg.module,
+        format: "es",
+        sourcemap: true,
+        exports: "named",
+      },
+      {
+        file: pkg.main,
+        format: "cjs",
+        sourcemap: true,
+        exports: "named",
+      },
+    ],
+    plugins,
+  },
+];
+
+export default config;
