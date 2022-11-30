@@ -1,1 +1,1 @@
-export { default } from "./InputButton";
+export { default as InputButton } from "./InputButton";
