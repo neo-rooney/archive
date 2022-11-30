@@ -1,7 +1,10 @@
+// Plugins
 import babel from "@rollup/plugin-babel";
 import typescript from "@rollup/plugin-typescript";
-import { getFolders } from "./scripts/buildUtils.mjs";
+import generatePackageJson from "rollup-plugin-generate-package-json";
 
+// at Project
+import { getFolders } from "./scripts/buildUtils.mjs";
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const pkg = require("./package.json");
@@ -22,6 +25,32 @@ const plugins = [
   typescript({ tsconfig: "./tsconfig.json" }),
 ];
 
+const subfolderPlugins = (folderName) => [
+  ...plugins,
+  generatePackageJson({
+    baseContents: {
+      name: `${pkg.name}/${folderName}`,
+      private: true,
+      main: "../cjs/index.js",
+      module: "./index.js",
+      types: "./types/index.d.ts",
+    },
+  }),
+];
+
+const folderBuilds = getFolders("./src/components/Atoms").map((folder) => {
+  return {
+    input: `src/components/Atoms/${folder}/index.ts`,
+    output: {
+      file: `dist/${folder}/index.js`,
+      sourcemap: true,
+      exports: "named",
+      format: "esm",
+    },
+    plugins: subfolderPlugins(folder),
+  };
+});
+
 const config = [
   {
     input: "./src/index.ts",
@@ -41,6 +70,7 @@ const config = [
     ],
     plugins,
   },
+  ...folderBuilds,
 ];
 
 export default config;
