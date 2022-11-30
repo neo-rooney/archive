@@ -1,6 +1,6 @@
 // Plugins
 import babel from "@rollup/plugin-babel";
-import typescript from "@rollup/plugin-typescript";
+import typescript from "rollup-plugin-typescript2";
 import generatePackageJson from "rollup-plugin-generate-package-json";
 
 // at Project
@@ -22,7 +22,7 @@ const plugins = [
     extensions: [".js", ".jsx", ".ts", ".tsx"],
   }),
   // 타입스크립트
-  typescript({ tsconfig: "./tsconfig.json" }),
+  typescript({ tsconfig: "./tsconfig.json", useTsconfigDeclarationDir: true }),
 ];
 
 const subfolderPlugins = (folderName) => [
@@ -42,7 +42,7 @@ const folderBuilds = getFolders("./src/components/Atoms").map((folder) => {
   return {
     input: `src/components/Atoms/${folder}/index.ts`,
     output: {
-      file: `dist/${folder}/index.js`,
+      file: `core/${folder}/index.js`,
       sourcemap: true,
       exports: "named",
       format: "esm",
