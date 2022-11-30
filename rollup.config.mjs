@@ -33,7 +33,7 @@ const subfolderPlugins = (folderName) => [
       private: true,
       main: "../cjs/index.js",
       module: "./index.js",
-      types: "./types/index.d.ts",
+      types: "../index.d.ts",
     },
   }),
 ];
