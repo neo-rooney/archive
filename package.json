@@ -5,6 +5,10 @@
   "module": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "license": "MIT",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/cjs/index.js"
+  },
   "devDependencies": {
     "@babel/core": "^7.20.2",
     "@babel/preset-env": "^7.20.2",
