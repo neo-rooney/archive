@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data binding</title>
+  <style>
+    #mytag {
+      color: red
+    }
+  </style>
+</head>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <div id="app">
+    <div>_________________________________</div>
+    <div>v-bind & v-on 설명 영역입니다.</div>
+    <input type="text" @input="onInputText">
+    <div v-bind:id="idname">하이</div>
+    <div>_________________________________</div>
+    <div>v- model 설명 영역입니다.</div>
+    <input type="text" v-model="textValue">
+    <div>{{textValue}}</div>
+    <div>_________________________________</div>
+    <div>v-show설명 영역입니다.</div>
+    <button @click="onClickButton">click</button>
+    <div v-show="isShow">버튼을 누르기 전에는 이 텍스트가 노출됩니다.</div>
+    <div>_________________________________</div>
+    <div>v-if설명 영역입니다.</div>
+    <button @click="onClickButton">click</button>
+    <div v-if="isShow">버튼을 누르기 전에는 이 텍스트가 노출됩니다.</div>
+    <div v-else>버튼을 누르셨군요?</div>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        idname: "",
+        textValue: '',
+        isShow: true
+      },
+      methods: {
+        onInputText: function (e) {
+          this.idname = e.target.value
+        },
+        onClickButton: function () {
+          this.isShow = !this.isShow
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

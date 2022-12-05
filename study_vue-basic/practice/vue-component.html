@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue component</title>
+  </head>
+
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <div id="app">
+      <my-header></my-header>
+      <my-footer></my-footer>
+    </div>
+
+    <div id="anotherApp">
+      <my-header></my-header>
+      <my-footer></my-footer>
+    </div>
+
+    <script>
+      Vue.component("my-header", {
+        template: "<h1>내가 만든 Header</h1>",
+      });
+
+      var vm = new Vue({
+        el: "#app",
+        components: {
+          "my-footer": {
+            template: "<div>내가 만든 Footer</div>",
+          },
+        },
+      });
+
+      var vm2 = new Vue({
+        el: "#anotherApp",
+      });
+    </script>
+  </body>
+</html>

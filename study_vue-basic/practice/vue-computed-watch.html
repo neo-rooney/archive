@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue computed & watch</title>
+</head>
+
+<body>
+  <div id="app">
+    <div>메세지 : {{message}}</div>
+    <div>역순으로 변환한 메세지 : {{reversedMessage}}</div>
+    <button @click="onClickButton">click</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        message: 'Hello Vue!',
+        isClick: false
+      },
+      computed: {
+        reversedMessage: function () {
+          // `this` 는 vm 인스턴스를 가리킵니다.
+          return this.message.split('').reverse().join('')
+        }
+      },
+      watch: {
+        isClick: function () {
+          console.log(this.message)
+        }
+      },
+      methods: {
+        onClickButton: function () {
+          this.isClick = !this.isClick
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

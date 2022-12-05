@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Same level Component</title>
+</head>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+  <div id="app">
+    <my-header v-bind:propsdata="num"></my-header>
+    <my-contents v-on:emitdata="getData"></my-contents>
+  </div>
+
+  <script>
+    var myHeader = {
+      template: '<h1>My Header {{propsdata}} <h1>',
+      props: ['propsdata']
+    }
+
+    var myContents = {
+      template: '<button v-on:click="onClickPass">pass</button>',
+      methods: {
+        onClickPass: function () {
+          this.$emit("emitdata", 10)
+        }
+      }
+    }
+
+
+
+    vm = new Vue({
+      el: '#app',
+      components: {
+        'my-header': myHeader,
+        'my-contents': myContents
+      },
+      data: {
+        num: 0
+      },
+      methods: {
+        getData: function (value) {
+          this.num = value
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

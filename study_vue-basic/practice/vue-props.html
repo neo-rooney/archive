@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue props</title>
+</head>
+
+<body>
+  <div id="app">
+    <my-header v-bind:propsdata="str" v-on:emitdata="changeStr"></my-header>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    var myHeader = {
+      template: '<h1 v-on:click="onClickHeader">{{propsdata}}</h1>',
+      props: ['propsdata'],
+      methods: {
+        onClickHeader: function () {
+          this.$emit('emitdata', 10)
+        }
+      }
+    }
+
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'my-header': myHeader
+      },
+      data: {
+        str: 'Hello'
+      },
+      methods: {
+        changeStr: function (value) {
+          this.str = value
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
