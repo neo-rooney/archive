@@ -1,0 +1,26 @@
+// tsconfig.json
+{
+  /*-- 컴파일 될 파일의 경로 --*/
+  "include": ["./src"],
+  /*-- 컴파일이에서 제외 될 파일의 경로 --*/
+  "exclude": [
+    "./core",
+    "./node_modules",
+    "./src/**/*.test.tsx",
+    "./src/**/*.stories.tsx"
+  ],
+  "compilerOptions": {
+    "target": "ES2016" /*-- 내보낼 JS의 언어 버전을 설정하고 호환되는 type declarations를 포함 --*/,
+    "jsx": "react" /*-- javascript 문법을 React 코드로 변형 --*/,
+    "module": "ESNext" /*-- 이 라이브러리를 모던 JS 모듈로 생성 --*/,
+    "strict": true /*--  type strict 하게 체크 --*/,
+    "esModuleInterop": true /*-- 추가 JS를 내보내 import를 용이하게 해줌 --*/,
+    "outDir": "core" /*-- 프로젝트 결과가 생성될 디렉토리 --*/,
+    "moduleResolution": "node" /*-- 모듈을 찾을때 node의 룰을 따름 --*/,
+    "emitDeclarationOnly": true /*-- rollup이 JS를 생성해주므로 type declarations만 내보냄 --*/,
+    "declaration": true /*-- 라이브러리의 타입을 .d.ts 파일로 출력 --*/,
+    "declarationDir": "core" /*-- .d.ts 파일의 위치 설정, rollup에서 설정한 output의 경로와 동일하거나 하위 경로여야함 --*/,
+    "allowSyntheticDefaultImports": true /*-- manual export가 없을 경우 default export를 적용 --*/,
+    "noImplicitAny": false
+  }
+}
