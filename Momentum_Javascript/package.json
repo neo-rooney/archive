@@ -1,0 +1,23 @@
+{
+  "name": "momentum_javascript",
+  "version": "1.0.0",
+  "description": "![Momentum](https://user-images.githubusercontent.com/52039229/74095396-2be40300-4b33-11ea-980d-46b1d945f2f8.png)",
+  "main": "index.js",
+  "dependencies": {
+    "dotenv": "^8.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CHEOLHUN/Momentum_Javascript.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CHEOLHUN/Momentum_Javascript/issues"
+  },
+  "homepage": "https://github.com/CHEOLHUN/Momentum_Javascript#readme"
+}

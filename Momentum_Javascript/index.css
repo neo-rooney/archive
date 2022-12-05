@@ -1,0 +1,117 @@
+@import "reset.css";
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    background-color: #3c6382;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.js_weather {
+    color: white;
+}
+
+.js_main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.clock_text {
+    font-size: 100px;
+    color: white;
+}
+.js_form_text {
+    color: white;
+    font-size: 30px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.form {
+    margin: 50px 0px;
+}
+
+.displayName {
+    color: white;
+    font-size: 30px;
+    margin: 30px 0px;
+}
+
+.js_form_input {
+    width: 100%;
+    background-color: transparent;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1;
+    font-size: 30px;
+    text-align: center;
+}
+
+.js_form_input:focus {
+    outline: none;
+    color: white;
+}
+
+li {
+    font-size: 30px;
+    color: white;
+    display: flex;
+    margin-top: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+button {
+    background-color: transparent;
+    margin: 0px 10px;
+    color: white;
+    border: 1px white solid;
+    border-radius: 3px;
+}
+
+button:focus {
+    outline: none;
+}
+button:active {
+    background-color: white;
+}
+
+.displayName,
+.form {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
+.success {
+    text-decoration: line-through;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.bgimage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    animation: fadeIn 1.5s linear;
+}
