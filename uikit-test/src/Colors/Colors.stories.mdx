@@ -1,0 +1,46 @@
+<!-- Colors.stories.mdx -->
+
+import { colors } from "./colors";
+import { Meta, ColorPalette, ColorItem } from "@storybook/addon-docs";
+
+<Meta title="DesignSystem/Colors" />
+
+<ColorPalette>
+  <ColorItem
+    title="colors.primary"
+    subtitle="primary"
+    colors={[colors.primary]}
+  />
+  <ColorItem
+    title="colors.secondary"
+    subtitle="secondary"
+    colors={[colors.secondary]}
+  />
+  <ColorItem
+    title="colors.tertiary"
+    subtitle="tertiary"
+    colors={[colors.tertiary]}
+  />
+  <ColorItem
+    title="colors.warning"
+    subtitle="warning"
+    colors={[colors.warning]}
+  />
+  <ColorItem
+    title="colors.positive"
+    subtitle="positive"
+    colors={[colors.green]}
+  />
+  <ColorItem title="colors.orange" subtitle="orange" colors={[colors.orange]} />
+  <ColorItem
+    title="gray scale"
+    colors={[
+      colors.gray0,
+      colors.gray1,
+      colors.gray2,
+      colors.gray3,
+      colors.gray4,
+      colors.gray5,
+    ]}
+  />
+</ColorPalette>
