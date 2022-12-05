@@ -1,0 +1,24 @@
+{
+    "name": "@rooneyhooks/use-fade-in",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/CHEOLHUN/create-hook_react-hook.git"
+    },
+    "keywords": [
+        "react",
+        "hook",
+        "fadein"
+    ],
+    "author": "rooney",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/CHEOLHUN/create-hook_react-hook/issues"
+    },
+    "homepage": "https://github.com/CHEOLHUN/create-hook_react-hook#readme"
+}

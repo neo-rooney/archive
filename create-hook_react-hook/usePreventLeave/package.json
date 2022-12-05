@@ -1,0 +1,27 @@
+{
+    "name": "@rooneyhooks/use-prevent-leave",
+    "version": "1.0.0",
+    "description": "Hook to check again when leaving the website",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/CHEOLHUN/create-hook_react-hook.git"
+    },
+    "keywords": [
+        "react",
+        "hook"
+    ],
+    "author": "rooney",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/CHEOLHUN/create-hook_react-hook/issues"
+    },
+    "homepage": "https://github.com/CHEOLHUN/create-hook_react-hook#readme",
+    "dependencies": {
+        "react": "^16.13.0",
+        "react-dom": "^16.13.0"
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "name": "@rooneyhooks/use-scroll",
+    "version": "1.0.0",
+    "description": "React hook for controll scroll",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/CHEOLHUN/create-hook_react-hook.git"
+    },
+    "keywords": [
+        "react",
+        "hook",
+        "scroll"
+    ],
+    "author": "rooney",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/CHEOLHUN/create-hook_react-hook/issues"
+    },
+    "homepage": "https://github.com/CHEOLHUN/create-hook_react-hook#readme",
+    "peerDependencies": {
+        "react": "^16.13.0",
+        "react-dom": "^16.13.0"
+    }
+}
