@@ -1,0 +1,31 @@
+include ../mixins/message
+
+doctype html
+html 
+    head
+        <script src="https://kit.fontawesome.com/a01f14778c.js" crossorigin="anonymous"></script>
+        title #{pageTitle} | #{siteName}
+        link(rel="stylesheet", href="/static/styles.css")
+    body
+        if messages.error
+            +message({
+                type:'error',
+                text:messages.error
+            })
+        else if messages.info
+            +message({
+                type:'info',
+                text:messages.info
+            })
+        else if messages.success
+            +message({
+                type:'success',
+                text:messages.success
+            })
+        include ../partials/header
+        main
+            block content 
+        include ../partials/footer
+        script(src="/static/main.js")
+
+//- by Rooney, 모든 화면에 반복되는 layout

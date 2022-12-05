@@ -1,0 +1,6 @@
+.home-videos {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 70px 20px;
+}
