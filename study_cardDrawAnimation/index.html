@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        background: #666666;
+      }
+      .wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100vh;
+        max-width: 540px;
+        background: #ffffff;
+      }
+
+      .card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 256px;
+        height: 366px;
+        padding: 18px 13px 24px 5px;
+        border-radius: 24px;
+        box-shadow: 0 0 30px 0 rgba(87, 87, 87, 0.5);
+        background-color: #fff;
+      }
+
+      .image {
+        width: 220px;
+        height: 220px;
+        object-fit: contain;
+      }
+
+      .title {
+        width: 161px;
+        height: 19px;
+        margin: 9px 253px 0 194px;
+        font-family: SFProDisplay;
+        font-size: 16px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #000;
+      }
+
+      button {
+        width: 181px;
+        height: 50px;
+        margin: 54px 21px 0 23px;
+        padding: 18px 30px 17px;
+        border-radius: 25px;
+        border: solid 1px #979797;
+        background-color: #fff;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="card">
+        <img
+          class="image"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRS-WH8xlazKLWmKR3DXUYNKtx_KJJaDtb9DQ&usqp=CAU"
+          alt=""
+        />
+        <div class="title">MY LUCKY CHANGED</div>
+        <button>상세 보기</button>
+      </div>
+    </div>
+  </body>
+</html>
