@@ -1,0 +1,63 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs';
+import Button from './Button';
+
+<Meta title='Example/Button' component={Button} />
+
+<style>
+  {`
+    .flex{
+      display:flex;
+      width:100%;
+      justify-content:center;
+      gap:20px;
+    }
+  `}
+</style>
+
+# Button Size
+
+버튼 컴포넌트 크기
+
+<Canvas>
+  <Story name='button size'>
+    <div className='flex'>
+      <Button size='small'>Small</Button>
+      <Button size='medium'>Medium</Button>
+      <Button size='large'>Large</Button>
+    </div>
+  </Story>
+</Canvas>
+
+# Button Color
+
+버튼 색상
+
+<Canvas>
+  <Story name='button color'>
+    <div className='flex'>
+      <Button size='small' color='white'>
+        Small
+      </Button>
+      <Button size='medium' color='black'>
+        Medium
+      </Button>
+    </div>
+  </Story>
+</Canvas>
+
+# Button Color
+
+버튼 비활성화
+
+<Canvas>
+  <Story name='button disabled'>
+    <div className='flex'>
+      <Button size='small' color='white' disabled>
+        Small
+      </Button>
+      <Button size='medium' color='black' disabled>
+        Medium
+      </Button>
+    </div>
+  </Story>
+</Canvas>

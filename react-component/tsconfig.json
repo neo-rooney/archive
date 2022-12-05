@@ -1,0 +1,46 @@
+{
+  // tsc 명령어로 컴파일 할 파일이 어디에 위치하는지를 명시해주는 옵션
+  //   * 0 이상의 모든 문자와 일치 (디렉토리 분리 기호 제외)
+  // **/ 모든 하위 디렉토리까지 포함
+  "include": ["src"],
+  // 컴파일 제외
+  "exclude": [
+    "node_modules",
+    "build",
+    "**/*.(spec|test).ts",
+    "**/*.stories.tsx"
+  ],
+  "compilerOptions": {
+    // 컴파일 결과물이 담길 폴더 주소
+    "outDir": "./dist",
+    // 타입 정의를 포함할 폴더 목록
+    "typeRoots": ["index.d.ts", "node_modules/@types"],
+    // 빌드의 결과물 , 해당 버전으로 트랜스파일링
+    "target": "es5",
+    // 빌드시 모듈 방식
+    "module": "CommonJS",
+    // 컴파일에 포함될 라이브러리 파일 목록
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    // .map 파일 생성 여부
+    "sourceMap": true,
+    // .d.ts파일 생성 여부
+    "declaration": true,
+    // jsx 파일에서 jsx 코드 생성 설정
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    // true로 할 경우
+    // 컴파일러가 JavaScript 파일 등의 출력 파일들을 만들어 내지 않도록 하는 설정
+    // Babel이나 swc와 같은 또 다른 도구가 TypeScript 파일을 JavaScript 환경에서 실행될 수 있는 파일로 변환하는 작업을 담당할 수 있도록 한다
+    //  TypeScript를 에디터 통합 기능을 제공하기 위한 도구 혹은 소스 코드 타입 체커로만 사용하게 된다.
+    "noEmit": false
+  }
+}
