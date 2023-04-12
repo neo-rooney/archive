@@ -10,3 +10,6 @@
 [submodule "payment-sdk"]
 	path = payment-sdk
 	url = git@github.com:neo-rooney/payment-sdk.git
+[submodule "2023"]
+	path = 2023
+	url = git@github.com:neo-rooney/2023.git
