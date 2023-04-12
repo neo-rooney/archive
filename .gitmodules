@@ -1,3 +1,6 @@
 [submodule "rule"]
 	path = rule
 	url = git@github.com:neo-rooney/rule.git
+[submodule "practice"]
+	path = practice
+	url = git@github.com:neo-rooney/practice.git
