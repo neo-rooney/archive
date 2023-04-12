@@ -7,3 +7,6 @@
 [submodule "lecture"]
 	path = lecture
 	url = git@github.com:neo-rooney/lecture.git
+[submodule "payment-sdk"]
+	path = payment-sdk
+	url = git@github.com:neo-rooney/payment-sdk.git
