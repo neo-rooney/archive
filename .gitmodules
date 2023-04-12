@@ -1,0 +1,3 @@
+[submodule "rule"]
+	path = rule
+	url = git@github.com:neo-rooney/rule.git
